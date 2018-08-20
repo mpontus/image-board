@@ -1,8 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import axios from "axios";
+import App from "./App";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import registerServiceWorker from "./registerServiceWorker";
+
+console.log({ baseurl: process.env.REACT_APP_API_URL });
+console.log(process.env);
+
+const client = axios.create({
+  baseURL: process.env.REACT_APP_API_URL
+});
+
+client.get("posts").then(console.log);
+
+ReactDOM.render(<App />, document.getElementById("root"));
 registerServiceWorker();
