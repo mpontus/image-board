@@ -32,11 +32,18 @@ export const fetchPostsResult = ({ posts, total }) => ({
   }
 });
 
-export const createPost = (file, user) => ({
+/**
+ * Create post with the given image file
+ *
+ * We need to provide data url separately from the file for the action to be created syncrhonously.
+ */
+
+export const createPost = (file, dataUrl, user) => ({
   type: CREATE_POST,
   payload: {
     id: `temp/${nanoid()}`,
     file,
+    dataUrl,
     user
   }
 });

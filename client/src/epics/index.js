@@ -1,3 +1,3 @@
-import authEpic from "./auth";
+import authEpic from "./authEpic";
 
 export default authEpic;

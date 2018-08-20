@@ -8,13 +8,13 @@ import {
   LIKE_POST_RESULT
 } from "../actions";
 
-const createPost = (id, file, user) => ({
+const createPost = (id, dataUrl, user) => ({
   id,
-  imageUrl: URL.createObjectUrl(file),
+  imageUrl: dataUrl,
   author: {
-    id: null,
+    id: user.id,
     name: user.name,
-    avatarUrl: user.pictureUrl
+    avatarUrl: user.avatar
   },
   isLiked: true,
   likes: 1,
@@ -32,7 +32,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  switch (aciton.type) {
+  switch (action.type) {
     case FETCH_POSTS_RESULT: {
       if (action.error) {
         return state;
@@ -41,31 +41,30 @@ export default (state = initialState, action) => {
       const { posts, after } = action.payload;
 
       const ids = posts.map(post => post.id);
-      const posts = posts.reduce(
-        (posts, post) => ({
-          ...posts,
-          [post.id]: createPostFromResponse(post)
-        }),
-        {}
-      );
 
       return {
         ids: after ? [...state.ids, ...ids] : ids,
         posts: {
           ...state.posts,
-          ...posts
+          ...posts.reduce(
+            (posts, post) => ({
+              ...posts,
+              [post.id]: createPostFromResponse(post)
+            }),
+            {}
+          )
         }
       };
     }
 
     case CREATE_POST: {
-      const { post } = action.payload;
+      const { id, dataUrl, user } = action.payload;
 
       return {
-        ids: [post.id, ...state.ids],
+        ids: [id, ...state.ids],
         byId: {
           ...state.byId,
-          [post.id]: post
+          [id]: createPost(id, dataUrl, user)
         }
       };
     }
@@ -131,6 +130,8 @@ export default (state = initialState, action) => {
           }
         };
       }
+
+      return state;
     }
 
     case DELETE_POST: {
@@ -174,5 +175,8 @@ export default (state = initialState, action) => {
         }
       };
     }
+
+    default:
+      return state;
   }
 };

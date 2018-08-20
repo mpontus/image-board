@@ -15,6 +15,13 @@ export {
   likePostResult,
   deletePost,
   deletePostResult
-} from "./posts";
+} from "./postsActions";
 
-export { AUTHENTICATED, LOGOUT, authenticated, logout } from "./auth";
+export {
+  LOGIN,
+  AUTHENTICATED,
+  LOGOUT,
+  login,
+  authenticated,
+  logout
+} from "./authActions";
