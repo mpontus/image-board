@@ -1,18 +1,37 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import Auth0Lock from "auth0-lock";
 import axios from "axios";
 import App from "./App";
+import createStore from "./store";
 
 import registerServiceWorker from "./registerServiceWorker";
 
-console.log({ baseurl: process.env.REACT_APP_API_URL });
-console.log(process.env);
-
-const client = axios.create({
+const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL
 });
 
-client.get("posts").then(console.log);
+var auth = new Auth0Lock(
+  process.env.REACT_APP_AUTH0_CLIENT_ID,
+  process.env.REACT_APP_AUTH0_DOMAIN,
+  {
+    autoclose: true,
+    auth: {
+      redirect: false,
+      responseType: "token id_token"
+    }
+  }
+);
 
-ReactDOM.render(<App />, document.getElementById("root"));
+auth.show();
+
+const store = createStore({ auth, api });
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
 registerServiceWorker();
