@@ -1,5 +1,11 @@
 {
-	"devDependencies": {
-		"lerna": "^2.11.0"
-	}
+  "scripts": {
+    "client:start": "lerna run start --scope client",
+    "server:start": "lerna run start --scope server",
+    "start": "concurrently \"npm run client:start\" \"npm run server:start\""
+  },
+  "devDependencies": {
+    "concurrently": "^3.6.1",
+    "lerna": "^2.11.0"
+  }
 }

@@ -46,10 +46,6 @@ app.get("/api/posts", (req, res) => {
   });
 });
 
-app.get("/api/hello", (req, res) => {
-  res.json({ text: "Hello world!" });
-});
-
 const server = app.listen(PORT, HOST, () => {
   const { address, port } = server.address();
 
