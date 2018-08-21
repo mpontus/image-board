@@ -32,7 +32,7 @@ const App = () => (
           <PostListContainer>
             {({ ids }) =>
               ids.map(id => (
-                <PostContainer id={id}>
+                <PostContainer id={id} key={id}>
                   {({ post, likePost, deletePost }) => (
                     <PostCard
                       imageUrl={post.imageUrl}
