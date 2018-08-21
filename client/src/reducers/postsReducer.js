@@ -8,24 +8,6 @@ import {
   LIKE_POST_RESULT
 } from "../actions";
 
-const createPost = (id, dataUrl, user) => ({
-  id,
-  imageUrl: dataUrl,
-  author: {
-    id: user.id,
-    name: user.name,
-    avatarUrl: user.avatar
-  },
-  isLiked: true,
-  likes: 1,
-  committed: false
-});
-
-const createPostFromResponse = response => ({
-  ...response,
-  committed: true
-});
-
 const initialState = {
   ids: [],
   byId: {}
@@ -49,7 +31,7 @@ export default (state = initialState, action) => {
           ...posts.reduce(
             (posts, post) => ({
               ...posts,
-              [post.id]: createPostFromResponse(post)
+              [post.id]: post
             }),
             {}
           )
@@ -58,13 +40,13 @@ export default (state = initialState, action) => {
     }
 
     case CREATE_POST: {
-      const { id, dataUrl, user } = action.payload;
+      const { post } = action.payload;
 
       return {
-        ids: [id, ...state.ids],
+        ids: [post.id, ...state.ids],
         byId: {
           ...state.byId,
-          [id]: createPost(id, dataUrl, user)
+          [post.id]: post
         }
       };
     }

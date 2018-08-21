@@ -29,7 +29,10 @@ export const fetchPostsResult = ({ posts, total }) => ({
   type: FETCH_POSTS_RESULT,
   payload: {
     total,
-    posts
+    posts: posts.map(post => ({
+      ...post,
+      committed: true
+    }))
   }
 });
 
@@ -42,10 +45,19 @@ export const fetchPostsResult = ({ posts, total }) => ({
 export const createPost = (file, dataUrl, user) => ({
   type: CREATE_POST,
   payload: {
-    id: `temp/${nanoid()}`,
     file,
-    dataUrl,
-    user
+    post: {
+      id: `temp/${nanoid()}`,
+      imageUrl: dataUrl,
+      author: {
+        id: user.id,
+        name: user.name,
+        avatarUrl: user.avatar
+      },
+      isLiked: true,
+      likes: 1,
+      committed: false
+    }
   }
 });
 
