@@ -6,14 +6,21 @@ const authorSchema = new mongoose.Schema({
   avatarUrl: String
 });
 
-const postSchema = new mongoose.Schema({
-  imageUrl: String,
-  author: authorSchema,
-  likesByUser: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {}
+const postSchema = new mongoose.Schema(
+  {
+    imageUrl: String,
+    author: authorSchema,
+    likesByUser: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
+    },
+    likesCount: Number
   },
-  likesCount: Number
-});
+  {
+    timestamps: {
+      createdAt: "created_at"
+    }
+  }
+);
 
 module.exports = mongoose.model("Post", postSchema);

@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const jwt = require("express-jwt");
+const jwksRsa = require("jwks-rsa");
 const cloudinary = require("cloudinary");
 const multer = require("multer");
 const cloudinaryStorage = require("multer-storage-cloudinary");
@@ -29,9 +30,18 @@ const storage = cloudinaryStorage({
 
 const upload = multer({ storage });
 
+const secret = jwksRsa.expressJwtSecret({
+  cache: true,
+  rateLimit: true,
+  jwksRequestsPerMinute: 5,
+  jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+});
+
 const requireAuth = jwt({
-  secret: Buffer.from(process.env.AUTH0_SECRET),
-  audience: Buffer.from(process.env.AUTH0_CLIENT_ID)
+  secret,
+  audience: process.env.AUTH0_CLIENT_ID,
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  algorithms: ["RS256"]
 });
 
 const app = express();
@@ -47,22 +57,23 @@ app.post(
       const post = await Post.create({
         imageUrl: req.file.url,
         author: {
-          id: req.user.id,
-          name: req.user.name,
+          id: req.user.sub,
+          name: req.user.nickname,
           avatarUrl: req.user.picture
         },
         likesByUser: {
-          [req.user.id]: true
+          [req.user.sub]: true
         },
         likesCount: 1
       });
 
       res.json({
-        id: post._id,
+        id: post.id,
         imageUrl: post.imageUrl,
         author: post.author,
         likes: post.likesCount,
-        isLiked: post.likesByUser[user.id]
+        isLiked: post.likesByUser[req.user.sub],
+        createdAt: post.createdAt
       });
     } catch (error) {
       next(error);
