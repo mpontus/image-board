@@ -12,7 +12,7 @@ export const makeGetAuthenticatedUser = () =>
     token =>
       token && {
         id: token.sub,
-        avatar: token.picture,
+        avatarUrl: token.picture,
         name: token.nickname
       }
   );

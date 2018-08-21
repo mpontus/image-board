@@ -6,7 +6,7 @@ import { fileToDataUrl } from "./utils";
 const App = () => (
   <div>
     <AuthContainer>
-      {({ user, login }) => (
+      {({ user, login, logout }) => (
         <PostListContainer>
           {({ createPost }) => (
             <Header
@@ -20,7 +20,7 @@ const App = () => (
                   createPost(file, dataUrl, user)
                 )
               }
-              onAvatarClick={() => console.log("Go profile")}
+              onAvatarClick={() => logout()}
             />
           )}
         </PostListContainer>
