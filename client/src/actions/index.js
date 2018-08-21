@@ -7,6 +7,7 @@ export {
   LIKE_POST_RESULT,
   DELETE_POST,
   DELETE_POST_RESULT,
+  UPLOAD_PROGRESS,
   fetchPosts,
   fetchPostsResult,
   createPost,
@@ -14,7 +15,8 @@ export {
   likePost,
   likePostResult,
   deletePost,
-  deletePostResult
+  deletePostResult,
+  uploadProgress
 } from "./postsActions";
 
 export {

@@ -8,6 +8,7 @@ export const LIKE_POST = "LIKE_POST";
 export const LIKE_POST_RESULT = "LIKE_POST_RESULT";
 export const DELETE_POST = "DELETE_POST";
 export const DELETE_POST_RESULT = "DELETE_POST_RESULT";
+export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
 
 const withErrorVariant = (actionType, actionCreator) => (...payload) => {
   if (payload[0] instanceof Error) {
@@ -87,3 +88,12 @@ export const deletePostResult = withErrorVariant(DELETE_POST_RESULT, post => ({
     post
   }
 }));
+
+export const uploadProgress = (id, bytesTransferred, totalBytes) => ({
+  type: UPLOAD_PROGRESS,
+  payload: {
+    id,
+    bytesTransferred,
+    totalBytes
+  }
+});
