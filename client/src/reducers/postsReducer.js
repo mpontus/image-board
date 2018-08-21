@@ -1,11 +1,15 @@
 import {
-  FETCH_POSTS_RESULT,
+  FETCH_POSTS_SUCCESS,
+  FETCH_POSTS_ERROR,
   CREATE_POST,
-  CREATE_POST_RESULT,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_ERROR,
   DELETE_POST,
-  DELETE_POST_RESULT,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_ERROR,
   LIKE_POST,
-  LIKE_POST_RESULT
+  LIKE_POST_SUCCESS,
+  LIKE_POST_ERROR
 } from "../actions";
 
 const initialState = {
@@ -15,11 +19,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_POSTS_RESULT: {
-      if (action.error) {
-        return state;
-      }
-
+    case FETCH_POSTS_SUCCESS: {
       const { posts, after } = action.payload;
 
       const ids = posts.map(post => post.id);
@@ -51,22 +51,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case CREATE_POST_RESULT: {
-      if (action.error) {
-        const { post } = action.payload;
-
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [post.id]: {
-              ...post,
-              error: action.payload
-            }
-          }
-        };
-      }
-
+    case CREATE_POST_SUCCESS: {
       const { post } = action.payload;
 
       return {
@@ -76,6 +61,21 @@ export default (state = initialState, action) => {
           [post.id]: {
             ...post,
             committed: true
+          }
+        }
+      };
+    }
+
+    case CREATE_POST_ERROR: {
+      const { post, error } = action.payload;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [post.id]: {
+            ...post,
+            error: error
           }
         }
       };
@@ -97,23 +97,19 @@ export default (state = initialState, action) => {
       };
     }
 
-    case LIKE_POST_RESULT: {
-      if (action.error) {
-        const { post, value } = action.payload;
+    case LIKE_POST_ERROR: {
+      const { post, value } = action.payload;
 
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [post.id]: {
-              isLiked: !(value > 0),
-              likes: post.likes - value
-            }
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [post.id]: {
+            isLiked: !(value > 0),
+            likes: post.likes - value
           }
-        };
-      }
-
-      return state;
+        }
+      };
     }
 
     case DELETE_POST: {
@@ -133,20 +129,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case DELETE_POST_RESULT: {
-      if (action.error) {
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [post.id]: {
-              ...post,
-              error: action.payload
-            }
-          }
-        };
-      }
-
+    case DELETE_POST_SUCCESS: {
       const { post } = action.payload;
 
       return {
@@ -154,6 +137,21 @@ export default (state = initialState, action) => {
         byId: {
           ...state.byId,
           [post.id]: null
+        }
+      };
+    }
+
+    case DELETE_POST_ERROR: {
+      const { post, error } = action.payload;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [post.id]: {
+            ...post,
+            error: action.payload
+          }
         }
       };
     }

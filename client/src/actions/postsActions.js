@@ -1,38 +1,38 @@
 import nanoid from "nanoid";
 
 export const FETCH_POSTS = "FETCH_POSTS";
-export const FETCH_POSTS_RESULT = "FETCH_POSTS_RESULT";
+export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
+export const FETCH_POSTS_ERROR = "FETCH_POSTS_ERROR";
 export const CREATE_POST = "CREATE_POST";
-export const CREATE_POST_RESULT = "CREATE_POST_RESULT";
+export const CREATE_POST_SUCCESS = "CREATE_POST_SUCCESS";
+export const CREATE_POST_ERROR = "CREATE_POST_ERROR";
 export const LIKE_POST = "LIKE_POST";
-export const LIKE_POST_RESULT = "LIKE_POST_RESULT";
+export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
+export const LIKE_POST_ERROR = "LIKE_POST_ERROR";
 export const DELETE_POST = "DELETE_POST";
-export const DELETE_POST_RESULT = "DELETE_POST_RESULT";
+export const DELETE_POST_SUCCESS = "DELETE_POST_SUCCESS";
+export const DELETE_POST_ERROR = "DELETE_POST_ERROR";
 export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
-
-const withErrorVariant = (actionType, actionCreator) => (...payload) => {
-  if (payload[0] instanceof Error) {
-    return {
-      type: actionType,
-      payload
-    };
-  }
-
-  return actionCreator(...payload);
-};
 
 export const fetchPosts = () => ({
   type: FETCH_POSTS
 });
 
-export const fetchPostsResult = ({ posts, total }) => ({
-  type: FETCH_POSTS_RESULT,
+export const fetchPostsSuccess = ({ posts, total }) => ({
+  type: FETCH_POSTS_SUCCESS,
   payload: {
     total,
     posts: posts.map(post => ({
       ...post,
       committed: true
     }))
+  }
+});
+
+export const fetchPostsError = error => ({
+  type: FETCH_POSTS_ERROR,
+  payload: {
+    error
   }
 });
 
@@ -61,12 +61,20 @@ export const createPost = (file, dataUrl, user) => ({
   }
 });
 
-export const createPostResult = withErrorVariant(CREATE_POST_RESULT, post => ({
-  type: CREATE_POST_RESULT,
+export const createPostSuccess = post => ({
+  type: CREATE_POST_SUCCESS,
   payload: {
     post
   }
-}));
+});
+
+export const createPostError = (post, error) => ({
+  type: CREATE_POST_ERROR,
+  payload: {
+    post,
+    error
+  }
+});
 
 export const likePost = (post, value) => ({
   type: LIKE_POST,
@@ -76,16 +84,22 @@ export const likePost = (post, value) => ({
   }
 });
 
-export const likePostResult = withErrorVariant(
-  LIKE_POST_RESULT,
-  (post, value) => ({
-    type: LIKE_POST_RESULT,
-    payload: {
-      post,
-      value
-    }
-  })
-);
+export const likePostSuccess = (post, value) => ({
+  type: LIKE_POST_SUCCESS,
+  payload: {
+    post,
+    value
+  }
+});
+
+export const likePostError = (post, value, error) => ({
+  type: LIKE_POST_ERROR,
+  payload: {
+    post,
+    value,
+    error
+  }
+});
 
 export const deletePost = post => ({
   type: DELETE_POST,
@@ -94,12 +108,20 @@ export const deletePost = post => ({
   }
 });
 
-export const deletePostResult = withErrorVariant(DELETE_POST_RESULT, post => ({
-  type: DELETE_POST_RESULT,
+export const deletePostSuccess = post => ({
+  type: DELETE_POST_SUCCESS,
   payload: {
     post
   }
-}));
+});
+
+export const deletePostError = (post, error) => ({
+  type: DELETE_POST_ERROR,
+  payload: {
+    post,
+    error
+  }
+});
 
 export const uploadProgress = (id, bytesTransferred, totalBytes) => ({
   type: UPLOAD_PROGRESS,
