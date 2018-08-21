@@ -67,16 +67,13 @@ export default (state = initialState, action) => {
     }
 
     case CREATE_POST_ERROR: {
-      const { post, error } = action.payload;
+      const { post } = action.payload;
 
       return {
         ...state,
         byId: {
           ...state.byId,
-          [post.id]: {
-            ...post,
-            error: error
-          }
+          [post.id]: null
         }
       };
     }
