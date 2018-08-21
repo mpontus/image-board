@@ -4,7 +4,7 @@ import { tap, share, startWith, filter } from "rxjs/operators";
 const ID_TOKEN_KEY = "idToken";
 
 /**
- * Authentication service using auth0 lock
+ * Authentication service using auth0 lock enhanced with persistent storage
  */
 class AuthService {
   constructor(lock, tokenStorage) {
@@ -27,8 +27,7 @@ class AuthService {
 
   getIdToken() {
     return this.idToken$.pipe(
-      startWith(this.tokenStorage.getItem(ID_TOKEN_KEY)),
-      filter(idToken => !!idToken)
+      startWith(this.tokenStorage.getItem(ID_TOKEN_KEY))
     );
   }
 }

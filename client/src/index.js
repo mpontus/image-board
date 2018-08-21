@@ -6,7 +6,7 @@ import axios from "axios";
 import App from "./App";
 import createStore from "./store";
 import { AuthService } from "./services";
-
+import { connectAxiosToAuth } from "./utils";
 import registerServiceWorker from "./registerServiceWorker";
 
 const api = axios.create({
@@ -30,10 +30,13 @@ const auth = new AuthService(
 
 const store = createStore({ auth, api });
 
+connectAxiosToAuth(api, auth);
+
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById("root")
 );
+
 registerServiceWorker();
