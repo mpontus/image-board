@@ -18,11 +18,11 @@ export const fetchPosts = () => ({
   type: FETCH_POSTS
 });
 
-export const fetchPostsSuccess = ({ posts, total }) => ({
+export const fetchPostsSuccess = ({ items, total }) => ({
   type: FETCH_POSTS_SUCCESS,
   payload: {
     total,
-    posts: posts.map(post => ({
+    posts: items.map(post => ({
       ...post,
       committed: true
     }))

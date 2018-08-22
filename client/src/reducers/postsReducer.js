@@ -26,7 +26,7 @@ export default (state = initialState, action) => {
 
       return {
         ids: after ? [...state.ids, ...ids] : ids,
-        posts: {
+        byId: {
           ...state.posts,
           ...posts.reduce(
             (posts, post) => ({

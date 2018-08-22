@@ -1,5 +1,6 @@
 require("dotenv-safe").config();
 const express = require("express");
+const paginate = require("express-paginate");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const jwt = require("express-jwt");
@@ -48,6 +49,37 @@ const app = express();
 
 app.use(cors());
 
+const serializePost = user => post => ({
+  id: post.id,
+  imageUrl: post.imageUrl,
+  author: post.author,
+  likes: post.likesCount,
+  isLiked: user ? post.likesByUser[user.sub] : false,
+  createdAt: post.createdAt
+});
+
+app.get("/api/posts", paginate.middleware(20, 20), async (req, res, next) => {
+  try {
+    const [total, posts] = await Promise.all([
+      Post.find({})
+        .countDocuments()
+        .exec(),
+      Post.find({})
+        .skip(req.skip)
+        .limit(req.limit)
+        .lean()
+        .exec()
+    ]);
+
+    res.json({
+      total,
+      items: posts.map(serializePost(req.user))
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post(
   "/api/posts",
   requireAuth,
@@ -67,14 +99,7 @@ app.post(
         likesCount: 1
       });
 
-      res.json({
-        id: post.id,
-        imageUrl: post.imageUrl,
-        author: post.author,
-        likes: post.likesCount,
-        isLiked: post.likesByUser[req.user.sub],
-        createdAt: post.createdAt
-      });
+      res.json(post.serialize(req.user));
     } catch (error) {
       next(error);
     }

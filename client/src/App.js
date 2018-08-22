@@ -4,11 +4,11 @@ import { AuthContainer, PostListContainer, PostContainer } from "./containers";
 import { fileToDataUrl } from "./utils";
 
 const App = () => (
-  <div>
-    <AuthContainer>
-      {({ user, login, logout }) => (
-        <PostListContainer>
-          {({ createPost }) => (
+  <AuthContainer>
+    {({ user, login, logout }) => (
+      <PostListContainer>
+        {({ ids, createPost }) => (
+          <div>
             <Header
               title="Image Board"
               isAuthenticated={!!user}
@@ -22,16 +22,8 @@ const App = () => (
               }
               onAvatarClick={() => logout()}
             />
-          )}
-        </PostListContainer>
-      )}
-    </AuthContainer>
-    <ul>
-      <AuthContainer>
-        {({ user }) => (
-          <PostListContainer>
-            {({ ids }) =>
-              ids.map(id => (
+            <ul>
+              {ids.map(id => (
                 <PostContainer id={id} key={id}>
                   {({ post, likePost, deletePost }) => (
                     <PostCard
@@ -54,13 +46,13 @@ const App = () => (
                     />
                   )}
                 </PostContainer>
-              ))
-            }
-          </PostListContainer>
+              ))}
+            </ul>
+          </div>
         )}
-      </AuthContainer>
-    </ul>
-  </div>
+      </PostListContainer>
+    )}
+  </AuthContainer>
 );
 
 export default App;

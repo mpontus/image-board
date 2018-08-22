@@ -1,12 +1,33 @@
+import { combineEpics } from "redux-observable";
 import { Observable, from, of } from "rxjs";
-import { mergeMap, filter, map, catchError, takeUntil } from "rxjs/operators";
+import {
+  tap,
+  mergeMap,
+  switchMap,
+  filter,
+  map,
+  catchError,
+  takeUntil
+} from "rxjs/operators";
 import {
   CREATE_POST,
   DELETE_POST,
+  FETCH_POSTS,
   uploadProgress,
   createPostSuccess,
-  createPostError
+  createPostError,
+  fetchPostsSuccess,
+  fetchPostsError
 } from "../actions";
+
+const fetchPostsEpic = (action$, getState, { api }) =>
+  action$
+    .ofType(FETCH_POSTS)
+    .pipe(
+      switchMap(action => api.get("posts")),
+      map(response => fetchPostsSuccess(response.data)),
+      catchError(error => of(fetchPostsError(error)))
+    );
 
 const createPostEpic = (action$, getState, { api }) =>
   action$.ofType(CREATE_POST).pipe(
@@ -44,4 +65,4 @@ const createPostEpic = (action$, getState, { api }) =>
     })
   );
 
-export default createPostEpic;
+export default combineEpics(fetchPostsEpic, createPostEpic);
