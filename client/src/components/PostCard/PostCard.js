@@ -26,7 +26,7 @@ export const PostCard = ({
     </div>
     <div className="post-card__toolbar">
       <div className="post-card__author">
-        <img className="post-card__avatar" src={avatarUrl} width="88" />
+        <img className="post-card__avatar" src={avatarUrl} />
         <span className="post-card__username">{authorName}</span>
       </div>
       <div className="post-card__actions">
