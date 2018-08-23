@@ -22,7 +22,7 @@ const App = () => (
                   createPost(file, dataUrl, user)
                 )
               }
-              onAvatarClick={() => logout()}
+              onLogoutClick={() => logout()}
             />
             <div>
               {ids.map(id => (
