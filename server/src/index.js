@@ -50,9 +50,13 @@ const app = express();
 app.use(cors());
 
 const serializePost = user => post => ({
-  id: post.id,
+  id: post._id,
   imageUrl: post.imageUrl,
-  author: post.author,
+  author: {
+    id: post.author.id,
+    name: post.author.name,
+    avatarUrl: post.author.avatarUrl
+  },
   likes: post.likesCount,
   isLiked: user ? post.likesByUser[user.sub] : false,
   createdAt: post.createdAt
@@ -99,7 +103,7 @@ app.post(
         likesCount: 1
       });
 
-      res.json(post.serialize(req.user));
+      res.json(serializePost(req.user)(post));
     } catch (error) {
       next(error);
     }
