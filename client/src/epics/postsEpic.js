@@ -55,7 +55,7 @@ const createPostEpic = (action$, getState, { api }) =>
 
         from(api.post("posts", data, config))
           .pipe(
-            map(response => createPostSuccess(response.data)),
+            map(response => createPostSuccess(post, response.data)),
             catchError(error => {
               const action = createPostError(post, error);
 

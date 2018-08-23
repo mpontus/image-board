@@ -9,7 +9,11 @@ export const makeGetPostIds = () =>
 
 export const makeGetPostById = () =>
   createSelector(
-    state => state.posts.byId,
     (state, query) => query.id,
-    (byId, id) => byId[id]
+    state => state.posts.byId,
+    state => state.posts.uncommitted,
+    (id, byId, uncommitted) => ({
+      ...byId[id],
+      committed: !uncommitted[id]
+    })
   );

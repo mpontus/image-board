@@ -14,7 +14,8 @@ import {
 
 const initialState = {
   ids: [],
-  byId: {}
+  byId: {},
+  uncommitted: {}
 };
 
 export default (state = initialState, action) => {
@@ -25,6 +26,7 @@ export default (state = initialState, action) => {
       const ids = posts.map(post => post.id);
 
       return {
+        ...state,
         ids: after ? [...state.ids, ...ids] : ids,
         byId: {
           ...state.posts,
@@ -43,25 +45,29 @@ export default (state = initialState, action) => {
       const { post } = action.payload;
 
       return {
+        ...state,
         ids: [post.id, ...state.ids],
         byId: {
           ...state.byId,
           [post.id]: post
+        },
+        uncommitted: {
+          ...state.uncommitted,
+          [post.id]: true
         }
       };
     }
 
     case CREATE_POST_SUCCESS: {
-      const { post } = action.payload;
+      const { post, committedPost } = action.payload;
 
       return {
         ...state,
+        ids: state.ids.map(id => (id === post.id ? committedPost.id : id)),
         byId: {
           ...state.byId,
-          [post.id]: {
-            ...post,
-            committed: true
-          }
+          [post.id]: undefined,
+          [committedPost.id]: committedPost
         }
       };
     }

@@ -22,10 +22,7 @@ export const fetchPostsSuccess = ({ items, total }) => ({
   type: FETCH_POSTS_SUCCESS,
   payload: {
     total,
-    posts: items.map(post => ({
-      ...post,
-      committed: true
-    }))
+    posts: items
   }
 });
 
@@ -63,10 +60,11 @@ export const createPost = (file, dataUrl, user) => ({
   }
 });
 
-export const createPostSuccess = post => ({
+export const createPostSuccess = (post, committedPost) => ({
   type: CREATE_POST_SUCCESS,
   payload: {
-    post
+    post,
+    committedPost
   }
 });
 
