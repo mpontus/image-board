@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Header, PostCard } from "./components";
 import { AuthContainer, PostListContainer, PostContainer } from "./containers";
 import { fileToDataUrl } from "./utils";
+import "normalize.css";
+import "./App.css";
 
 const App = () => (
   <AuthContainer>
@@ -22,13 +24,14 @@ const App = () => (
               }
               onAvatarClick={() => logout()}
             />
-            <ul>
+            <div>
               {ids.map(id => (
                 <PostContainer id={id} key={id}>
                   {({ post, likePost, deletePost }) => (
                     <PostCard
                       imageUrl={post.imageUrl}
                       avatarUrl={post.author.avatarUrl}
+                      authorName={post.author.name}
                       likesCount={post.likes}
                       isLiked={post.isLiked}
                       canDelete={
@@ -47,7 +50,7 @@ const App = () => (
                   )}
                 </PostContainer>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </PostListContainer>
