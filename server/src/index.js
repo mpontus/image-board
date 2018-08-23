@@ -71,6 +71,7 @@ app.get("/api/posts", paginate.middleware(20, 20), async (req, res, next) => {
         .countDocuments()
         .exec(),
       Post.find({})
+        .sort("-created_at")
         .skip(req.skip)
         .limit(req.limit)
         .lean()
