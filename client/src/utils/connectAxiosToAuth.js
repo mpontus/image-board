@@ -27,7 +27,7 @@ const connectAxiosToAuth = (axios, authService) =>
 
                 return () => axios.interceptors.request.eject(interceptor);
               })
-            : Observable.empty()
+            : empty()
       )
     )
     .subscribe();

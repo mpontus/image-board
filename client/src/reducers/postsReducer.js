@@ -86,9 +86,9 @@ export default (state = initialState, action) => {
         byId: {
           ...state.byId,
           [post.id]: {
-            ...post,
+            ...state.byId[post.id],
             isLiked: value > 0,
-            likes: post.likes + value
+            likes: state.byId[post.id].likes + value
           }
         }
       };
@@ -102,8 +102,9 @@ export default (state = initialState, action) => {
         byId: {
           ...state.byId,
           [post.id]: {
+            ...state.byId[post.id],
             isLiked: !(value > 0),
-            likes: post.likes - value
+            likes: state.byId[post.id].likes - value
           }
         }
       };
@@ -116,12 +117,7 @@ export default (state = initialState, action) => {
         ...state,
         byId: {
           ...state.byId,
-          [post.id]: post.committed
-            ? {
-                ...post,
-                deleted: true
-              }
-            : null
+          [post.id]: null
         }
       };
     }

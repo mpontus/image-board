@@ -43,7 +43,9 @@ const App = () => (
                       }
                       bytesTotal={post.progress && post.progress.totalBytes}
                       errorMessage={post.error && post.error.message}
-                      onLikeToggle={() => likePost(post)}
+                      onLikeToggle={() =>
+                        likePost(post, post.isLiked ? -1 : +1)
+                      }
                       onDeleteClick={() => deletePost(post)}
                       onAuthorClick={() => console.log("go to author page")}
                     />

@@ -1,23 +1,29 @@
 import { combineEpics } from "redux-observable";
-import { Observable, from, of } from "rxjs";
+import { Observable, from, of, empty } from "rxjs";
 import {
-  tap,
-  mergeMap,
-  switchMap,
+  catchError,
   filter,
   map,
-  catchError,
-  takeUntil
+  mapTo,
+  mergeMap,
+  switchMap,
+  takeUntil,
+  tap
 } from "rxjs/operators";
 import {
+  FETCH_POSTS,
   CREATE_POST,
   DELETE_POST,
-  FETCH_POSTS,
-  uploadProgress,
+  LIKE_POST,
+  fetchPostsSuccess,
+  fetchPostsError,
   createPostSuccess,
   createPostError,
-  fetchPostsSuccess,
-  fetchPostsError
+  uploadProgress,
+  deletePostSuccess,
+  deletePostError,
+  likePostSuccess,
+  likePostError
 } from "../actions";
 
 const fetchPostsEpic = (action$, getState, { api }) =>
@@ -65,4 +71,45 @@ const createPostEpic = (action$, getState, { api }) =>
     })
   );
 
-export default combineEpics(fetchPostsEpic, createPostEpic);
+const likePostEpic = (action$, getState, { api }) =>
+  action$.ofType(LIKE_POST).pipe(
+    mergeMap(action => {
+      const { post, value } = action.payload;
+
+      if (!post.committed) {
+        return empty();
+      }
+
+      return from(
+        value > 0
+          ? api.put(`posts/${post.id}/like`)
+          : api.delete(`posts/${post.id}/like`)
+      ).pipe(
+        mapTo(likePostSuccess(post, value)),
+        catchError(error => of(likePostError(post, value, error)))
+      );
+    })
+  );
+
+const deletePostEpic = (action$, getState, { api }) =>
+  action$.ofType(DELETE_POST).pipe(
+    mergeMap(action => {
+      const { post } = action.payload;
+
+      if (!post.committed) {
+        return empty();
+      }
+
+      return from(api.delete(`posts/${post.id}`)).pipe(
+        mapTo(deletePostSuccess(post)),
+        catchError(error => of(deletePostError(post, error)))
+      );
+    })
+  );
+
+export default combineEpics(
+  fetchPostsEpic,
+  createPostEpic,
+  likePostEpic,
+  deletePostEpic
+);

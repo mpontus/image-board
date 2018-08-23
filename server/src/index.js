@@ -38,16 +38,29 @@ const secret = jwksRsa.expressJwtSecret({
   jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
 });
 
-const requireAuth = jwt({
-  secret,
-  audience: process.env.AUTH0_CLIENT_ID,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-  algorithms: ["RS256"]
-});
-
 const app = express();
 
 app.use(cors());
+
+app.use(
+  jwt({
+    secret,
+    audience: process.env.AUTH0_CLIENT_ID,
+    issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+    algorithms: ["RS256"],
+    credentialsRequired: false
+  })
+);
+
+const requireAuth = (req, res, next) => {
+  if (!req.user) {
+    res.status(401).send({
+      message: "Authentication required"
+    });
+  } else {
+    next();
+  }
+};
 
 const serializePost = user => post => ({
   id: post._id,
@@ -60,8 +73,8 @@ const serializePost = user => post => ({
     avatarUrl: post.author.avatarUrl
   },
   likes: post.likesCount,
-  isLiked: user ? post.likesByUser[user.sub] : false,
-  createdAt: post.createdAt
+  isLiked: user ? post.likes.includes(user.sub) : false,
+  timestamp: post.timestamp
 });
 
 app.get("/api/posts", paginate.middleware(20, 20), async (req, res, next) => {
@@ -71,7 +84,7 @@ app.get("/api/posts", paginate.middleware(20, 20), async (req, res, next) => {
         .countDocuments()
         .exec(),
       Post.find({})
-        .sort("-created_at")
+        .sort("-timestamp")
         .skip(req.skip)
         .limit(req.limit)
         .lean()
@@ -94,6 +107,7 @@ app.post(
   async (req, res, next) => {
     try {
       const post = await Post.create({
+        imageId: req.file.public_id,
         imageUrl: req.file.url,
         imageWidth: req.file.width,
         imageHeight: req.file.height,
@@ -102,9 +116,7 @@ app.post(
           name: req.user.nickname,
           avatarUrl: req.user.picture
         },
-        likesByUser: {
-          [req.user.sub]: true
-        },
+        likes: [req.user.sub],
         likesCount: 1
       });
 
@@ -115,9 +127,73 @@ app.post(
   }
 );
 
+app.delete("/api/posts/:id", requireAuth, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ _id: req.params.id });
+
+    if (req.user.sub !== post.author.id) {
+      throw new Error("Unauthorized");
+    }
+
+    await Promise.all([
+      cloudinary.uploader.destroy(post.imageId),
+      post.remove()
+    ]);
+
+    res.end();
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/posts/:id/like", requireAuth, async (req, res, next) => {
+  try {
+    await Post.update(
+      {
+        _id: req.params.id,
+        likes: { $ne: req.user.sub }
+      },
+      {
+        $inc: {
+          likesCount: 1
+        },
+        $push: {
+          likes: req.user.sub
+        }
+      }
+    ).exec();
+
+    res.end();
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.delete("/api/posts/:id/like", requireAuth, async (req, res, next) => {
+  try {
+    await Post.update(
+      {
+        _id: req.params.id,
+        likes: req.user.sub
+      },
+      {
+        $inc: {
+          likesCount: -1
+        },
+        $pull: {
+          likes: req.user.sub
+        }
+      }
+    ).exec();
+
+    res.end();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use((err, req, res, next) => {
   res.status(500).json({
-    error: true,
     message: err.message
   });
 });

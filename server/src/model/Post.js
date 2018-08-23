@@ -1,26 +1,22 @@
 const mongoose = require("mongoose");
 
-const authorSchema = new mongoose.Schema({
-  id: String,
-  name: String,
-  avatarUrl: String
-});
-
 const postSchema = new mongoose.Schema(
   {
+    imageId: String,
     imageUrl: String,
     imageWidth: Number,
     imageHeight: Number,
-    author: authorSchema,
-    likesByUser: {
-      type: mongoose.Schema.Types.Mixed,
-      default: {}
+    author: {
+      id: String,
+      name: String,
+      avatarUrl: String
     },
+    likes: [String],
     likesCount: Number
   },
   {
     timestamps: {
-      createdAt: "created_at"
+      createdAt: "timestamp"
     }
   }
 );
