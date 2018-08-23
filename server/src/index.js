@@ -52,6 +52,8 @@ app.use(cors());
 const serializePost = user => post => ({
   id: post._id,
   imageUrl: post.imageUrl,
+  imageWidth: post.imageWidth,
+  imageHeight: post.imageHeight,
   author: {
     id: post.author.id,
     name: post.author.name,
@@ -92,6 +94,8 @@ app.post(
     try {
       const post = await Post.create({
         imageUrl: req.file.url,
+        imageWidth: req.file.width,
+        imageHeight: req.file.height,
         author: {
           id: req.user.sub,
           name: req.user.nickname,

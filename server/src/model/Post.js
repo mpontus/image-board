@@ -9,6 +9,8 @@ const authorSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema(
   {
     imageUrl: String,
+    imageWidth: Number,
+    imageHeight: Number,
     author: authorSchema,
     likesByUser: {
       type: mongoose.Schema.Types.Mixed,

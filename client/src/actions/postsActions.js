@@ -49,6 +49,8 @@ export const createPost = (file, dataUrl, user) => ({
     post: {
       id: `temp/${nanoid()}`,
       imageUrl: dataUrl,
+      imageWidth: null,
+      imageHeight: null,
       author: {
         id: user.id,
         name: user.name,
