@@ -13,16 +13,15 @@ const connectAxiosToAuth = (axios, authService) =>
   authService
     .getIdToken()
     .pipe(
-      map(
+      switchMap(
         token =>
           token
-            ? set(lensPath(["headers", "Authorization"]), `Bearer ${token}`)
-            : null
-      ),
-      switchMap(
-        interceptor =>
-          interceptor
             ? Observable.create(() => {
+                const interceptor = set(
+                  lensPath(["headers", "Authorization"]),
+                  `Bearer ${token}`
+                );
+
                 axios.interceptors.request.use(interceptor);
 
                 return () => axios.interceptors.request.eject(interceptor);
@@ -31,5 +30,4 @@ const connectAxiosToAuth = (axios, authService) =>
       )
     )
     .subscribe();
-
 export default connectAxiosToAuth;
