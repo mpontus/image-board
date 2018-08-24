@@ -4,7 +4,7 @@
   "description": "Image Board Server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon src/index.js"
   },
   "author": "Mikhail Pontus",
   "license": "MIT",
