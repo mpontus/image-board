@@ -1,4 +1,3 @@
-import * as React from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { makeGetAuthenticatedUser } from "../selectors";

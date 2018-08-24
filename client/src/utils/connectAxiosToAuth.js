@@ -1,5 +1,5 @@
 import { Observable, empty } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
 import { set, lensPath } from "ramda";
 
 /**

@@ -1,5 +1,5 @@
 import { Observable, of, concat } from "rxjs";
-import { tap, shareReplay, startWith, filter } from "rxjs/operators";
+import { tap, shareReplay, filter } from "rxjs/operators";
 import jwtDecode from "jwt-decode";
 
 const ID_TOKEN_KEY = "idToken";

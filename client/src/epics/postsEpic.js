@@ -7,8 +7,7 @@ import {
   mapTo,
   mergeMap,
   switchMap,
-  takeUntil,
-  tap
+  takeUntil
 } from "rxjs/operators";
 import {
   FETCH_POSTS,

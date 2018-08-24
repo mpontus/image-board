@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Header, PostCard } from "./components";
 import { AuthContainer, PostListContainer, PostContainer } from "./containers";
 import { fileToDataUrl } from "./utils";

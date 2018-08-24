@@ -1,5 +1,4 @@
 import { combineEpics } from "redux-observable";
-import { Observable } from "rxjs";
 import { map, tap, ignoreElements } from "rxjs/operators";
 import { LOGIN, authenticated } from "../actions";
 

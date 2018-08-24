@@ -1,6 +1,5 @@
 import {
   FETCH_POSTS_SUCCESS,
-  FETCH_POSTS_ERROR,
   CREATE_POST,
   CREATE_POST_SUCCESS,
   CREATE_POST_ERROR,
@@ -8,7 +7,6 @@ import {
   DELETE_POST_SUCCESS,
   DELETE_POST_ERROR,
   LIKE_POST,
-  LIKE_POST_SUCCESS,
   LIKE_POST_ERROR
 } from "../actions";
 
@@ -141,7 +139,7 @@ export default (state = initialState, action) => {
     }
 
     case DELETE_POST_ERROR: {
-      const { post, error } = action.payload;
+      const { post } = action.payload;
 
       return {
         ...state,
