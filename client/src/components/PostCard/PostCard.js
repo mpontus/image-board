@@ -8,6 +8,8 @@ import "./PostCard.css";
 
 export const PostCard = ({
   imageUrl,
+  imageWidth,
+  imageHeight,
   avatarUrl,
   authorName,
   likesCount,
@@ -22,7 +24,20 @@ export const PostCard = ({
 }) => (
   <div className="post-card">
     <div className="post-card__backdrop">
-      <img className="post-card__primary-image" src={imageUrl} width="480" />
+      <div
+        style={{
+          position: "relative",
+          paddingBottom: `${imageHeight / imageWidth * 100}%`
+        }}
+      >
+        <img
+          style={{
+            position: "absolute",
+            width: "100%"
+          }}
+          src={imageUrl}
+        />
+      </div>
     </div>
     <div className="post-card__toolbar">
       <div className="post-card__author">
