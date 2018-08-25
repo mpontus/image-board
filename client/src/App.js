@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, PostCard } from "./components";
+import { Header, PostCard, MasonryLayout } from "./components";
 import { AuthContainer, PostListContainer, PostContainer } from "./containers";
 import { fileToDataUrl } from "./utils";
 import "normalize.css";
@@ -10,7 +10,7 @@ const App = () => (
     {({ user, login, logout }) => (
       <PostListContainer>
         {({ ids, createPost }) => (
-          <div>
+          <React.Fragment>
             <Header
               title="Image Board"
               isAuthenticated={!!user}
@@ -24,36 +24,42 @@ const App = () => (
               }
               onLogoutClick={() => logout()}
             />
-            <div>
-              {ids.map(id => (
-                <PostContainer id={id} key={id}>
+            <MasonryLayout
+              maxCellWidth={420}
+              cellCount={ids.length}
+              cellRenderer={({ index }) => (
+                <PostContainer id={ids[index]}>
                   {({ post, likePost, deletePost }) => (
-                    <PostCard
-                      imageUrl={post.imageUrl}
-                      avatarUrl={post.author.avatarUrl}
-                      authorName={post.author.name}
-                      likesCount={post.likes}
-                      isLiked={post.isLiked}
-                      canDelete={
-                        /// TODO: We don't know user id from JWT token
-                        user && user.id === post.author.id
-                      }
-                      bytesUploaded={
-                        post.progress && post.progress.bytesTransferred
-                      }
-                      bytesTotal={post.progress && post.progress.totalBytes}
-                      errorMessage={post.error && post.error.message}
-                      onLikeToggle={() =>
-                        likePost(post, post.isLiked ? -1 : +1)
-                      }
-                      onDeleteClick={() => deletePost(post)}
-                      onAuthorClick={() => console.log("go to author page")}
-                    />
+                    <div style={{ overflow: "hidden" }}>
+                      <PostCard
+                        imageUrl={post.imageUrl}
+                        imageWidth={post.imageWidth}
+                        imageHeight={post.imageHeight}
+                        avatarUrl={post.author.avatarUrl}
+                        authorName={post.author.name}
+                        likesCount={post.likes}
+                        isLiked={post.isLiked}
+                        canDelete={
+                          /// TODO: We don't know user id from JWT token
+                          user && user.id === post.author.id
+                        }
+                        bytesUploaded={
+                          post.progress && post.progress.bytesTransferred
+                        }
+                        bytesTotal={post.progress && post.progress.totalBytes}
+                        errorMessage={post.error && post.error.message}
+                        onLikeToggle={() =>
+                          likePost(post, post.isLiked ? -1 : +1)
+                        }
+                        onDeleteClick={() => deletePost(post)}
+                        onAuthorClick={() => console.log("go to author page")}
+                      />
+                    </div>
                   )}
                 </PostContainer>
-              ))}
-            </div>
-          </div>
+              )}
+            />
+          </React.Fragment>
         )}
       </PostListContainer>
     )}
