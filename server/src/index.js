@@ -86,7 +86,7 @@ app.get("/api/posts", paginate.middleware(20, 20), async (req, res, next) => {
       Post.find({})
         .sort("-timestamp")
         .skip(req.skip)
-        .limit(req.limit)
+        .limit(req.query.limit)
         .lean()
         .exec()
     ]);
