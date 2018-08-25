@@ -77,7 +77,7 @@ const serializePost = user => post => ({
   timestamp: post.timestamp
 });
 
-app.get("/api/posts", paginate.middleware(20, 20), async (req, res, next) => {
+app.get("/api/posts", paginate.middleware(5, 5), async (req, res, next) => {
   try {
     const [total, posts] = await Promise.all([
       Post.find({})

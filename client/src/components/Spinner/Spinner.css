@@ -1,0 +1,50 @@
+$duration: 1.4s; 
+$circ: 3.1415;
+
+.spinner {
+  animation: spinner-rotate $duration linear infinite;
+}
+
+@keyframes spinner-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner circle {
+  stroke-dasharray: $circ;
+  stroke-dashoffset: $circ / 2;
+  transform-origin: center;
+  animation: extend $duration ease-in-out infinite,
+      catch-up $duration ease-in-out infinite;
+}
+
+@keyframes spinner-extend {
+ 0% { 
+   stroke-dashoffset: $circ * 0.8; 
+  }
+ 50% {
+   stroke-dashoffset: $circ * 0.2;
+ }
+ 100% {
+   stroke-dashoffset: $circ * 0.8;
+ }
+}
+
+@keyframes spinner-catch-up {
+  0% {
+    transform: rotate(0deg);
+  }
+  
+  50% {
+    transform: rotate(72deg);
+  }
+  
+  100% {
+    transform: rotate(360deg);
+  }
+}

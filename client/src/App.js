@@ -1,5 +1,6 @@
 import React from "react";
-import { Header, PostCard, MasonryLayout } from "./components";
+import { Flex, Box } from "grid-styled";
+import { Header, PostCard, MasonryLayout, Spinner } from "./components";
 import { AuthContainer, PostListContainer, PostContainer } from "./containers";
 import { fileToDataUrl } from "./utils";
 import "normalize.css";
@@ -10,7 +11,7 @@ const App = () => (
     {({ user, login, logout }) => (
       <PostListContainer>
         {({ ids, createPost }) => (
-          <React.Fragment>
+          <Flex flexDirection="column">
             <Header
               title="Image Board"
               isAuthenticated={!!user}
@@ -39,10 +40,7 @@ const App = () => (
                         authorName={post.author.name}
                         likesCount={post.likes}
                         isLiked={post.isLiked}
-                        canDelete={
-                          /// TODO: We don't know user id from JWT token
-                          user && user.id === post.author.id
-                        }
+                        canDelete={user && user.id === post.author.id}
                         bytesUploaded={
                           post.progress && post.progress.bytesTransferred
                         }
@@ -52,14 +50,16 @@ const App = () => (
                           likePost(post, post.isLiked ? -1 : +1)
                         }
                         onDeleteClick={() => deletePost(post)}
-                        onAuthorClick={() => console.log("go to author page")}
                       />
                     </div>
                   )}
                 </PostContainer>
               )}
             />
-          </React.Fragment>
+            <Box alignSelf="center">
+              <Spinner size="40" />
+            </Box>
+          </Flex>
         )}
       </PostListContainer>
     )}
