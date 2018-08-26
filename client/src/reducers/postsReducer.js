@@ -11,6 +11,8 @@ import {
 } from "../actions";
 
 const initialState = {
+  total: null,
+  lastPage: null,
   ids: [],
   byId: {},
   uncommitted: {}
@@ -19,15 +21,17 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case FETCH_POSTS_SUCCESS: {
-      const { posts, offset } = action.payload;
+      const { total, posts, page } = action.payload;
 
       const ids = posts.map(post => post.id);
 
       return {
         ...state,
-        ids: offset > 0 ? [...state.ids, ...ids] : ids,
+        total,
+        lastPage: page,
+        ids: page > 1 ? [...state.ids, ...ids] : ids,
         byId: {
-          ...state.posts,
+          ...state.byId,
           ...posts.reduce(
             (posts, post) => ({
               ...posts,

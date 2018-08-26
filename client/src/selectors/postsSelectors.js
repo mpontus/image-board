@@ -1,5 +1,14 @@
 import { createSelector } from "reselect";
 
+export const makeHasMorePosts = () =>
+  createSelector(
+    state => state.posts.ids.length,
+    state => state.posts.total,
+    (count, total) => (total == null ? true : total > count)
+  );
+
+export const makeGetLastPage = () => state => state.posts.lastPage;
+
 export const makeGetPostIds = () =>
   createSelector(
     state => state.posts.ids,

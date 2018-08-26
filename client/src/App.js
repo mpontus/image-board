@@ -11,7 +11,7 @@ const App = () => (
   <AuthContainer>
     {({ user, login, logout }) => (
       <PostListContainer fetch>
-        {({ ids, createPost, endReached }) => (
+        {({ hasMorePosts, lastPage, ids, createPost, endReached }) => (
           <Flex flexDirection="column">
             <Header
               title="Image Board"
@@ -58,11 +58,16 @@ const App = () => (
               )}
             />
             {ids.length > 0 && (
-              <Waypoint onEnter={() => endReached(ids.length)} />
+              <Waypoint
+                key={`posts-${ids.length}`}
+                onEnter={() => endReached(lastPage)}
+              />
             )}
-            <Box alignSelf="center">
-              <Spinner size="40" />
-            </Box>
+            {hasMorePosts && (
+              <Box alignSelf="center">
+                <Spinner size="40" />
+              </Box>
+            )}
           </Flex>
         )}
       </PostListContainer>

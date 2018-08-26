@@ -7,7 +7,8 @@ import {
   mapTo,
   mergeMap,
   switchMap,
-  takeUntil
+  takeUntil,
+  delay
 } from "rxjs/operators";
 import {
   FETCH_POSTS,
@@ -28,17 +29,17 @@ import {
 
 const fetchPostsEpic = (action$, getState, { api }) =>
   merge(
-    action$.ofType(FETCH_POSTS).pipe(mapTo(0)),
-    action$.ofType(END_REACHED).pipe(map(action => action.payload.offset))
+    action$.ofType(FETCH_POSTS).pipe(mapTo(1)),
+    action$.ofType(END_REACHED).pipe(map(action => action.payload.lastPage + 1))
   ).pipe(
-    switchMap(offset =>
-      from(api.get(`posts?offset=${offset}`)).pipe(
+    switchMap(page =>
+      from(api.get(`posts?page=${page}`)).pipe(
         map(response => {
           const { total, items } = response.data;
 
-          return fetchPostsSuccess({ items, total, offset });
+          return fetchPostsSuccess({ items, total, page });
         }),
-        catchError(error => of(fetchPostsError(offset, error)))
+        catchError(error => of(fetchPostsError(page, error)))
       )
     )
   );

@@ -19,20 +19,20 @@ export const fetchPosts = () => ({
   type: FETCH_POSTS
 });
 
-export const fetchPostsSuccess = ({ items, total, offset }) => ({
+export const fetchPostsSuccess = ({ items, total, page }) => ({
   type: FETCH_POSTS_SUCCESS,
   payload: {
-    offset,
+    page,
     total,
     posts: items
   }
 });
 
-export const fetchPostsError = (offset, error) => ({
+export const fetchPostsError = (page, error) => ({
   type: FETCH_POSTS_ERROR,
   payload: {
     error,
-    offset
+    page
   }
 });
 
@@ -135,9 +135,9 @@ export const uploadProgress = (id, bytesTransferred, totalBytes) => ({
   }
 });
 
-export const endReached = offset => ({
+export const endReached = lastPage => ({
   type: END_REACHED,
   payload: {
-    offset
+    lastPage
   }
 });

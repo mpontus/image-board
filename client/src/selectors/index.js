@@ -1,2 +1,7 @@
 export { makeGetAuthenticatedUser } from "./authSelectors";
-export { makeGetPostIds, makeGetPostById } from "./postsSelectors";
+export {
+  makeHasMorePosts,
+  makeGetLastPage,
+  makeGetPostIds,
+  makeGetPostById
+} from "./postsSelectors";
