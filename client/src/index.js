@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "styled-components";
 import Auth0Lock from "auth0-lock";
 import axios from "axios";
 import App from "./App";
 import createStore from "./store";
 import { AuthService } from "./services";
 import { connectAxiosToAuth } from "./utils";
+import theme from "./theme";
 import registerServiceWorker from "./registerServiceWorker";
 
 const api = axios.create({
@@ -34,7 +36,9 @@ connectAxiosToAuth(api, auth);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </Provider>,
   document.getElementById("root")
 );

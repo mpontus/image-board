@@ -1,10 +1,30 @@
 import * as React from "react";
-import classnames from "classnames";
-import {
-  MdFavorite as FavoriteIcon,
-  MdDelete as DeleteIcon
-} from "react-icons/md";
-import "./PostCard.css";
+import styled from "styled-components";
+import Media from "./Media";
+import AuthorBlock from "./AuthorBlock";
+import LikeButton from "./LikeButton";
+import DeleteButton from "./DeleteButton";
+
+const Card = styled.div.withConfig({
+  displayName: "Card"
+})`
+  margin: ${props => props.theme.space[2]};
+  box-shadow: ${props => props.theme.boxShadow[0]};
+  transition: box-shadow ${props => props.theme.duration[1]} ease-in;
+
+  &:hover {
+    box-shadow: ${props => props.theme.boxShadow[1]};
+  }
+`;
+
+const Toolbar = styled.div.withConfig({
+  displayName: "Toolbar"
+})`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: ${props => props.theme.space[2]} ${props => props.theme.space[1]};
+`;
 
 export const PostCard = ({
   imageUrl,
@@ -20,48 +40,17 @@ export const PostCard = ({
   errorMessage,
   onLikeToggle,
   onDeleteClick,
-  onAuthorClick
+  onAuthorClick,
+  ...rest
 }) => (
-  <div className="post-card">
-    <div className="post-card__backdrop">
-      <div
-        style={{
-          position: "relative",
-          paddingBottom: `${imageHeight / imageWidth * 100}%`
-        }}
-      >
-        <img
-          style={{
-            position: "absolute",
-            width: "100%"
-          }}
-          src={imageUrl}
-        />
-      </div>
-    </div>
-    <div className="post-card__toolbar">
-      <div className="post-card__author">
-        <img className="post-card__avatar" src={avatarUrl} />
-        <span className="post-card__username">{authorName}</span>
-      </div>
-      <div className="post-card__actions">
-        <div
-          className={classnames("post-card__likes", {
-            "post-card__likes--active": isLiked
-          })}
-          onClick={onLikeToggle}
-        >
-          <span className="post-card__likes-count">{likesCount}</span>
-          <FavoriteIcon className="post-card__icon" />
-        </div>
-        {canDelete && (
-          <div className="post-card__delete" onClick={onDeleteClick}>
-            <DeleteIcon className="post-card__icon" />
-          </div>
-        )}
-      </div>
-    </div>
-  </div>
+  <Card {...rest}>
+    <Media ratio={imageHeight / imageWidth} image={imageUrl} />
+    <Toolbar>
+      <AuthorBlock avatarUrl={avatarUrl} authorName={authorName} />
+      <LikeButton active={isLiked} count={likesCount} onClick={onLikeToggle} />
+      {canDelete && <DeleteButton px={1} onClick={onDeleteClick} />}
+    </Toolbar>
+  </Card>
 );
 
 export default PostCard;
