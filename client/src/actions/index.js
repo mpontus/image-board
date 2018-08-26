@@ -12,6 +12,7 @@ export {
   DELETE_POST_SUCCESS,
   DELETE_POST_ERROR,
   UPLOAD_PROGRESS,
+  END_REACHED,
   fetchPosts,
   fetchPostsSuccess,
   fetchPostsError,
@@ -24,7 +25,8 @@ export {
   deletePost,
   deletePostSuccess,
   deletePostError,
-  uploadProgress
+  uploadProgress,
+  endReached
 } from "./postsActions";
 
 export {

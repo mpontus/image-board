@@ -19,13 +19,13 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case FETCH_POSTS_SUCCESS: {
-      const { posts, after } = action.payload;
+      const { posts, offset } = action.payload;
 
       const ids = posts.map(post => post.id);
 
       return {
         ...state,
-        ids: after ? [...state.ids, ...ids] : ids,
+        ids: offset > 0 ? [...state.ids, ...ids] : ids,
         byId: {
           ...state.posts,
           ...posts.reduce(

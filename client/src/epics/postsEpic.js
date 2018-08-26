@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { Observable, from, of, empty } from "rxjs";
+import { Observable, merge, from, of, empty } from "rxjs";
 import {
   catchError,
   filter,
@@ -11,6 +11,7 @@ import {
 } from "rxjs/operators";
 import {
   FETCH_POSTS,
+  END_REACHED,
   CREATE_POST,
   DELETE_POST,
   LIKE_POST,
@@ -26,13 +27,21 @@ import {
 } from "../actions";
 
 const fetchPostsEpic = (action$, getState, { api }) =>
-  action$
-    .ofType(FETCH_POSTS)
-    .pipe(
-      switchMap(action => api.get("posts")),
-      map(response => fetchPostsSuccess(response.data)),
-      catchError(error => of(fetchPostsError(error)))
-    );
+  merge(
+    action$.ofType(FETCH_POSTS).pipe(mapTo(0)),
+    action$.ofType(END_REACHED).pipe(map(action => action.payload.offset))
+  ).pipe(
+    switchMap(offset =>
+      from(api.get(`posts?offset=${offset}`)).pipe(
+        map(response => {
+          const { total, items } = response.data;
+
+          return fetchPostsSuccess({ items, total, offset });
+        }),
+        catchError(error => of(fetchPostsError(offset, error)))
+      )
+    )
+  );
 
 const createPostEpic = (action$, getState, { api }) =>
   action$.ofType(CREATE_POST).pipe(

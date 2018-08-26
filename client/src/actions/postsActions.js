@@ -13,23 +13,26 @@ export const DELETE_POST = "DELETE_POST";
 export const DELETE_POST_SUCCESS = "DELETE_POST_SUCCESS";
 export const DELETE_POST_ERROR = "DELETE_POST_ERROR";
 export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
+export const END_REACHED = "END_REACHED";
 
 export const fetchPosts = () => ({
   type: FETCH_POSTS
 });
 
-export const fetchPostsSuccess = ({ items, total }) => ({
+export const fetchPostsSuccess = ({ items, total, offset }) => ({
   type: FETCH_POSTS_SUCCESS,
   payload: {
+    offset,
     total,
     posts: items
   }
 });
 
-export const fetchPostsError = error => ({
+export const fetchPostsError = (offset, error) => ({
   type: FETCH_POSTS_ERROR,
   payload: {
-    error
+    error,
+    offset
   }
 });
 
@@ -129,5 +132,12 @@ export const uploadProgress = (id, bytesTransferred, totalBytes) => ({
     id,
     bytesTransferred,
     totalBytes
+  }
+});
+
+export const endReached = offset => ({
+  type: END_REACHED,
+  payload: {
+    offset
   }
 });

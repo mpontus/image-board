@@ -2,14 +2,18 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { makeGetPostIds } from "../selectors";
-import { fetchPosts, createPost } from "../actions";
+import { fetchPosts, createPost, endReached } from "../actions";
 
 const makeMapStateToProps = () =>
   createStructuredSelector({
     ids: makeGetPostIds()
   });
 
-const enhance = connect(makeMapStateToProps, { fetchPosts, createPost });
+const enhance = connect(makeMapStateToProps, {
+  fetchPosts,
+  createPost,
+  endReached
+});
 
 class PostListContainer extends React.Component {
   componentDidMount() {
@@ -17,9 +21,9 @@ class PostListContainer extends React.Component {
   }
 
   render() {
-    const { ids, createPost, children } = this.props;
+    const { ids, createPost, endReached, children } = this.props;
 
-    return children({ ids, createPost });
+    return children({ ids, createPost, endReached });
   }
 }
 

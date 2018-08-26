@@ -1,5 +1,6 @@
 import React from "react";
 import { Flex, Box } from "grid-styled";
+import Waypoint from "react-waypoint";
 import { Header, PostCard, MasonryLayout, Spinner } from "./components";
 import { AuthContainer, PostListContainer, PostContainer } from "./containers";
 import { fileToDataUrl } from "./utils";
@@ -9,8 +10,8 @@ import "./App.css";
 const App = () => (
   <AuthContainer>
     {({ user, login, logout }) => (
-      <PostListContainer>
-        {({ ids, createPost }) => (
+      <PostListContainer fetch>
+        {({ ids, createPost, endReached }) => (
           <Flex flexDirection="column">
             <Header
               title="Image Board"
@@ -56,6 +57,9 @@ const App = () => (
                 </PostContainer>
               )}
             />
+            {ids.length > 0 && (
+              <Waypoint onEnter={() => endReached(ids.length)} />
+            )}
             <Box alignSelf="center">
               <Spinner size="40" />
             </Box>
