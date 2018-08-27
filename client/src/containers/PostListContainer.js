@@ -29,17 +29,28 @@ class PostListContainer extends React.Component {
     this.props.fetchPosts();
   }
 
+  handleCreatePost = (file, user) => {
+    const img = new Image();
+
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const { width, height } = img;
+
+      this.props.createPost(file, img.src, width, height, user);
+    };
+  };
+
   render() {
-    const {
+    const { hasMorePosts, lastPage, ids, endReached, children } = this.props;
+
+    return children({
       hasMorePosts,
       lastPage,
       ids,
-      createPost,
+      createPost: this.handleCreatePost,
       endReached,
-      children,
-    } = this.props;
-
-    return children({ hasMorePosts, lastPage, ids, createPost, endReached });
+    });
   }
 }
 

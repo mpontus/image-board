@@ -3,7 +3,6 @@ import { Flex, Box } from "grid-styled";
 import Waypoint from "react-waypoint";
 import { Header, PostCard, MasonryLayout, Spinner } from "./components";
 import { AuthContainer, PostListContainer, PostContainer } from "./containers";
-import { fileToDataUrl } from "./utils";
 import "normalize.css";
 import "./App.css";
 
@@ -19,11 +18,7 @@ const App = () => (
               avatarUrl={user && user.avatarUrl}
               onTitleClick={() => console.log("go home")}
               onLoginClick={login}
-              onCreateClick={file =>
-                fileToDataUrl(file).then(dataUrl =>
-                  createPost(file, dataUrl, user)
-                )
-              }
+              onCreateClick={file => createPost(file, user)}
               onLogoutClick={() => logout()}
             />
             <MasonryLayout

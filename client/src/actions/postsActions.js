@@ -41,16 +41,16 @@ export const fetchPostsError = (page, error) => ({
  *
  * We need to provide data url separately from the file for the action to be created syncrhonously.
  */
-
-export const createPost = (file, dataUrl, user) => ({
+// TODO: Encapsulate dataUrl, width and height as value object
+export const createPost = (file, dataUrl, width, height, user) => ({
   type: CREATE_POST,
   payload: {
     file,
     post: {
       id: `temp/${nanoid()}`,
       imageUrl: dataUrl,
-      imageWidth: null,
-      imageHeight: null,
+      imageWidth: width,
+      imageHeight: height,
       author: {
         id: user.id,
         name: user.name,
