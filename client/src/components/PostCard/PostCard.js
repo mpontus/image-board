@@ -1,11 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
-import Button from "../Button";
 import {
   MdFavorite as FavoriteIcon,
   MdDelete as DeleteIcon,
 } from "react-icons/md";
-import Media from "./Media";
+import Spinner from "../Spinner";
+import Button from "../Button";
+import ImagePreloader from "./ImagePreloader";
 
 const Card = styled.div`
   margin: 8px;
@@ -38,8 +39,34 @@ const AuthorName = styled.span`
   padding: 0 4px;
 `;
 
+const MediaBackdrop = styled.div`
+  position: relative;
+  padding-top: ${props => props.ratio * 100}%;
+`;
+
+const MediaImage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+`;
+
 export const PostCard = ({
   imageUrl,
+  imageRatio,
   imageWidth,
   imageHeight,
   avatarUrl,
@@ -56,7 +83,18 @@ export const PostCard = ({
   ...rest
 }) => (
   <Card {...rest}>
-    <Media ratio={imageHeight / imageWidth} image={imageUrl} />
+    <MediaBackdrop ratio={imageHeight / imageWidth}>
+      <ImagePreloader
+        src={imageUrl}
+        loading={
+          <SpinnerContainer>
+            <Spinner />
+          </SpinnerContainer>
+        }
+      >
+        {({ src }) => <MediaImage src={src} />}
+      </ImagePreloader>
+    </MediaBackdrop>
     <CardToolbar>
       <AuthorContainer>
         <AuthorAvatar src={avatarUrl} />
