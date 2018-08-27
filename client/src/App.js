@@ -28,6 +28,7 @@ const App = () => (
             />
             <MasonryLayout
               maxCellWidth={420}
+              keyMapper={index => ids[index]}
               cellCount={ids.length}
               cellRenderer={({ index }) => (
                 <PostContainer id={ids[index]}>

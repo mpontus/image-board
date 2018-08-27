@@ -8,11 +8,18 @@ import {
   Masonry,
 } from "react-virtualized";
 
+const defaultProps = {
+  spacer: 0,
+};
+
 /**
  * Masonry layout component using React-Virtualized
  */
 class MasonryLayout extends React.Component {
+  static defaultProps = defaultProps;
+
   state = {
+    columnCount: 0,
     columnWidth: Math.min(200, this.props.maxCellWidth),
   };
 
@@ -24,9 +31,9 @@ class MasonryLayout extends React.Component {
 
   cellPositioner = createMasonryCellPositioner({
     cellMeasurerCache: this.cellMeasurerCache,
-    columnCount: 0,
+    columnCount: this.state.columnCount,
     columnWidth: this.state.columnWidth,
-    spacer: 10,
+    spacer: this.props.spacer,
   });
 
   masonry = React.createRef();
@@ -37,6 +44,7 @@ class MasonryLayout extends React.Component {
 
     this.setState(
       {
+        columnCount,
         columnWidth,
       },
       () => {
@@ -45,7 +53,7 @@ class MasonryLayout extends React.Component {
         this.cellPositioner.reset({
           columnWidth,
           columnCount,
-          spacer: 0,
+          spacer: this.props.spacer,
         });
 
         this.masonry.current.clearCellPositions();
@@ -56,6 +64,11 @@ class MasonryLayout extends React.Component {
   cellRenderer = props => {
     const { index, key, parent, style } = props;
     const { columnWidth: width } = this.state;
+
+    if (!(index < this.props.cellCount)) {
+      // TODO: Investigate how to avoid rendering cell outside cellCount range
+      return null;
+    }
 
     return (
       <div key={key} style={{ ...style, width }}>
@@ -69,6 +82,20 @@ class MasonryLayout extends React.Component {
       </div>
     );
   };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.cellCount !== prevProps.cellCount) {
+      const { columnWidth, columnCount } = this.state;
+
+      this.cellMeasurerCache.clearAll();
+      this.cellPositioner.reset({
+        columnWidth,
+        columnCount,
+        spacer: this.props.spacer,
+      });
+      this.masonry.current.clearCellPositions();
+    }
+  }
 
   render() {
     return (
@@ -86,6 +113,7 @@ class MasonryLayout extends React.Component {
                 height={height}
                 width={width}
                 scrollTop={scrollTop}
+                keyMapper={this.props.keyMapper}
                 cellCount={this.props.cellCount}
                 cellMeasurerCache={this.cellMeasurerCache}
                 cellPositioner={this.cellPositioner}
