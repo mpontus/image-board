@@ -5,10 +5,13 @@ import { likePost, deletePost } from "../actions";
 
 const makeMapStateToProps = () =>
   createStructuredSelector({
-    post: makeGetPostById()
+    post: makeGetPostById(),
   });
 
-const enhance = connect(makeMapStateToProps, { likePost, deletePost });
+const enhance = connect(
+  makeMapStateToProps,
+  { likePost, deletePost }
+);
 
 const PostContainer = ({ post, likePost, deletePost, children }) =>
   children({ post, likePost, deletePost });

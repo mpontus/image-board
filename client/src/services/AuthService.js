@@ -23,7 +23,10 @@ class AuthService {
           observer.next(authResult.idToken);
         })
       ).pipe(tap(idToken => tokenStorage.setItem(ID_TOKEN_KEY, idToken)))
-    ).pipe(shareReplay(1), tap(token => console.log("token", token)));
+    ).pipe(
+      shareReplay(1),
+      tap(token => console.log("token", token))
+    );
   }
 
   login() {

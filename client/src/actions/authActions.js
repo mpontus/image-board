@@ -3,16 +3,16 @@ export const AUTHENTICATED = "AUTHENTICATED";
 export const LOGOUT = "LOGOUT";
 
 export const login = () => ({
-  type: LOGIN
+  type: LOGIN,
 });
 
 export const authenticated = idToken => ({
   type: AUTHENTICATED,
   payload: {
-    idToken
-  }
+    idToken,
+  },
 });
 
 export const logout = () => ({
-  type: LOGOUT
+  type: LOGOUT,
 });

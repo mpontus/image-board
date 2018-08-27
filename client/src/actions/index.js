@@ -26,7 +26,7 @@ export {
   deletePostSuccess,
   deletePostError,
   uploadProgress,
-  endReached
+  endReached,
 } from "./postsActions";
 
 export {
@@ -35,5 +35,5 @@ export {
   LOGOUT,
   login,
   authenticated,
-  logout
+  logout,
 } from "./authActions";

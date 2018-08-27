@@ -16,7 +16,7 @@ export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
 export const END_REACHED = "END_REACHED";
 
 export const fetchPosts = () => ({
-  type: FETCH_POSTS
+  type: FETCH_POSTS,
 });
 
 export const fetchPostsSuccess = ({ items, total, page }) => ({
@@ -24,16 +24,16 @@ export const fetchPostsSuccess = ({ items, total, page }) => ({
   payload: {
     page,
     total,
-    posts: items
-  }
+    posts: items,
+  },
 });
 
 export const fetchPostsError = (page, error) => ({
   type: FETCH_POSTS_ERROR,
   payload: {
     error,
-    page
-  }
+    page,
+  },
 });
 
 /**
@@ -54,45 +54,45 @@ export const createPost = (file, dataUrl, user) => ({
       author: {
         id: user.id,
         name: user.name,
-        avatarUrl: user.avatar
+        avatarUrl: user.avatar,
       },
       isLiked: true,
       likes: 1,
-      committed: false
-    }
-  }
+      committed: false,
+    },
+  },
 });
 
 export const createPostSuccess = (post, committedPost) => ({
   type: CREATE_POST_SUCCESS,
   payload: {
     post,
-    committedPost
-  }
+    committedPost,
+  },
 });
 
 export const createPostError = (post, error) => ({
   type: CREATE_POST_ERROR,
   payload: {
     post,
-    error
-  }
+    error,
+  },
 });
 
 export const likePost = (post, value) => ({
   type: LIKE_POST,
   payload: {
     post,
-    value
-  }
+    value,
+  },
 });
 
 export const likePostSuccess = (post, value) => ({
   type: LIKE_POST_SUCCESS,
   payload: {
     post,
-    value
-  }
+    value,
+  },
 });
 
 export const likePostError = (post, value, error) => ({
@@ -100,30 +100,30 @@ export const likePostError = (post, value, error) => ({
   payload: {
     post,
     value,
-    error
-  }
+    error,
+  },
 });
 
 export const deletePost = post => ({
   type: DELETE_POST,
   payload: {
-    post
-  }
+    post,
+  },
 });
 
 export const deletePostSuccess = post => ({
   type: DELETE_POST_SUCCESS,
   payload: {
-    post
-  }
+    post,
+  },
 });
 
 export const deletePostError = (post, error) => ({
   type: DELETE_POST_ERROR,
   payload: {
     post,
-    error
-  }
+    error,
+  },
 });
 
 export const uploadProgress = (id, bytesTransferred, totalBytes) => ({
@@ -131,13 +131,13 @@ export const uploadProgress = (id, bytesTransferred, totalBytes) => ({
   payload: {
     id,
     bytesTransferred,
-    totalBytes
-  }
+    totalBytes,
+  },
 });
 
 export const endReached = lastPage => ({
   type: END_REACHED,
   payload: {
-    lastPage
-  }
+    lastPage,
+  },
 });

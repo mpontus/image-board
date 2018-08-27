@@ -4,7 +4,7 @@ import { createStructuredSelector } from "reselect";
 import {
   makeHasMorePosts,
   makeGetLastPage,
-  makeGetPostIds
+  makeGetPostIds,
 } from "../selectors";
 import { fetchPosts, createPost, endReached } from "../actions";
 
@@ -12,14 +12,17 @@ const makeMapStateToProps = () =>
   createStructuredSelector({
     hasMorePosts: makeHasMorePosts(),
     lastPage: makeGetLastPage(),
-    ids: makeGetPostIds()
+    ids: makeGetPostIds(),
   });
 
-const enhance = connect(makeMapStateToProps, {
-  fetchPosts,
-  createPost,
-  endReached
-});
+const enhance = connect(
+  makeMapStateToProps,
+  {
+    fetchPosts,
+    createPost,
+    endReached,
+  }
+);
 
 class PostListContainer extends React.Component {
   componentDidMount() {
@@ -33,7 +36,7 @@ class PostListContainer extends React.Component {
       ids,
       createPost,
       endReached,
-      children
+      children,
     } = this.props;
 
     return children({ hasMorePosts, lastPage, ids, createPost, endReached });

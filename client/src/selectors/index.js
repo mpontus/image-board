@@ -3,5 +3,5 @@ export {
   makeHasMorePosts,
   makeGetLastPage,
   makeGetPostIds,
-  makeGetPostById
+  makeGetPostById,
 } from "./postsSelectors";

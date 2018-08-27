@@ -5,7 +5,7 @@ import {
   CellMeasurer,
   CellMeasurerCache,
   createMasonryCellPositioner,
-  Masonry
+  Masonry,
 } from "react-virtualized";
 
 /**
@@ -13,20 +13,20 @@ import {
  */
 class MasonryLayout extends React.Component {
   state = {
-    columnWidth: Math.min(200, this.props.maxCellWidth)
+    columnWidth: Math.min(200, this.props.maxCellWidth),
   };
 
   cellMeasurerCache = new CellMeasurerCache({
     defaultHeight: 250,
     defaultWidth: this.state.columnWidth,
-    fixedWidth: true
+    fixedWidth: true,
   });
 
   cellPositioner = createMasonryCellPositioner({
     cellMeasurerCache: this.cellMeasurerCache,
     columnCount: 0,
     columnWidth: this.state.columnWidth,
-    spacer: 10
+    spacer: 10,
   });
 
   masonry = React.createRef();
@@ -37,7 +37,7 @@ class MasonryLayout extends React.Component {
 
     this.setState(
       {
-        columnWidth
+        columnWidth,
       },
       () => {
         this.cellMeasurerCache.clearAll();
@@ -45,7 +45,7 @@ class MasonryLayout extends React.Component {
         this.cellPositioner.reset({
           columnWidth,
           columnCount,
-          spacer: 0
+          spacer: 0,
         });
 
         this.masonry.current.clearCellPositions();

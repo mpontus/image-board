@@ -8,7 +8,6 @@ import {
   mergeMap,
   switchMap,
   takeUntil,
-  delay
 } from "rxjs/operators";
 import {
   FETCH_POSTS,
@@ -24,7 +23,7 @@ import {
   deletePostSuccess,
   deletePostError,
   likePostSuccess,
-  likePostError
+  likePostError,
 } from "../actions";
 
 const fetchPostsEpic = (action$, getState, { api }) =>
@@ -59,7 +58,7 @@ const createPostEpic = (action$, getState, { api }) =>
       return Observable.create(observer => {
         const config = {
           onUploadProgress: e =>
-            observer.next(uploadProgress(post.id, e.loaded, e.total))
+            observer.next(uploadProgress(post.id, e.loaded, e.total)),
         };
 
         from(api.post("posts", data, config))

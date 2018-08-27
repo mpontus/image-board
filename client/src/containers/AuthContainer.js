@@ -5,10 +5,13 @@ import { login, logout } from "../actions";
 
 const makeMapStateToProps = () =>
   createStructuredSelector({
-    user: makeGetAuthenticatedUser()
+    user: makeGetAuthenticatedUser(),
   });
 
-const enhance = connect(makeMapStateToProps, { login, logout });
+const enhance = connect(
+  makeMapStateToProps,
+  { login, logout }
+);
 
 const AuthContainer = ({ user, login, logout, children }) =>
   children({ user, login, logout });

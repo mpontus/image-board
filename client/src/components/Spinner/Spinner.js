@@ -6,7 +6,7 @@ const DURATION = 1400;
 const COLORS = ["red", "green", "dodgerblue"];
 
 const defaultProps = {
-  size: 80
+  size: 80,
 };
 
 /**
@@ -57,16 +57,16 @@ const catchUp = keyframes`
 /**
  * Animate spinner color
  */
-const colorPercent = i => Math.floor(i / COLORS.length * 100);
+const colorPercent = i => Math.floor((i / COLORS.length) * 100);
 
 const colors = keyframes(
   COLORS.reduce(
     (keyframes, color, i) => ({
       ...keyframes,
-      [`${colorPercent(i)}%`]: { stroke: color }
+      [`${colorPercent(i)}%`]: { stroke: color },
     }),
     {
-      "100%": { stroke: COLORS[0] }
+      "100%": { stroke: COLORS[0] },
     }
   )
 );
@@ -86,7 +86,7 @@ const Spinner = styled(props => (
     />
   </svg>
 )).withConfig({
-  displayName: "Spinner"
+  displayName: "Spinner",
 })`
   width: ${prop("size")}px;
   height: ${prop("size")}px;

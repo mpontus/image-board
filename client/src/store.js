@@ -7,7 +7,7 @@ import epic from "./epics";
 
 const configureStore = deps => {
   const epicMiddleware = createEpicMiddleware({
-    dependencies: deps
+    dependencies: deps,
   });
 
   const store = createStore(

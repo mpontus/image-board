@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
       const { idToken } = action.payload;
 
       return {
-        token: idToken
+        token: idToken,
       };
     }
 
