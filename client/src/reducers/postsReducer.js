@@ -7,7 +7,7 @@ import {
   DELETE_POST_SUCCESS,
   DELETE_POST_ERROR,
   LIKE_POST,
-  LIKE_POST_ERROR
+  LIKE_POST_ERROR,
 } from "../actions";
 
 const initialState = {
@@ -15,7 +15,8 @@ const initialState = {
   lastPage: null,
   ids: [],
   byId: {},
-  uncommitted: {}
+  instances: {},
+  uncommitted: {},
 };
 
 export default (state = initialState, action) => {
@@ -35,11 +36,11 @@ export default (state = initialState, action) => {
           ...posts.reduce(
             (posts, post) => ({
               ...posts,
-              [post.id]: post
+              [post.id]: post,
             }),
             {}
-          )
-        }
+          ),
+        },
       };
     }
 
@@ -51,12 +52,12 @@ export default (state = initialState, action) => {
         ids: [post.id, ...state.ids],
         byId: {
           ...state.byId,
-          [post.id]: post
+          [post.id]: post,
         },
         uncommitted: {
           ...state.uncommitted,
-          [post.id]: true
-        }
+          [post.id]: true,
+        },
       };
     }
 
@@ -65,12 +66,19 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
-        ids: state.ids.map(id => (id === post.id ? committedPost.id : id)),
+        instances: {
+          ...state.instances,
+          [post.id]: committedPost.id,
+        },
         byId: {
           ...state.byId,
           [post.id]: undefined,
-          [committedPost.id]: committedPost
-        }
+          [committedPost.id]: committedPost,
+        },
+        uncommitted: {
+          ...state.uncommitted,
+          [post.id]: false,
+        },
       };
     }
 
@@ -81,8 +89,8 @@ export default (state = initialState, action) => {
         ...state,
         byId: {
           ...state.byId,
-          [post.id]: null
-        }
+          [post.id]: null,
+        },
       };
     }
 
@@ -96,9 +104,9 @@ export default (state = initialState, action) => {
           [post.id]: {
             ...state.byId[post.id],
             isLiked: value > 0,
-            likes: state.byId[post.id].likes + value
-          }
-        }
+            likes: state.byId[post.id].likes + value,
+          },
+        },
       };
     }
 
@@ -112,9 +120,9 @@ export default (state = initialState, action) => {
           [post.id]: {
             ...state.byId[post.id],
             isLiked: !(value > 0),
-            likes: state.byId[post.id].likes - value
-          }
-        }
+            likes: state.byId[post.id].likes - value,
+          },
+        },
       };
     }
 
@@ -125,8 +133,8 @@ export default (state = initialState, action) => {
         ...state,
         byId: {
           ...state.byId,
-          [post.id]: null
-        }
+          [post.id]: null,
+        },
       };
     }
 
@@ -137,8 +145,8 @@ export default (state = initialState, action) => {
         ...state,
         byId: {
           ...state.byId,
-          [post.id]: null
-        }
+          [post.id]: null,
+        },
       };
     }
 
@@ -151,9 +159,9 @@ export default (state = initialState, action) => {
           ...state.byId,
           [post.id]: {
             ...post,
-            error: action.payload
-          }
-        }
+            error: action.payload,
+          },
+        },
       };
     }
 
