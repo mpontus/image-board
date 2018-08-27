@@ -60,7 +60,9 @@ const Header = ({
           </Button>
           <UploadInput
             type="file"
-            onChange={e => onCreateClick(e.target.files[0])}
+            onChange={e =>
+              e.target.files.length && onCreateClick(e.target.files[0])
+            }
           />
         </UploadContainer>
         <Button onClick={onLogoutClick}>Logout</Button>
