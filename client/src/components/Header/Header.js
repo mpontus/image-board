@@ -1,6 +1,61 @@
 import * as React from "react";
+import styled from "styled-components";
 import { MdAdd as AddIcon } from "react-icons/md";
-import "./Header.css";
+import Button from "../Button";
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 8px;
+  margin-bottom: 8px;
+`;
+
+const Title = styled.div`
+  flex: 1;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1em;
+`;
+
+const UploadContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+`;
+
+const UploadInput = styled.input`
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+`;
+
+const IconButton = styled.div`
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+
+  & > svg {
+    color: gray;
+    font-size: 24px;
+    width: 1em;
+    height: 1em;
+    margin: 8px;
+  }
+`;
+
+const TextButton = styled.button`
+  border: none;
+  background: transparent;
+  padding: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+`;
 
 const Header = ({
   title,
@@ -11,32 +66,25 @@ const Header = ({
   onCreateClick,
   onLogoutClick
 }) => (
-  <div className="header">
-    <h1 className="header__title" onClick={onTitleClick}>
-      {title}
-    </h1>
+  <Container>
+    <Title onClick={onTitleClick}>{title}</Title>
     {isAuthenticated ? (
       <React.Fragment>
-        <div className="header__upload-container">
-          <div className="header__icon-button">
-            <AddIcon className="header__icon" />
-          </div>
-          <input
-            className="header__upload-input"
+        <UploadContainer>
+          <Button>
+            <AddIcon size="24" />
+          </Button>
+          <UploadInput
             type="file"
             onChange={e => onCreateClick(e.target.files[0])}
           />
-        </div>
-        <div className="header__text-button" onClick={onLogoutClick}>
-          Logout
-        </div>
+        </UploadContainer>
+        <Button onClick={onLogoutClick}>Logout</Button>
       </React.Fragment>
     ) : (
-      <div className="header__text-button" onClick={onLoginClick}>
-        Login
-      </div>
+      <TextButton onClick={onLoginClick}>Login</TextButton>
     )}
-  </div>
+  </Container>
 );
 
 export default Header;

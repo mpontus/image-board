@@ -1,18 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { ThemeProvider } from "styled-components";
 import Auth0Lock from "auth0-lock";
 import axios from "axios";
 import App from "./App";
 import createStore from "./store";
 import { AuthService } from "./services";
 import { connectAxiosToAuth } from "./utils";
-import theme from "./theme";
 import registerServiceWorker from "./registerServiceWorker";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 const auth = new AuthService(
@@ -23,8 +21,8 @@ const auth = new AuthService(
       autoclose: true,
       auth: {
         redirect: false,
-        responseType: "token id_token"
-      }
+        responseType: "token id_token",
+      },
     }
   ),
   localStorage
@@ -36,9 +34,7 @@ connectAxiosToAuth(api, auth);
 
 ReactDOM.render(
   <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <App />
   </Provider>,
   document.getElementById("root")
 );

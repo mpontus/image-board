@@ -1,29 +1,41 @@
 import * as React from "react";
 import styled from "styled-components";
+import Button from "../Button";
+import {
+  MdFavorite as FavoriteIcon,
+  MdDelete as DeleteIcon,
+} from "react-icons/md";
 import Media from "./Media";
-import AuthorBlock from "./AuthorBlock";
-import LikeButton from "./LikeButton";
-import DeleteButton from "./DeleteButton";
 
-const Card = styled.div.withConfig({
-  displayName: "Card"
-})`
-  margin: ${props => props.theme.space[2]};
-  box-shadow: ${props => props.theme.boxShadow[0]};
-  transition: box-shadow ${props => props.theme.duration[1]} ease-in;
-
-  &:hover {
-    box-shadow: ${props => props.theme.boxShadow[1]};
-  }
+const Card = styled.div`
+  margin: 8px;
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
 `;
 
-const Toolbar = styled.div.withConfig({
-  displayName: "Toolbar"
-})`
+const CardToolbar = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: ${props => props.theme.space[2]} ${props => props.theme.space[1]};
+  padding: 8px 4px;
+`;
+
+const AuthorContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  padding: 0 4px;
+`;
+
+const AuthorAvatar = styled.img`
+  margin: 0 4px;
+  height: 24px;
+  width: 24px;
+`;
+
+const AuthorName = styled.span`
+  font-size: 14px;
+  padding: 0 4px;
 `;
 
 export const PostCard = ({
@@ -45,11 +57,21 @@ export const PostCard = ({
 }) => (
   <Card {...rest}>
     <Media ratio={imageHeight / imageWidth} image={imageUrl} />
-    <Toolbar>
-      <AuthorBlock avatarUrl={avatarUrl} authorName={authorName} />
-      <LikeButton active={isLiked} count={likesCount} onClick={onLikeToggle} />
-      {canDelete && <DeleteButton px={1} onClick={onDeleteClick} />}
-    </Toolbar>
+    <CardToolbar>
+      <AuthorContainer>
+        <AuthorAvatar src={avatarUrl} />
+        <AuthorName>{authorName}</AuthorName>
+      </AuthorContainer>
+      <Button color={isLiked ? "hotpink" : "gray"} onClick={onLikeToggle}>
+        <span>{likesCount}</span>
+        <FavoriteIcon size="24" />
+      </Button>
+      {canDelete && (
+        <Button onClick={onDeleteClick}>
+          <DeleteIcon size="24" />
+        </Button>
+      )}
+    </CardToolbar>
   </Card>
 );
 
