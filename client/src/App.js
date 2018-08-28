@@ -30,6 +30,7 @@ const App = () => (
                   {({ post, likePost, deletePost }) => (
                     <div style={{ overflow: "hidden" }}>
                       <PostCard
+                        committed={post.committed}
                         imageUrl={post.imageUrl}
                         imageWidth={post.imageWidth}
                         imageHeight={post.imageHeight}
@@ -38,10 +39,10 @@ const App = () => (
                         likesCount={post.likes}
                         isLiked={post.isLiked}
                         canDelete={user && user.id === post.author.id}
-                        bytesUploaded={
+                        bytesTransferred={
                           post.progress && post.progress.bytesTransferred
                         }
-                        bytesTotal={post.progress && post.progress.totalBytes}
+                        bytesTotal={post.progress && post.progress.bytesTotal}
                         errorMessage={post.error && post.error.message}
                         onLikeToggle={() =>
                           likePost(post, post.isLiked ? -1 : +1)

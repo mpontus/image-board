@@ -126,12 +126,12 @@ export const deletePostError = (post, error) => ({
   },
 });
 
-export const uploadProgress = (id, bytesTransferred, totalBytes) => ({
+export const uploadProgress = (id, bytesTransferred, bytesTotal) => ({
   type: UPLOAD_PROGRESS,
   payload: {
     id,
     bytesTransferred,
-    totalBytes,
+    bytesTotal,
   },
 });
 

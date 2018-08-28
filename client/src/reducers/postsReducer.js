@@ -1,6 +1,7 @@
 import {
   FETCH_POSTS_SUCCESS,
   CREATE_POST,
+  UPLOAD_PROGRESS,
   CREATE_POST_SUCCESS,
   CREATE_POST_ERROR,
   DELETE_POST,
@@ -17,6 +18,7 @@ const initialState = {
   byId: {},
   instances: {},
   uncommitted: {},
+  progress: {},
 };
 
 export default (state = initialState, action) => {
@@ -57,6 +59,21 @@ export default (state = initialState, action) => {
         uncommitted: {
           ...state.uncommitted,
           [post.id]: true,
+        },
+      };
+    }
+
+    case UPLOAD_PROGRESS: {
+      const { id, bytesTransferred, bytesTotal } = action.payload;
+
+      return {
+        ...state,
+        progress: {
+          ...state.uploadProgress,
+          [id]: {
+            bytesTransferred,
+            bytesTotal,
+          },
         },
       };
     }
