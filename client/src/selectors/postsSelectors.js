@@ -8,34 +8,16 @@ import { createSelector } from "reselect";
  * the real id by which the entity returned from the API is saved into
  * redux store.
  */
-const getFinalId = (instances, id) =>
-  id in instances ? getFinalId(instances, instances[id]) : id;
+const makeGetFinalId = () =>
+  createSelector(
+    state => state.posts.instances,
+    (state, id) => id,
+    (instances, id) => {
+      const recurse = id => (id in instances ? recurse(instances[id]) : id);
 
-/**
- * Check whether the entity refernced by ID exists.
- *
- * Removing entity from the store is cheaper by resetting its value in
- * the map rather than splicing the id list.
- */
-const entityExists = (byId, id) => !!byId[id];
-
-/**
- * Denormalize post
- *
- * Post model includes such values as its upload progress, whether the
- * entity only exists locally or saved in the database, and any errors
- * that occur while persisting the entity.
- *
- * In the redux store those values are stored separately from Post
- * representation as returned by the API.
- *
- * We need to build fully qualified local model before the entity can
- * be used in the components.
- */
-const denormalizeEntity = (byId, uncommitted, id) => ({
-  ...byId[id],
-  committed: !uncommitted[id],
-});
+      return recurse(id);
+    }
+  );
 
 // TODO: After removing post the ids length may be greater than total
 // due to not splicing the id list. We need to store the count of
@@ -52,22 +34,48 @@ export const makeHasMorePosts = () =>
  */
 export const makeGetLastPage = () => state => state.posts.lastPage;
 
-export const makeGetPostIds = () =>
-  createSelector(
+/**
+ * Return the list IDs in the current listing
+ */
+// Why don't we return final ids from this function?
+//
+// Even though it would help us avoid performing ID resolution in
+// makeGetPostById, the original key may be important for UX in the
+// context of virtualized list.
+export const makeGetPostIds = () => {
+  const getFinalId = makeGetFinalId();
+
+  return createSelector(
     state => state.posts.ids,
     state => state.posts.byId,
     state => state.posts.instances,
-    (ids, byId, instances) => {
-      return ids.filter(id => entityExists(byId, getFinalId(instances, id)));
-    }
+    (ids, byId, instances) =>
+      ids.filter(id => {
+        // Use OutputSelector#resultFunc to bypass, in this case,
+        // harmful memoization since the key will be reset with each
+        // iteration
+        const finalId = getFinalId.resultFunc(instances, id);
+
+        return !!byId[finalId];
+      })
+  );
+};
+
+/**
+ * Retrieve the post by ID and denormalize it into domain model
+ */
+export const makeGetPostById = () => {
+  const getFinalId = makeGetFinalId();
+  const finalSelector = createSelector(
+    (state, id) => state.posts.byId[id],
+    (state, id) => state.posts.uncommitted[id],
+    (state, id) => state.posts.progress[id],
+    (post, uncommitted, progress) => ({
+      ...post,
+      committed: !uncommitted,
+      progress: progress,
+    })
   );
 
-export const makeGetPostById = () =>
-  createSelector(
-    (_, query) => query.id,
-    state => state.posts.byId,
-    state => state.posts.uncommitted,
-    state => state.posts.instances,
-    (id, byId, uncommitted, instances) =>
-      denormalizeEntity(byId, uncommitted, getFinalId(instances, id))
-  );
+  return (state, { id }) => finalSelector(state, getFinalId(state, id));
+};
