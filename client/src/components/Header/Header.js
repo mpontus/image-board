@@ -33,14 +33,6 @@ const UploadInput = styled.input`
   top: 0;
 `;
 
-const TextButton = styled.button`
-  border: none;
-  background: transparent;
-  padding: 8px;
-  font-size: 14px;
-  text-transform: uppercase;
-`;
-
 const Header = ({
   title,
   isAuthenticated,
@@ -68,7 +60,7 @@ const Header = ({
         <Button onClick={onLogoutClick}>Logout</Button>
       </React.Fragment>
     ) : (
-      <TextButton onClick={onLoginClick}>Login</TextButton>
+      <Button onClick={onLoginClick}>Login</Button>
     )}
   </Container>
 );
