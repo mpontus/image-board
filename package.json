@@ -1,4 +1,10 @@
 {
+  "name": "image-board",
+  "version": "1.0.0",
+  "description": "Simple Image Board application built with React and NodeJS",
+  "repository": "https://github.com/mpontus/image-board",
+  "author": "Mikhail Pontus <m.pontus@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "client:start": "lerna run start --scope client",
     "server:start": "lerna run start --scope server",
