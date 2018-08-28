@@ -9,6 +9,7 @@ import {
   switchMap,
   takeUntil,
 } from "rxjs/operators";
+import { CancelToken } from "axios";
 import {
   FETCH_POSTS,
   END_REACHED,
@@ -56,9 +57,12 @@ const createPostEpic = (action$, getState, { api }) =>
         .pipe(filter(action => action.payload.post.id === post.id));
 
       return Observable.create(observer => {
+        const source = CancelToken.source();
+
         const config = {
           onUploadProgress: e =>
             observer.next(uploadProgress(post.id, e.loaded, e.total)),
+          cancelToken: source.token,
         };
 
         from(api.post("posts", data, config))
@@ -74,7 +78,7 @@ const createPostEpic = (action$, getState, { api }) =>
           .subscribe(observer);
 
         // TODO; Cancel the request here
-        return () => {};
+        return source.cancel;
       });
     })
   );

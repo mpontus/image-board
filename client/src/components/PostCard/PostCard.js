@@ -146,7 +146,7 @@ class PostCard extends React.Component {
                 {bytesTransferred ? `${bytesTransferred}Kb` : "Pending"}
               </ProgressText>
             </UploadProgressContainer>
-            <Button onClick={onLikeToggle}>
+            <Button onClick={onDeleteClick}>
               <CloseIcon size="24" />
             </Button>
           </CardToolbar>
