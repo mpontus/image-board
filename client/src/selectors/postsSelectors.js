@@ -43,11 +43,12 @@ export const makeGetPostIds = () => {
   const getFinalId = makeGetFinalId();
 
   return createSelector(
+    state => state.posts.pending,
     state => state.posts.ids,
     state => state.posts.byId,
     state => state.posts.instances,
-    (ids, byId, instances) =>
-      ids.filter(id => {
+    (pending, ids, byId, instances) =>
+      [...pending, ...ids].filter(id => {
         // Use OutputSelector#resultFunc to bypass, in this case,
         // harmful memoization since the key will be reset with each
         // iteration

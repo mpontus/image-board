@@ -15,6 +15,7 @@ const initialState = {
   total: null,
   lastPage: null,
   ids: [],
+  pending: [],
   byId: {},
   instances: {},
   uncommitted: {},
@@ -51,7 +52,7 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
-        ids: [post.id, ...state.ids],
+        pending: [post.id, ...state.pending],
         byId: {
           ...state.byId,
           [post.id]: post,
@@ -83,6 +84,8 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
+        pending: state.pending.filter(id => id !== post.id),
+        ids: [post.id, ...state.ids],
         instances: {
           ...state.instances,
           [post.id]: committedPost.id,
