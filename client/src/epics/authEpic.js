@@ -1,9 +1,13 @@
 import { combineEpics } from "redux-observable";
-import { map, tap, ignoreElements } from "rxjs/operators";
-import { LOGIN, authenticated } from "../actions";
+import { from } from "rxjs";
+import { filter, map, tap, ignoreElements } from "rxjs/operators";
+import { LOGIN, LOGOUT, authenticated } from "../actions";
 
 const authEpic = (action$, getState, { auth }) =>
-  auth.getIdToken().pipe(map(authenticated));
+  from(auth.getIdToken()).pipe(
+    filter(token => !!token),
+    map(authenticated)
+  );
 
 const loginEpic = (action$, getState, { auth }) =>
   action$.ofType(LOGIN).pipe(
@@ -11,4 +15,10 @@ const loginEpic = (action$, getState, { auth }) =>
     ignoreElements()
   );
 
-export default combineEpics(authEpic, loginEpic);
+const logoutEpic = (action$, getState, { auth }) =>
+  action$.ofType(LOGOUT).pipe(
+    tap(() => auth.logout()),
+    ignoreElements()
+  );
+
+export default combineEpics(authEpic, loginEpic, logoutEpic);

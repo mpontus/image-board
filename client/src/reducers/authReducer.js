@@ -12,10 +12,6 @@ export default (state = initialState, action) => {
       };
     }
 
-    case LOGOUT: {
-      return null;
-    }
-
     default: {
       return state;
     }

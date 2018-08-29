@@ -6,11 +6,11 @@
     "auth0-lock": "^11.8.1",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "dot-prop-immutable": "^1.4.0",
     "grid-styled": "^5.0.2",
     "jwt-decode": "^2.2.0",
     "nanoid": "^1.2.1",
     "normalize.css": "^8.0.0",
-    "ramda": "^0.25.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-icons": "^3.0.5",
@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "eslint-plugin-prettier": "^2.6.2",
+    "jwt-simple": "^0.5.1",
     "prettier": "^1.14.2"
   }
 }
