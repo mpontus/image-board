@@ -76,7 +76,7 @@ class AuthService {
     return new Promise((resolve, reject) => {
       this.lock.checkSession({}, (err, data) => {
         try {
-          err ? reject(err) : resolve(data.id_token);
+          err ? reject(err) : resolve(data.idToken);
         } catch (error) {
           reject(error);
         }
