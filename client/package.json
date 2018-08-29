@@ -5,7 +5,6 @@
   "dependencies": {
     "auth0-lock": "^11.8.1",
     "axios": "^0.18.0",
-    "classnames": "^2.2.6",
     "dot-prop-immutable": "^1.4.0",
     "grid-styled": "^5.0.2",
     "jwt-decode": "^2.2.0",
