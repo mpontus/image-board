@@ -77,7 +77,6 @@ const createPostEpic = (action$, getState, { api }) =>
           )
           .subscribe(observer);
 
-        // TODO; Cancel the request here
         return source.cancel;
       });
     })

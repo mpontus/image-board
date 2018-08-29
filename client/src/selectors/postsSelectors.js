@@ -19,14 +19,11 @@ const makeGetFinalId = () =>
     }
   );
 
-// TODO: After removing post the ids length may be greater than total
-// due to not splicing the id list. We need to store the count of
-// deleted posts separately to account for that.
 export const makeHasMorePosts = () =>
   createSelector(
-    state => state.posts.ids.length,
+    makeGetPostIds(),
     state => state.posts.total,
-    (count, total) => (total == null ? true : total > count)
+    (ids, total) => total > ids.length
   );
 
 /**
