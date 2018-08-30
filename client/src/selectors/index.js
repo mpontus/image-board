@@ -6,3 +6,4 @@ export {
   makeGetPostIds,
   makeGetPostById,
 } from "./postsSelectors";
+export { makeGetNotificationMessage } from "./notificationsSelectors";

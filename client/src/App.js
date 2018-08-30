@@ -1,8 +1,19 @@
 import React from "react";
 import { Flex, Box } from "grid-styled";
 import Waypoint from "react-waypoint";
-import { Header, PostCard, MasonryLayout, Spinner } from "./components";
-import { AuthContainer, PostListContainer, PostContainer } from "./containers";
+import {
+  Snackbar,
+  Header,
+  PostCard,
+  MasonryLayout,
+  Spinner,
+} from "./components";
+import {
+  AuthContainer,
+  PostListContainer,
+  PostContainer,
+  NotificationContainer,
+} from "./containers";
 import "normalize.css";
 import "./App.css";
 
@@ -75,6 +86,11 @@ const App = () => (
                 <Spinner size="40" />
               </Box>
             )}
+            <NotificationContainer>
+              {({ message }) =>
+                message ? <Snackbar>{message}</Snackbar> : null
+              }
+            </NotificationContainer>
           </Flex>
         )}
       </PostListContainer>

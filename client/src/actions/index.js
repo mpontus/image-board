@@ -37,3 +37,8 @@ export {
   authenticated,
   logout,
 } from "./authActions";
+
+export {
+  DISMISS_NOTIFICATION,
+  dismissNotification,
+} from "./notificationActions";
