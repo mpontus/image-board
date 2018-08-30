@@ -21,7 +21,7 @@ describe("Deleteing a post", () => {
     cy.get('[data-cy="card"]').should("have.length", 4);
   });
 
-  it.skip("should handle delete errors", () => {
+  it("should handle delete errors", () => {
     cy.route({
       method: "DELETE",
       url: "/api/posts/*",
@@ -33,7 +33,7 @@ describe("Deleteing a post", () => {
       .get('[data-cy="card"] [aria-label="Delete"]')
       .click();
 
-    cy.contains("Failed to delete a post");
+    cy.contains("Delete post failed");
 
     cy.get('[data-cy="card"]').should("have.length", 5);
   });

@@ -31,15 +31,11 @@ describe("Creating a post", () => {
     cy.get('[data-cy="card"]').should("have.length", 5);
   });
 
-  it.skip("should show error when the post has failed to upload", () => {
-    cy.route({ method: "POST", url: "/api/posts", response: {}, code: 500 });
+  it("should show error when the post has failed to upload", () => {
+    cy.route({ method: "POST", url: "/api/posts", response: {}, status: 500 });
     cy.upload("input[type=file]", "sample.jpg", "image/jpeg");
 
-    cy.get('[data-cy="card"]:first')
-      .contains("The post has failed to upload")
-      .get('[aria-label="Cancel"]')
-      .click();
-
     cy.get('[data-cy="card"]').should("have.length", 5);
+    cy.contains("Create post failed");
   });
 });
