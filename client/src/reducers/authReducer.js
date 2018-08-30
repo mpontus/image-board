@@ -1,4 +1,4 @@
-import { AUTHENTICATED, LOGOUT } from "../actions";
+import { AUTHENTICATED } from "../actions";
 
 const initialState = null;
 
