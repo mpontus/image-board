@@ -1,4 +1,4 @@
-import nanoid from "nanoid";
+import gud from "gud";
 
 export const FETCH_POSTS = "FETCH_POSTS";
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
@@ -47,7 +47,7 @@ export const createPost = (file, dataUrl, width, height, user) => ({
   payload: {
     file,
     post: {
-      id: `temp/${nanoid()}`,
+      id: `temp/${gud()}`,
       imageUrl: dataUrl,
       imageWidth: width,
       imageHeight: height,
