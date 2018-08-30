@@ -25,7 +25,7 @@ describe("Liking a post", () => {
     cy.get('[data-cy="likes-count"]').contains(1);
   });
 
-  it.skip("should handle like error", () => {
+  it("should handle like error", () => {
     cy.visit("/");
 
     cy.route({

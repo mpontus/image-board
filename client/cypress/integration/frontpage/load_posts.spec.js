@@ -17,14 +17,16 @@ describe("Posts loading", () => {
     cy.get('[data-cy="card"]').should("have.length", 10);
   });
 
-  it.skip("should show an error when posts failed to load", () => {
+  it("should show an error when posts failed to load", () => {
     cy.route({
       method: "GET",
       url: "/api/posts?page=1",
       response: {},
       status: 500,
     });
+
     cy.visit("/");
+
     cy.contains("An error occured. Please reload the page.");
   });
 });

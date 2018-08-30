@@ -1,6 +1,7 @@
 import {
   FETCH_POSTS,
   FETCH_POSTS_SUCCESS,
+  FETCH_POSTS_ERROR,
   CREATE_POST,
   UPLOAD_PROGRESS,
   CREATE_POST_SUCCESS,
@@ -56,6 +57,13 @@ export default (state = initialState, action) => {
             {}
           ),
         },
+      };
+    }
+
+    case FETCH_POSTS_ERROR: {
+      return {
+        ...state,
+        loading: false,
       };
     }
 

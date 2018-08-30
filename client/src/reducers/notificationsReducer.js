@@ -1,5 +1,6 @@
 import {
   DISMISS_NOTIFICATION,
+  FETCH_POSTS_ERROR,
   CREATE_POST_ERROR,
   DELETE_POST_ERROR,
   LIKE_POST_ERROR,
@@ -23,6 +24,10 @@ const notificationsReducer = (state = initialState, action) => {
 
     case LIKE_POST_ERROR: {
       return "Failed to like the post";
+    }
+
+    case FETCH_POSTS_ERROR: {
+      return "An error occured. Please reload the page.";
     }
 
     default:
