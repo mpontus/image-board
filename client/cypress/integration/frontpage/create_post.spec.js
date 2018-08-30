@@ -1,7 +1,14 @@
 describe("Creating a post", () => {
   beforeEach(() => {
     cy.server()
-      .route("GET", "/api/posts?page=1", "fixture:posts.json")
+      .route("GET", "/api/posts?page=1", "fixture:posts-page-1.json")
+      // Don't load any additional pages
+      .route({
+        method: "GET",
+        url: "/api/posts?page=2",
+        response: {},
+        delay: 9000,
+      })
       .route("POST", "/api/posts", "fixture:post.json");
   });
 
@@ -11,27 +18,28 @@ describe("Creating a post", () => {
   });
 
   it("should create new post", () => {
-    cy.get('[data-cy="card"]').then(cards => {
-      cy.upload("input[type=file]", "sample.jpg", "image/jpeg");
-
-      cy.get('[data-cy="card"]').should("have.length", cards.length + 1);
-    });
+    cy.upload("input[type=file]", "sample.jpg", "image/jpeg");
+    cy.get('[data-cy="card"]').should("have.length", 6);
+    cy.upload("input[type=file]", "sample.jpg", "image/jpeg");
+    cy.get('[data-cy="card"]').should("have.length", 7);
   });
 
   it("should abort post creation", () => {
-    cy.route({
-      method: "POST",
-      url: "/api/posts",
-      delay: 9000,
-      response: {},
-    });
+    cy.route({ method: "POST", url: "/api/posts", response: {}, delay: 9000 });
+    cy.upload("input[type=file]", "sample.jpg", "image/jpeg");
+    cy.get('[aria-label="Cancel"]').click();
+    cy.get('[data-cy="card"]').should("have.length", 5);
+  });
 
-    cy.get('[data-cy="card"]').then(cards => {
-      cy.upload("input[type=file]", "sample.jpg", "image/jpeg");
+  it.skip("should show error when the post has failed to upload", () => {
+    cy.route({ method: "POST", url: "/api/posts", response: {}, code: 500 });
+    cy.upload("input[type=file]", "sample.jpg", "image/jpeg");
 
-      cy.get('[aria-label="Cancel"]').click();
+    cy.get('[data-cy="card"]:first')
+      .contains("The post has failed to upload")
+      .get('[aria-label="Cancel"]')
+      .click();
 
-      cy.get('[data-cy="card"]').should("have.length", cards.length);
-    });
+    cy.get('[data-cy="card"]').should("have.length", 5);
   });
 });
