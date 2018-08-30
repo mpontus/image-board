@@ -12,7 +12,7 @@
         "avatarUrl": "https://s.gravatar.com/avatar/13df033e9429f26f6f20fefa1c96925e?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fdf.png"
       },
       "likes": 1,
-      "isLiked": true,
+      "isLiked": false,
       "timestamp": "2018-08-27T17:05:49.586Z"
     },
     {
@@ -26,7 +26,7 @@
         "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
       },
       "likes": 1,
-      "isLiked": true,
+      "isLiked": false,
       "timestamp": "2018-08-24T10:54:10.054Z"
     },
     {
@@ -40,7 +40,7 @@
         "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
       },
       "likes": 1,
-      "isLiked": true,
+      "isLiked": false,
       "timestamp": "2018-08-24T10:54:05.837Z"
     },
     {
@@ -54,7 +54,7 @@
         "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
       },
       "likes": 1,
-      "isLiked": true,
+      "isLiked": false,
       "timestamp": "2018-08-24T10:54:02.187Z"
     },
     {
@@ -68,7 +68,7 @@
         "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
       },
       "likes": 1,
-      "isLiked": true,
+      "isLiked": false,
       "timestamp": "2018-08-24T10:53:58.505Z"
     }
   ]

@@ -124,8 +124,12 @@ class PostCard extends React.Component {
               <AuthorAvatar src={avatarUrl} />
               <AuthorName>{authorName}</AuthorName>
             </AuthorContainer>
-            <Button color={isLiked ? "hotpink" : "gray"} onClick={onLikeToggle}>
-              <span>{likesCount}</span>
+            <Button
+              aria-label="Like"
+              color={isLiked ? "hotpink" : "gray"}
+              onClick={onLikeToggle}
+            >
+              <span data-cy="likes-count">{likesCount}</span>
               <FavoriteIcon size="24" />
             </Button>
             {canDelete && (
