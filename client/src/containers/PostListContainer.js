@@ -2,14 +2,16 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
-  makeHasMorePosts,
+  makeIsLoading,
   makeGetLastPage,
+  makeHasMorePosts,
   makeGetPostIds,
 } from "../selectors";
 import { fetchPosts, createPost, endReached } from "../actions";
 
 const makeMapStateToProps = () =>
   createStructuredSelector({
+    isLoading: makeIsLoading(),
     hasMorePosts: makeHasMorePosts(),
     lastPage: makeGetLastPage(),
     ids: makeGetPostIds(),
@@ -42,9 +44,17 @@ class PostListContainer extends React.Component {
   };
 
   render() {
-    const { hasMorePosts, lastPage, ids, endReached, children } = this.props;
+    const {
+      isLoading,
+      hasMorePosts,
+      lastPage,
+      ids,
+      endReached,
+      children,
+    } = this.props;
 
     return children({
+      isLoading,
       hasMorePosts,
       lastPage,
       ids,

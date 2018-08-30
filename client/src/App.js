@@ -9,8 +9,15 @@ import "./App.css";
 const App = () => (
   <AuthContainer>
     {({ user, login, logout }) => (
-      <PostListContainer fetch>
-        {({ hasMorePosts, lastPage, ids, createPost, endReached }) => (
+      <PostListContainer>
+        {({
+          isLoading,
+          hasMorePosts,
+          lastPage,
+          ids,
+          createPost,
+          endReached,
+        }) => (
           <Flex flexDirection="column">
             <Header
               title="Image Board"
@@ -60,11 +67,13 @@ const App = () => (
                   key={`posts-${ids.length}`}
                   onEnter={() => endReached(lastPage)}
                 />
-
-                <Box alignSelf="center">
-                  <Spinner size="40" />
-                </Box>
               </React.Fragment>
+            )}
+
+            {isLoading && (
+              <Box alignSelf="center">
+                <Spinner size="40" />
+              </Box>
             )}
           </Flex>
         )}

@@ -1,0 +1,75 @@
+{
+  "total": 33,
+  "items": [
+    {
+      "id": "5b842f6ddcac78201cfd5c19",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535389764/google-udacity-scholars18/983jBhWtY.jpg",
+      "imageWidth": 7952,
+      "imageHeight": 5304,
+      "author": {
+        "id": "github|2014259",
+        "name": "mpontus",
+        "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
+      },
+      "likes": 1,
+      "isLiked": true,
+      "timestamp": "2018-08-27T17:05:49.586Z"
+    },
+    {
+      "id": "5b7fe3d2fd8c0a3b347f778e",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535108259/google-udacity-scholars18/28qm2ilp0.jpg",
+      "imageWidth": 5400,
+      "imageHeight": 3600,
+      "author": {
+        "id": "github|2014259",
+        "name": "mpontus",
+        "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
+      },
+      "likes": 1,
+      "isLiked": true,
+      "timestamp": "2018-08-24T10:54:10.054Z"
+    },
+    {
+      "id": "5b7fe3cdfd8c0a3b347f778d",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535108254/google-udacity-scholars18/lVo7wJrSn.jpg",
+      "imageWidth": 3648,
+      "imageHeight": 5472,
+      "author": {
+        "id": "github|2014259",
+        "name": "mpontus",
+        "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
+      },
+      "likes": 1,
+      "isLiked": true,
+      "timestamp": "2018-08-24T10:54:05.837Z"
+    },
+    {
+      "id": "5b7fe3cafd8c0a3b347f778c",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535108251/google-udacity-scholars18/7MSjgJR7Q.jpg",
+      "imageWidth": 3885,
+      "imageHeight": 2912,
+      "author": {
+        "id": "github|2014259",
+        "name": "mpontus",
+        "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
+      },
+      "likes": 1,
+      "isLiked": true,
+      "timestamp": "2018-08-24T10:54:02.187Z"
+    },
+    {
+      "id": "5b7fe3c6fd8c0a3b347f778b",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535108247/google-udacity-scholars18/efnnK9mIc.jpg",
+      "imageWidth": 3024,
+      "imageHeight": 3780,
+      "author": {
+        "id": "github|2014259",
+        "name": "mpontus",
+        "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
+      },
+      "likes": 1,
+      "isLiked": true,
+      "timestamp": "2018-08-24T10:53:58.505Z"
+    }
+  ]
+}

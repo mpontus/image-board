@@ -10,6 +10,7 @@ import {
 
 const defaultProps = {
   spacer: 0,
+  overscanByPixels: 20,
 };
 
 /**
@@ -119,6 +120,12 @@ class MasonryLayout extends React.Component {
                 cellPositioner={this.cellPositioner}
                 cellRenderer={this.cellRenderer}
                 ref={this.masonry}
+                overscanByPixels={
+                  "Cypress" in window
+                    ? // Effectively disable optimization for UI tests
+                      Infinity
+                    : this.props.overscanByPixels
+                }
               />
             )}
           </AutoSizer>

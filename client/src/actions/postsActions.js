@@ -135,6 +135,9 @@ export const uploadProgress = (id, bytesTransferred, bytesTotal) => ({
   },
 });
 
+// TODO: Action would be more aptly called as "LOAD_MORE_PENDING" or
+// something like that, since we are working off the assumption that
+// it will not be dispatched when no more posts are available
 export const endReached = lastPage => ({
   type: END_REACHED,
   payload: {

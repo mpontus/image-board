@@ -19,17 +19,25 @@ const makeGetFinalId = () =>
     }
   );
 
+/**
+ * Return listing loading status
+ */
+export const makeIsLoading = () => state => state.posts.loading;
+
+/**
+ * Return the number of pages retrieved from the API so far.
+ */
+export const makeGetLastPage = () => state => state.posts.lastPage;
+
+/**
+ * Return whether more posts may be available
+ */
 export const makeHasMorePosts = () =>
   createSelector(
     makeGetPostIds(),
     state => state.posts.total,
     (ids, total) => total > ids.length
   );
-
-/**
- * Return the number of pages retrieved from the API so far.
- */
-export const makeGetLastPage = () => state => state.posts.lastPage;
 
 /**
  * Return the list IDs in the current listing

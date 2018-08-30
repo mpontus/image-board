@@ -1,4 +1,5 @@
 import {
+  FETCH_POSTS,
   FETCH_POSTS_SUCCESS,
   CREATE_POST,
   UPLOAD_PROGRESS,
@@ -9,9 +10,11 @@ import {
   DELETE_POST_ERROR,
   LIKE_POST,
   LIKE_POST_ERROR,
+  END_REACHED,
 } from "../actions";
 
 const initialState = {
+  loading: false,
   total: null,
   lastPage: null,
   ids: [],
@@ -24,6 +27,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_POSTS:
+    case END_REACHED: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
     case FETCH_POSTS_SUCCESS: {
       const { total, posts, page } = action.payload;
 
@@ -31,6 +42,7 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
+        loading: false,
         total,
         lastPage: page,
         ids: page > 1 ? [...state.ids, ...ids] : ids,
