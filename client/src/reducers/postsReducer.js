@@ -151,6 +151,7 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
+        total: state.total - 1,
         byId: {
           ...state.byId,
           [post.id]: null,
@@ -175,6 +176,7 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
+        total: state.total + 1,
         byId: {
           ...state.byId,
           [post.id]: {

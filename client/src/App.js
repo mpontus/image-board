@@ -54,16 +54,17 @@ const App = () => (
                 </PostContainer>
               )}
             />
-            {ids.length > 0 && (
-              <Waypoint
-                key={`posts-${ids.length}`}
-                onEnter={() => endReached(lastPage)}
-              />
-            )}
             {hasMorePosts && (
-              <Box alignSelf="center">
-                <Spinner size="40" />
-              </Box>
+              <React.Fragment>
+                <Waypoint
+                  key={`posts-${ids.length}`}
+                  onEnter={() => endReached(lastPage)}
+                />
+
+                <Box alignSelf="center">
+                  <Spinner size="40" />
+                </Box>
+              </React.Fragment>
             )}
           </Flex>
         )}

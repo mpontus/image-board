@@ -105,7 +105,7 @@ class PostCard extends React.Component {
     } = this.props;
 
     return (
-      <Card {...rest}>
+      <Card data-cy="card" {...rest}>
         <MediaBackdrop ratio={imageHeight / imageWidth}>
           <ImagePreloader
             src={imageUrl}
@@ -129,7 +129,7 @@ class PostCard extends React.Component {
               <FavoriteIcon size="24" />
             </Button>
             {canDelete && (
-              <Button onClick={onDeleteClick}>
+              <Button aria-label="Delete" onClick={onDeleteClick}>
                 <DeleteIcon size="24" />
               </Button>
             )}
@@ -146,7 +146,7 @@ class PostCard extends React.Component {
                 {bytesTransferred ? `${bytesTransferred}Kb` : "Pending"}
               </ProgressText>
             </UploadProgressContainer>
-            <Button onClick={onDeleteClick}>
+            <Button aria-label="Cancel" onClick={onDeleteClick}>
               <CloseIcon size="24" />
             </Button>
           </CardToolbar>

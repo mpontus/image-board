@@ -1,0 +1,63 @@
+{
+  "total": 5,
+  "items": [
+    {
+      "id": "5b86d3a86e7c0c3ed3c88a45",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535562882/google-udacity-scholars18/ME85LPI88.jpg",
+      "imageWidth": 1536,
+      "imageHeight": 1917,
+      "author": { "id": "github|2014259" },
+      "likes": 1,
+      "isLiked": false,
+      "timestamp": "2018-08-29T17:11:04.788Z"
+    },
+    {
+      "id": "5b86c9046e7c0c3ed3c88a2d",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535560157/google-udacity-scholars18/q1RiNRkgF.jpg",
+      "imageWidth": 1680,
+      "imageHeight": 1050,
+      "author": {
+        "id": "github|2014259",
+        "name": "mpontus",
+        "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
+      },
+      "likes": 1,
+      "isLiked": false,
+      "timestamp": "2018-08-29T16:25:40.391Z"
+    },
+    {
+      "id": "5b867ba74ce7bb48654c7326",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535540353/google-udacity-scholars18/Q6rx0QsyI.png",
+      "imageWidth": 597,
+      "imageHeight": 800,
+      "author": { "id": "github|2014259" },
+      "likes": 1,
+      "isLiked": false,
+      "timestamp": "2018-08-29T10:55:35.107Z"
+    },
+    {
+      "id": "5b867b894ce7bb48654c7325",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535540323/google-udacity-scholars18/tTDAJzF-F.jpg",
+      "imageWidth": 1500,
+      "imageHeight": 1954,
+      "author": { "id": "github|2014259" },
+      "likes": 1,
+      "isLiked": false,
+      "timestamp": "2018-08-29T10:55:05.696Z"
+    },
+    {
+      "id": "5b85301be0e2c53cfee0b3cf",
+      "imageUrl": "http://res.cloudinary.com/du0jftvmw/image/upload/v1535455475/google-udacity-scholars18/VXVkIIw1U.jpg",
+      "imageWidth": 1080,
+      "imageHeight": 1164,
+      "author": {
+        "id": "github|2014259",
+        "name": "mpontus",
+        "avatarUrl": "https://avatars0.githubusercontent.com/u/2014259?v=4"
+      },
+      "likes": 1,
+      "isLiked": false,
+      "timestamp": "2018-08-28T11:20:59.425Z"
+    }
+  ]
+}

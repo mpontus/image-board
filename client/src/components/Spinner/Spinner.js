@@ -74,7 +74,7 @@ const colors = keyframes(
 const prop = key => props => props[key];
 
 const Spinner = styled(props => (
-  <svg {...props} viewBox="0 0 1.12 1.12">
+  <svg data-cy="spinner" {...props} viewBox="0 0 1.12 1.12">
     <circle
       fill="none"
       stroke="#000"
