@@ -1,11 +1,11 @@
-import dotProp from "dot-prop-immutable";
+import { set } from "dot-prop-immutable";
 
 const createAxiosInterceptor = auth => async config => {
   const token = await auth.getIdToken();
 
   return token
-    ? dotProp.set(config, "headers.common.Authorization", `Bearer ${token}`)
-    : dotProp.delete(config, "headers.common.Authorization");
+    ? set(config, "headers.common.Authorization", `Bearer ${token}`)
+    : config;
 };
 
 export default createAxiosInterceptor;
