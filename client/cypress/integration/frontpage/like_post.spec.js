@@ -4,7 +4,7 @@ describe("Liking a post", () => {
 
     cy.server()
       .route("GET", "/api/posts?page=1", "fixture:posts-single.json")
-      // .route("PUT", "/api/posts/*/like", {})
+      .route("PUT", "/api/posts/*/like", {})
       .route("DELETE", "/api/posts/*/like", {});
   });
 
