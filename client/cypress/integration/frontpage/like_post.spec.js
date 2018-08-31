@@ -3,7 +3,7 @@ describe("Liking a post", () => {
     cy.login();
 
     cy.server()
-      .route("GET", "/api/posts?page=1", "fixture:posts-single.json")
+      .route("GET", "/api/posts?page=1", "fixture:posts-page-1.json")
       .route("PUT", "/api/posts/*/like", {})
       .route("DELETE", "/api/posts/*/like", {});
   });
@@ -11,18 +11,18 @@ describe("Liking a post", () => {
   it("should like a post", () => {
     cy.visit("/");
 
-    cy.get('[aria-label="Like"]').click();
+    cy.get('[aria-label="Like"]:first').click();
 
-    cy.get('[data-cy="likes-count"]').contains(2);
+    cy.get('[data-cy="likes-count"]:first').contains(2);
   });
 
   it("shold unlike the post", () => {
     cy.visit("/");
 
-    cy.get('[aria-label="Like"]').click();
-    cy.get('[aria-label="Like"]').click();
+    cy.get('[aria-label="Like"]:first').click();
+    cy.get('[aria-label="Like"]:first').click();
 
-    cy.get('[data-cy="likes-count"]').contains(1);
+    cy.get('[data-cy="likes-count"]:first').contains(1);
   });
 
   it("should handle like error", () => {
@@ -35,9 +35,9 @@ describe("Liking a post", () => {
       response: {},
     });
 
-    cy.get('[aria-label="Like"]').click();
+    cy.get('[aria-label="Like"]:first').click();
 
-    cy.get('[data-cy="likes-count"]').contains(1);
+    cy.get('[data-cy="likes-count"]:first').contains(1);
     cy.contains("Failed to like the post");
   });
 });
