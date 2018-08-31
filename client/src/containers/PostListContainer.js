@@ -58,8 +58,8 @@ class PostListContainer extends React.Component {
       hasMorePosts,
       lastPage,
       ids,
-      createPost: this.handleCreatePost,
-      endReached,
+      onCreatePost: this.handleCreatePost,
+      onEndReached: endReached,
     });
   }
 }

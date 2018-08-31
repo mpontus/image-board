@@ -19,25 +19,24 @@ import "./App.css";
 
 const App = () => (
   <AuthContainer>
-    {({ user, login, logout }) => (
+    {({ user, onLogin, onLogout }) => (
       <PostListContainer>
         {({
           isLoading,
           hasMorePosts,
           lastPage,
           ids,
-          createPost,
-          endReached,
+          onCreatePost,
+          onEndReached,
         }) => (
           <Flex flexDirection="column">
             <Header
               title="Image Board"
               isAuthenticated={!!user}
               avatarUrl={user && user.avatarUrl}
-              onTitleClick={() => console.log("go home")}
-              onLoginClick={login}
-              onCreateClick={file => createPost(file, user)}
-              onLogoutClick={() => logout()}
+              onLoginClick={onLogin}
+              onCreateClick={file => onCreatePost(file, user)}
+              onLogoutClick={() => onLogout()}
             />
             <MasonryLayout
               maxCellWidth={420}
@@ -45,7 +44,7 @@ const App = () => (
               cellCount={ids.length}
               cellRenderer={({ index }) => (
                 <PostContainer id={ids[index]}>
-                  {({ post, likePost, deletePost }) => (
+                  {({ post, onLikePost, onDeletePost }) => (
                     <div style={{ overflow: "hidden" }}>
                       <PostCard
                         committed={post.committed}
@@ -63,9 +62,9 @@ const App = () => (
                         bytesTotal={post.progress && post.progress.bytesTotal}
                         errorMessage={post.error && post.error.message}
                         onLikeToggle={() =>
-                          likePost(post, post.isLiked ? -1 : +1)
+                          onLikePost(post, post.isLiked ? -1 : +1)
                         }
-                        onDeleteClick={() => deletePost(post)}
+                        onDeleteClick={() => onDeletePost(post)}
                       />
                     </div>
                   )}
@@ -76,7 +75,7 @@ const App = () => (
               <React.Fragment>
                 <Waypoint
                   key={`posts-${ids.length}`}
-                  onEnter={() => endReached(lastPage)}
+                  onEnter={() => onEndReached(lastPage)}
                 />
               </React.Fragment>
             )}

@@ -14,6 +14,6 @@ const enhance = connect(
 );
 
 const AuthContainer = ({ user, login, logout, children }) =>
-  children({ user, login, logout });
+  children({ user, onLogin: login, onLogout: logout });
 
 export default enhance(AuthContainer);

@@ -14,6 +14,6 @@ const enhance = connect(
 );
 
 const PostContainer = ({ post, likePost, deletePost, children }) =>
-  children({ post, likePost, deletePost });
+  children({ post, onLikePost: likePost, onDeletePost: deletePost });
 
 export default enhance(PostContainer);

@@ -41,7 +41,7 @@ class NotificationContainer extends React.Component {
 
     return children({
       message,
-      dismissNotification,
+      onDismissNotification: dismissNotification,
     });
   }
 }
