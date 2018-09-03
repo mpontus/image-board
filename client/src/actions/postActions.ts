@@ -1,10 +1,14 @@
 import { PageResponse } from "../api";
 import { Post } from "../models";
 
+export const LOAD_POSTS = "LOAD_POSTS";
 export const LOAD_POSTS_REJECT = "LOAD_POSTS_REJECT";
 export const LOAD_POSTS_RESOLVE = "LOAD_POSTS_RESOLVE";
 
 export type Action =
+  | {
+    type: typeof LOAD_POSTS;
+  }
   | {
     type: typeof LOAD_POSTS_RESOLVE;
     payload: {
@@ -18,6 +22,10 @@ export type Action =
       error: Error;
     };
   };
+
+export const loadPosts = (): Action => ({
+  type: LOAD_POSTS
+});
 
 export const loadPostsResolve = ({ total, items }: PageResponse): Action => ({
   type: LOAD_POSTS_RESOLVE,

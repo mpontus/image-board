@@ -1,21 +1,5 @@
-export interface Post {
-  id: string;
-  picture: {
-    url: string;
-    width: number;
-    height: number;
-  };
-  author: {
-    id: string;
-    name: string;
-    avatarUrl: string;
-  };
-  likesCount: number;
-  isLiked: boolean;
-  timestamp: number;
-}
+import * as t from "io-ts";
+import { PostSchema, PageResponseSchema } from "./schema";
 
-export interface PageResponse {
-  total: number;
-  items: Post[];
-}
+export type Post = t.TypeOf<typeof PostSchema>;
+export type PageResponse = t.TypeOf<typeof PageResponseSchema>;

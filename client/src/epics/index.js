@@ -1,3 +1,4 @@
-import { ignoreElements } from "rxjs/operators";
+import { combineEpics } from "redux-observable";
+import postEpic from "./postEpic";
 
-export default action$ => action$.pipe(ignoreElements());
+export default combineEpics(postEpic);
