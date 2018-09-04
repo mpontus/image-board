@@ -1,5 +1,5 @@
 import { ThrowReporter } from "io-ts/lib/ThrowReporter";
-import { Epic } from "redux-observable";
+import { Epic, ofType } from "redux-observable";
 import { from, of } from "rxjs";
 import { switchMap, map, catchError } from "rxjs/operators";
 import {
@@ -17,7 +17,8 @@ const postEpic: Epic<Action, Action, State, Dependencies> = (
   state$,
   { api }
 ) =>
-  action$.ofType(LOAD_POSTS).pipe(
+  action$.pipe(
+    ofType(LOAD_POSTS),
     switchMap(() =>
       from(api.get("posts?page=1")).pipe(
         // map(response => loadPostsResolve(response.data)),
