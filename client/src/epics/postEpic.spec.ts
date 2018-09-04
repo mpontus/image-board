@@ -70,7 +70,8 @@ describe("Post epic", () => {
       const action$ = of(loadPosts());
       const store$ = never();
       const output$ = postEpic(action$ as any, store$ as any, {
-        api: api as AxiosInstance
+        api: api as AxiosInstance,
+        auth: {} as any
       });
 
       return output$
@@ -94,7 +95,8 @@ describe("Post epic", () => {
       const action$ = of(loadPosts());
       const store$ = never();
       const output$ = postEpic(action$ as any, store$ as any, {
-        api: api as AxiosInstance
+        api: api as AxiosInstance,
+        auth: {} as any
       });
 
       return output$
