@@ -9,7 +9,7 @@ interface Props {
 
 const Card = ({ imageUrl, width, height }: Props) => (
   <Box data-cy="card">
-    <BackgroundImage src={imageUrl} />
+    <BackgroundImage src={imageUrl} ratio={height / width} />
   </Box>
 );
 
