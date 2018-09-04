@@ -1,5 +1,3 @@
-/* tslint:disable variable-name */
-
 import * as t from "io-ts";
 
 export const PostSchema = t.type({
