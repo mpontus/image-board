@@ -4,7 +4,6 @@ import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import App from "./App";
 import { configureStore } from "./store";
-import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
 import { loadPosts } from "./actions";
 
