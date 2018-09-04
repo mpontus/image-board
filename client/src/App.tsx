@@ -1,5 +1,6 @@
 import * as React from "react";
 import { PostListContainer, PostContainer } from "./containers";
+import { Card } from "./components";
 
 class App extends React.Component {
   public render() {
@@ -10,7 +11,13 @@ class App extends React.Component {
             <div>
               {ids.map(id => (
                 <PostContainer key={id} id={id}>
-                  {({ post }) => <div data-cy="card">{post.picture.url}</div>}
+                  {({ post }) => (
+                    <Card
+                      width={post.picture.width}
+                      height={post.picture.height}
+                      imageUrl={post.picture.url}
+                    />
+                  )}
                 </PostContainer>
               ))}
             </div>
