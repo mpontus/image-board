@@ -9,6 +9,7 @@
   },
   "rules": {
     "object-literal-sort-keys": false,
-    "variable-name": false
+    "variable-name": false,
+    "jsx-no-lambda": false
   }
 }

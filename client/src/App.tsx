@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PostListContainer, PostContainer } from "./containers";
-import { Card } from "./components";
+import { MasonryLayout, Card } from "./components";
 
 class App extends React.Component {
   public render() {
@@ -8,9 +8,12 @@ class App extends React.Component {
       <div className="App">
         <PostListContainer>
           {({ ids }) => (
-            <div>
-              {ids.map(id => (
-                <PostContainer key={id} id={id}>
+            <MasonryLayout
+              gutter={10}
+              maxCellWidth={420}
+              cellCount={ids.length}
+              cellRenderer={({ index, key }) => (
+                <PostContainer id={ids[index]}>
                   {({ post }) => (
                     <Card
                       width={post.picture.width}
@@ -19,8 +22,8 @@ class App extends React.Component {
                     />
                   )}
                 </PostContainer>
-              ))}
-            </div>
+              )}
+            />
           )}
         </PostListContainer>
       </div>
