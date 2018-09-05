@@ -10,7 +10,7 @@ describe("makeGetPostIds", () => {
       }
     };
 
-    expect(getPostIds(state)).toEqual(["3", "5", "9"]);
+    expect(getPostIds(state as any)).toEqual(["3", "5", "9"]);
   });
 });
 
@@ -45,6 +45,6 @@ describe("makeGetPostById", () => {
       }
     };
 
-    expect(getPostById(state, { id: 5 })).toEqual(post);
+    expect(getPostById(state as any, { id: "5" })).toEqual(post);
   });
 });

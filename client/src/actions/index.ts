@@ -12,4 +12,11 @@ export {
   loadPostsReject
 } from "./postActions";
 
-export { AUTHENTICATED, LOGOUT, authenticated, logout } from "./authActions";
+export {
+  AUTHENTICATED,
+  LOGIN,
+  LOGOUT,
+  authenticated,
+  login,
+  logout
+} from "./authActions";

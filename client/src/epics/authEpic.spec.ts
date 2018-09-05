@@ -1,5 +1,5 @@
 import authEpic from "./authEpic";
-import { authenticated, logout } from "../actions";
+import { authenticated, login, logout } from "../actions";
 import { of, never } from "rxjs";
 import { TestScheduler } from "rxjs/testing";
 
@@ -25,7 +25,19 @@ describe("authEpic", () => {
     });
   });
 
-  it("calls auth.logout when LOGOUT actions is dispatched", done => {
+  it("calls auth.login when LOGIN action is dispatched", done => {
+    const auth = {
+      login: done,
+      getIdToken: () => never()
+    } as any;
+
+    authEpic(of(login()) as any, never() as any, {
+      auth,
+      api: null as any
+    }).subscribe();
+  });
+
+  it("calls auth.logout when LOGOUT action is dispatched", done => {
     const auth = {
       logout: done,
       getIdToken: () => never()
