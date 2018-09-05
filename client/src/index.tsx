@@ -2,6 +2,7 @@ import axios from "axios";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import auth0Lock from "auth0-lock";
 import App from "./App";
 import { configureStore } from "./store";
 import registerServiceWorker from "./registerServiceWorker";
@@ -13,7 +14,7 @@ const api = axios.create({
 });
 
 const auth = new AuthService({
-  lock: new Auth0Lock(
+  lock: new auth0Lock(
     process.env.REACT_APP_AUTH0_CLIENT_ID || "",
     process.env.REACT_APP_AUTH0_DOMAIN || "",
     {
