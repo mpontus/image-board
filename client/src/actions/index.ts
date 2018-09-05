@@ -1,6 +1,7 @@
 import { Action as PostAction } from "./postActions";
+import { Action as AuthAction } from "./authActions";
 
-export type Action = PostAction;
+export type Action = PostAction | AuthAction;
 
 export {
   LOAD_POSTS,
@@ -10,3 +11,5 @@ export {
   loadPostsResolve,
   loadPostsReject
 } from "./postActions";
+
+export { AUTHENTICATED, LOGOUT, authenticated, logout } from "./authActions";
