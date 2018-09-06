@@ -14,6 +14,11 @@ class App extends React.Component {
                   isAuthenticated={user !== null}
                   onLoginClick={onLogin}
                   onLogoutClick={onLogout}
+                  onFileChange={e => {
+                    if (user && e.currentTarget.files) {
+                      createPost(e.currentTarget.files[0], user);
+                    }
+                  }}
                 />
               )}
             </PostListContainer>
@@ -27,13 +32,15 @@ class App extends React.Component {
               cellCount={ids.length}
               cellRenderer={({ index, key }) => (
                 <PostContainer id={ids[index]}>
-                  {({ post }) => (
-                    <Card
-                      width={post.picture.width}
-                      height={post.picture.height}
-                      imageUrl={post.picture.url}
-                    />
-                  )}
+                  {({ post }) =>
+                    post ? (
+                      <Card
+                        width={post.picture.width}
+                        height={post.picture.height}
+                        imageUrl={post.picture.url}
+                      />
+                    ) : null
+                  }
                 </PostContainer>
               )}
             />

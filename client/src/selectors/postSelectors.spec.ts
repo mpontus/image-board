@@ -1,4 +1,4 @@
-import reducer, { State } from "../reducers";
+import reducers, { State } from "../reducers";
 import { makeGetPostIds, makeGetPostById } from "./postSelectors";
 
 const postFixture = {
@@ -37,7 +37,7 @@ const postFixture2 = {
   isLiked: true,
   timestamp: 1535731213512
 };
-const initialState = reducer(undefined, {} as any);
+const initialState = reducers(undefined, {} as any);
 
 describe("postSelectors", () => {
   describe("makeGetPostIds", () => {

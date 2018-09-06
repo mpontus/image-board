@@ -4,12 +4,12 @@ import { makeGetPostById } from "../selectors";
 import { Post } from "../models";
 
 interface RenderProps {
-  post: Post;
+  post: Post | undefined;
 }
 
 interface Props extends RenderProps {
   id: string;
-  children: (props: RenderProps) => JSX.Element;
+  children: (props: RenderProps) => JSX.Element | null;
 }
 
 const makeMapStateToProps = createStructuredSelector({
@@ -18,6 +18,6 @@ const makeMapStateToProps = createStructuredSelector({
 
 const enhance = connect(makeMapStateToProps);
 
-const PostListContainer = ({ post, children }: Props) => children({ post });
+const PostContainer = ({ children, ...rest }: Props) => children(rest);
 
-export default enhance(PostListContainer);
+export default enhance(PostContainer);
