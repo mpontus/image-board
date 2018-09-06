@@ -34,6 +34,10 @@ describe("when user is authenticated", () => {
     result = render(<Header isAuthenticated={true} />);
   });
 
+  it("should render upload component", () => {
+    result.getByText("Upload Picture");
+  });
+
   it("should render logout button", () => {
     result.getByText("Logout");
   });
@@ -88,5 +92,29 @@ describe("when logout button is pressed", () => {
 
   it("should dispatch onLogoutClick event", () => {
     expect(onLogoutClick).toHaveBeenCalled();
+  });
+});
+
+describe("when file is selected", () => {
+  const file = new File([""], "picture.png", { type: "image/png " });
+  let onFileChange: jest.Mock;
+
+  beforeEach(() => {
+    onFileChange = jest.fn(e => {
+      expect(e.target.files).toEqual([file]);
+    });
+
+    const { getByTestId } = render(
+      <Header isAuthenticated={true} onFileChange={onFileChange} />
+    );
+    const input = getByTestId("upload");
+
+    Object.defineProperty(input, "files", { value: [file] });
+
+    fireEvent.change(input, { bubbles: true });
+  });
+
+  it("should dispatch onFileChange event", () => {
+    expect(onFileChange).toHaveBeenCalled();
   });
 });
