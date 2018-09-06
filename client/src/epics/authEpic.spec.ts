@@ -12,15 +12,15 @@ describe("authEpic", () => {
     testScheduler.run(({ hot, cold, expectObservable }) => {
       const idToken = "idToken";
       const auth = {
-        getIdToken: () => hot("---a", { a: idToken })
+        getIdToken: () => hot("---a", { a: idToken }),
       };
       const output$ = authEpic(never() as any, never() as any, {
         api: null as any,
-        auth: auth as any
+        auth: auth as any,
       });
 
       expectObservable(output$).toBe("---a", {
-        a: authenticated(idToken)
+        a: authenticated(idToken),
       });
     });
   });
@@ -28,24 +28,24 @@ describe("authEpic", () => {
   it("calls auth.login when LOGIN action is dispatched", done => {
     const auth = {
       login: done,
-      getIdToken: () => never()
+      getIdToken: () => never(),
     } as any;
 
     authEpic(of(login()) as any, never() as any, {
       auth,
-      api: null as any
+      api: null as any,
     }).subscribe();
   });
 
   it("calls auth.logout when LOGOUT action is dispatched", done => {
     const auth = {
       logout: done,
-      getIdToken: () => never()
+      getIdToken: () => never(),
     } as any;
 
     authEpic(of(logout()) as any, never() as any, {
       auth,
-      api: null as any
+      api: null as any,
     }).subscribe();
   });
 });

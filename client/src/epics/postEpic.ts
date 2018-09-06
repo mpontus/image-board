@@ -6,7 +6,7 @@ import {
   Action,
   LOAD_POSTS,
   loadPostsResolve,
-  loadPostsReject
+  loadPostsReject,
 } from "../actions";
 import { State } from "../reducers";
 import { Dependencies } from "../store";

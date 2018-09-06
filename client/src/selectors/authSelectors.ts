@@ -20,7 +20,7 @@ export const makeGetAuthenticatedUser = () =>
       return {
         id: payload.sid,
         name: payload.name,
-        avatarUrl: payload.picture
+        avatarUrl: payload.picture,
       };
     }
   );

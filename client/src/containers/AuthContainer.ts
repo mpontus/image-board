@@ -18,16 +18,19 @@ interface Props {
 }
 
 const makeMapStateToProps = createStructuredSelector({
-  user: makeGetAuthenticatedUser()
+  user: makeGetAuthenticatedUser(),
 });
 
-const enhance = connect(makeMapStateToProps, { login, logout });
+const enhance = connect(
+  makeMapStateToProps,
+  { login, logout }
+);
 
 const AuthContainer = ({ user, login, logout, children }: Props) =>
   children({
     user,
     onLogin: login,
-    onLogout: logout
+    onLogout: logout,
   });
 
 export default enhance(AuthContainer);

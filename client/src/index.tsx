@@ -10,7 +10,7 @@ import { loadPosts } from "./actions";
 import { AuthService } from "./services";
 
 const api = axios.create({
-  baseURL: "/api/"
+  baseURL: "/api/",
 });
 
 const auth = new AuthService({
@@ -21,10 +21,10 @@ const auth = new AuthService({
       autoclose: true,
       auth: {
         redirect: false,
-        responseType: "token id_token"
-      }
+        responseType: "token id_token",
+      },
     }
-  )
+  ),
 });
 
 const store = configureStore({ api, auth });

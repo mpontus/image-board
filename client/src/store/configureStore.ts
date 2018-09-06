@@ -20,9 +20,9 @@ const configureStore = (dependencies: Dependencies) => {
     Action,
     State,
     Dependencies
-    > = createEpicMiddleware({
-      dependencies
-    });
+  > = createEpicMiddleware({
+    dependencies,
+  });
 
   const store = createStore(
     reducers,

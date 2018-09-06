@@ -31,7 +31,7 @@ const makeGetFinalId = (): ParametricSelector<State, string, string> =>
 export const makeGetPostIds = (): Selector<
   State,
   ReadonlyArray<string>
-  > => state => [...state.posts.pendingIds, ...state.posts.ids];
+> => state => [...state.posts.pendingIds, ...state.posts.ids];
 
 /**
  * Retrieve the post by ID and denormalize it into domain model
@@ -40,7 +40,7 @@ export const makeGetPostById = (): ParametricSelector<
   State,
   { id: string },
   Post | undefined
-  > => {
+> => {
   const getFinalId = makeGetFinalId();
 
   return (state, { id }) => state.posts.byId[getFinalId(state, id)];

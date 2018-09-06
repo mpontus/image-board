@@ -5,7 +5,7 @@ import {
   map,
   catchError,
   tap,
-  ignoreElements
+  ignoreElements,
 } from "rxjs/operators";
 import { Action, LOGIN, LOGOUT, authenticated } from "../actions";
 import { State } from "../reducers";
@@ -26,12 +26,22 @@ const loginEpic: Epic<Action, Action, State, Dependencies> = (
   action$,
   state$,
   { auth }
-) => action$.pipe(ofType(LOGIN), tap(() => auth.login()), ignoreElements());
+) =>
+  action$.pipe(
+    ofType(LOGIN),
+    tap(() => auth.login()),
+    ignoreElements()
+  );
 
 const logoutEpic: Epic<Action, Action, State, Dependencies> = (
   action$,
   state$,
   { auth }
-) => action$.pipe(ofType(LOGOUT), tap(() => auth.logout()), ignoreElements());
+) =>
+  action$.pipe(
+    ofType(LOGOUT),
+    tap(() => auth.logout()),
+    ignoreElements()
+  );
 
 export default combineEpics(authEpic, loginEpic, logoutEpic);

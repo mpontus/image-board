@@ -50,22 +50,22 @@ export type Action =
     };
 
 export const loadPosts = (): Action => ({
-  type: LOAD_POSTS
+  type: LOAD_POSTS,
 });
 
 export const loadPostsResolve = ({ total, items }: PageResponse): Action => ({
   type: LOAD_POSTS_RESOLVE,
   payload: {
     total,
-    posts: items
-  }
+    posts: items,
+  },
 });
 
 export const loadPostsReject = (error: Error): Action => ({
   type: LOAD_POSTS_REJECT,
   payload: {
-    error
-  }
+    error,
+  },
 });
 
 export const createPost = (file: File, user: User): Promise<Action> =>
@@ -80,13 +80,13 @@ export const createPost = (file: File, user: User): Promise<Action> =>
           picture: {
             url,
             width,
-            height
+            height,
           },
           likesCount: 1,
           isLiked: true,
-          timestamp: Date.now()
-        }
-      }
+          timestamp: Date.now(),
+        },
+      },
     })
   );
 
@@ -94,14 +94,14 @@ export const createPostResolve = (post: Post, instance: Post): Action => ({
   type: CREATE_POST_RESOLVE,
   payload: {
     post,
-    instance
-  }
+    instance,
+  },
 });
 
 export const createPostReject = (post: Post, error: Error): Action => ({
   type: CREATE_POST_REJECT,
   payload: {
     post,
-    error
-  }
+    error,
+  },
 });

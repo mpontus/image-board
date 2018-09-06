@@ -7,7 +7,7 @@ export interface State {
 }
 
 const initialState = {
-  idToken: null
+  idToken: null,
 };
 
 const reducer: Reducer<State, Action> = (state = initialState, action) => {

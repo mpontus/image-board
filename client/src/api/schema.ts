@@ -5,19 +5,19 @@ export const PostSchema = t.type({
   picture: t.type({
     url: t.string,
     width: t.number,
-    height: t.number
+    height: t.number,
   }),
   author: t.type({
     id: t.string,
     name: t.string,
-    avatarUrl: t.string
+    avatarUrl: t.string,
   }),
   likesCount: t.number,
   isLiked: t.boolean,
-  timestamp: t.number
+  timestamp: t.number,
 });
 
 export const PageResponseSchema = t.type({
   total: t.number,
-  items: t.array(PostSchema)
+  items: t.array(PostSchema),
 });

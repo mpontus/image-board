@@ -7,8 +7,8 @@ describe("makeGetAuthenticatedUser", () => {
     const getAuthenticatedUser = makeGetAuthenticatedUser();
     const state = {
       auth: {
-        idToken: null
-      }
+        idToken: null,
+      },
     };
 
     expect(getAuthenticatedUser(state as any)).toEqual(null);
@@ -18,7 +18,7 @@ describe("makeGetAuthenticatedUser", () => {
     const user: User = {
       id: "someid",
       name: "foo bar",
-      avatarUrl: "https://example.org/picture.jpg"
+      avatarUrl: "https://example.org/picture.jpg",
     };
     const getAuthenticatedUser = makeGetAuthenticatedUser();
     const state = {
@@ -27,11 +27,11 @@ describe("makeGetAuthenticatedUser", () => {
           {
             sid: user.id,
             name: user.name,
-            picture: user.avatarUrl
+            picture: user.avatarUrl,
           },
           "secret"
-        )
-      }
+        ),
+      },
     };
 
     expect(getAuthenticatedUser(state as any)).toEqual(user);

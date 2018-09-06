@@ -16,7 +16,7 @@ const getImageDimensions = (file: File): Promise<Dimensions> =>
     image.onload = () =>
       resolve({
         width: image.width,
-        height: image.height
+        height: image.height,
       });
   });
 

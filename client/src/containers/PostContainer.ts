@@ -13,7 +13,7 @@ interface Props extends RenderProps {
 }
 
 const makeMapStateToProps = createStructuredSelector({
-  post: makeGetPostById()
+  post: makeGetPostById(),
 });
 
 const enhance = connect(makeMapStateToProps);

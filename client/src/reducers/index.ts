@@ -9,5 +9,5 @@ export type State = {
 
 export default combineReducers({
   posts: postReducer,
-  auth: authReducer
+  auth: authReducer,
 });

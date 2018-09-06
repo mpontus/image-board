@@ -3,7 +3,7 @@ import { CREATE_POST, createPost } from "./postActions";
 
 jest.mock("../utils", () => ({
   fileToDataUrl: jest.fn(),
-  getImageDimensions: jest.fn()
+  getImageDimensions: jest.fn(),
 }));
 
 describe("postActions", () => {
@@ -11,13 +11,13 @@ describe("postActions", () => {
     const user = {
       id: "1",
       name: "foo",
-      avatarUrl: "https://example.org/picutre.png"
+      avatarUrl: "https://example.org/picutre.png",
     };
     const fileMock = new File([""], "picture.png", { type: "image/png " });
     const stubUrl = "https://example.org/picutre2.png";
     const stubDimensions = {
       width: 33,
-      height: 55
+      height: 55,
     };
 
     it("must resolve to action", async () => {
@@ -45,13 +45,13 @@ describe("postActions", () => {
             picture: {
               url: stubUrl,
               width: stubDimensions.width,
-              height: stubDimensions.height
+              height: stubDimensions.height,
             },
             likesCount: 1,
             isLiked: true,
-            timestamp: expect.any(Number)
-          }
-        }
+            timestamp: expect.any(Number),
+          },
+        },
       });
     });
   });

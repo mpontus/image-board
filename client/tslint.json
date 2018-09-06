@@ -1,5 +1,10 @@
 {
-  "extends": ["tslint-config-airbnb", "tslint-react", "tslint-config-prettier"],
+  "extends": [
+    "tslint-config-airbnb",
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
+  ],
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
@@ -10,6 +15,7 @@
   "rules": {
     "object-literal-sort-keys": false,
     "variable-name": false,
-    "jsx-no-lambda": false
+    "jsx-no-lambda": false,
+    "prettier": true
   }
 }

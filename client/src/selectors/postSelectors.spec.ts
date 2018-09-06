@@ -7,17 +7,17 @@ const postFixture = {
     url:
       "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
     width: 500,
-    height: 333
+    height: 333,
   },
   author: {
     id: "auth9|123123",
     name: "Foo bar",
     avatarUrl:
-      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
+      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff",
   },
   likesCount: 1,
   isLiked: true,
-  timestamp: 1535731213512
+  timestamp: 1535731213512,
 };
 const postFixture2 = {
   id: "7",
@@ -25,17 +25,17 @@ const postFixture2 = {
     url:
       "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
     width: 500,
-    height: 333
+    height: 333,
   },
   author: {
     id: "auth9|123123",
     name: "Foo bar",
     avatarUrl:
-      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
+      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff",
   },
   likesCount: 1,
   isLiked: true,
-  timestamp: 1535731213512
+  timestamp: 1535731213512,
 };
 const initialState = reducers(undefined, {} as any);
 
@@ -49,8 +49,8 @@ describe("postSelectors", () => {
         posts: {
           ...initialState.posts,
           pendingIds: ["2", "4"],
-          ids: ["3", "5", "9"]
-        }
+          ids: ["3", "5", "9"],
+        },
       };
 
       expect(getPostIds(state)).toEqual(["2", "4", "3", "5", "9"]);
@@ -66,9 +66,9 @@ describe("postSelectors", () => {
         posts: {
           ...initialState.posts,
           byId: {
-            [postFixture.id]: postFixture
-          }
-        }
+            [postFixture.id]: postFixture,
+          },
+        },
       };
 
       expect(getPostById(state, { id: postFixture.id })).toEqual(postFixture);
@@ -80,13 +80,13 @@ describe("postSelectors", () => {
         posts: {
           ...initialState.posts,
           instances: {
-            [postFixture.id]: postFixture2.id
+            [postFixture.id]: postFixture2.id,
           },
           byId: {
             [postFixture.id]: postFixture,
-            [postFixture2.id]: postFixture2
-          }
-        }
+            [postFixture2.id]: postFixture2,
+          },
+        },
       };
 
       expect(getPostById(state, { id: "5" })).toEqual(postFixture2);

@@ -14,10 +14,13 @@ interface Props extends RenderProps {
 }
 
 const makeMapStateToProps = createStructuredSelector({
-  ids: makeGetPostIds()
+  ids: makeGetPostIds(),
 });
 
-const enhance = connect(makeMapStateToProps, { createPost });
+const enhance = connect(
+  makeMapStateToProps,
+  { createPost }
+);
 
 const PostListContainer = ({ children, ...rest }: Props) => children(rest);
 
