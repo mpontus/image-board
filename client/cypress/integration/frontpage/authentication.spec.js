@@ -1,9 +1,19 @@
 describe("Authentication", () => {
-  it("should update header", () => {
-    cy.visit("/");
+  context("when the user is unauthenticated", () => {
+    it("should display login button in the header", () => {
+      cy.visit("/");
 
-    cy.login();
+      cy.get("header").contains("Login");
+    });
+  });
 
-    cy.get("header").contains("Logout");
+  context("when the user is authenticated", () => {
+    it("should display logout button in the header", () => {
+      cy.login();
+
+      cy.visit("/");
+
+      cy.get("header").contains("Logout");
+    });
   });
 });

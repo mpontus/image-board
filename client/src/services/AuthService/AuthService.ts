@@ -19,8 +19,6 @@ const isTokenValid = (token: string): boolean => {
 
 interface Options {
   lock: Auth0Lock;
-  location?: Location;
-  storage?: Storage;
 }
 
 /**

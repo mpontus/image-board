@@ -1,23 +1,24 @@
 import * as React from "react";
 import { AuthContainer, PostListContainer, PostContainer } from "./containers";
-import { MasonryLayout, Card } from "./components";
+import { Header, MasonryLayout, Card } from "./components";
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <header>
-          <AuthContainer>
-            {({ user, onLogin, onLogout }) =>
-              user ? (
-                <button onClick={onLogin}>Login</button>
-              ) : (
-                  <button onClick={onLogout}>Logout</button>
-                )
-            }
-          </AuthContainer>
-        </header>
+        <AuthContainer>
+          {({ user, onLogin, onLogout }) => {
+            console.log({ user });
 
+            return (
+              <Header
+                isAuthenticated={user !== null}
+                onLoginClick={onLogin}
+                onLogoutClick={onLogout}
+              />
+            );
+          }}
+        </AuthContainer>
         <PostListContainer>
           {({ ids }) => (
             <MasonryLayout
