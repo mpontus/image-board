@@ -6,9 +6,7 @@ const initialState = authReducer(undefined, {} as any);
 describe("authReducer", () => {
   describe("initial state", () => {
     it("should match snapshot", () => {
-      expect(initialState).toEqual({
-        idToken: null
-      });
+      expect(initialState).toMatchSnapshot();
     });
   });
 

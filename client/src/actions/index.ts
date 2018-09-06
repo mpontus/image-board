@@ -7,9 +7,15 @@ export {
   LOAD_POSTS,
   LOAD_POSTS_RESOLVE,
   LOAD_POSTS_REJECT,
+  CREATE_POST,
+  CREATE_POST_RESOLVE,
+  CREATE_POST_REJECT,
   loadPosts,
   loadPostsResolve,
-  loadPostsReject
+  loadPostsReject,
+  createPost,
+  createPostResolve,
+  createPostReject
 } from "./postActions";
 
 export {

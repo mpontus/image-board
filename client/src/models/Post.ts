@@ -1,6 +1,6 @@
 import { User } from "./User";
 
-interface Picture {
+export interface Picture {
   url: string;
   width: number;
   height: number;

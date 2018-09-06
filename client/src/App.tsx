@@ -8,11 +8,15 @@ class App extends React.Component {
       <div className="App">
         <AuthContainer>
           {({ user, onLogin, onLogout }) => (
-            <Header
-              isAuthenticated={user !== null}
-              onLoginClick={onLogin}
-              onLogoutClick={onLogout}
-            />
+            <PostListContainer>
+              {({ createPost }) => (
+                <Header
+                  isAuthenticated={user !== null}
+                  onLoginClick={onLogin}
+                  onLogoutClick={onLogout}
+                />
+              )}
+            </PostListContainer>
           )}
         </AuthContainer>
         <PostListContainer>
