@@ -12,22 +12,22 @@ const idToken = encode(
 beforeAll(() => {
   Object.defineProperty(window.location, "reload", {
     writable: true,
-    value: jest.fn(),
+    value: jest.fn()
   });
 
   Object.defineProperty(Storage.prototype, "getItem", {
     writable: true,
-    value: jest.fn(),
+    value: jest.fn()
   });
 
   Object.defineProperty(Storage.prototype, "setItem", {
     writable: true,
-    value: jest.fn(),
+    value: jest.fn()
   });
 
   Object.defineProperty(Storage.prototype, "removeItem", {
     writable: true,
-    value: jest.fn(),
+    value: jest.fn()
   });
 });
 
@@ -47,8 +47,8 @@ describe("AuthService", () => {
 
       auth = new AuthService({
         lock: {
-          on: () => {},
-        } as any,
+          on: () => undefined
+        } as any
       });
     });
 
@@ -65,11 +65,11 @@ describe("AuthService", () => {
     let auth: AuthService;
 
     beforeEach(() => {
-      let callback: Function;
+      let callback: (props: { idToken: string }) => void;
 
       auth = new AuthService({
         lock: {
-          on: (event: "authenticated", cb: Function) => {
+          on: (event: "authenticated", cb: typeof callback) => {
             if (event === "authenticated") {
               callback = cb;
             }
@@ -78,8 +78,8 @@ describe("AuthService", () => {
             if (callback) {
               callback({ idToken });
             }
-          },
-        } as any,
+          }
+        } as any
       });
 
       auth.login();
@@ -99,12 +99,12 @@ describe("AuthService", () => {
 
     beforeEach(() => {
       lock = {
-        on: () => {},
-        logout: jest.fn(),
+        on: () => undefined,
+        logout: jest.fn()
       };
 
       const auth = new AuthService({
-        lock,
+        lock
       });
 
       auth.logout();
@@ -137,11 +137,14 @@ describe("AuthService", () => {
 
       auth = new AuthService({
         lock: {
-          on: () => {},
-          checkSession: (options: any, callback: Function) => {
+          on: () => undefined,
+          checkSession: (
+            options: any,
+            callback: (err: Error | null, data: { idToken: string }) => void
+          ) => {
             callback(null, { idToken: nextIdToken });
-          },
-        } as any,
+          }
+        } as any
       });
 
       jest.runAllTimers();

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Flex, Box, Text } from "rebass";
+import { Box, Flex, Text } from "rebass";
 
 interface Props {
   isAuthenticated: boolean;
@@ -12,7 +12,7 @@ const Header = ({
   isAuthenticated,
   onLoginClick,
   onLogoutClick,
-  onFileChange,
+  onFileChange
 }: Props) => (
   <Flex is="header">
     <Box flex="1">

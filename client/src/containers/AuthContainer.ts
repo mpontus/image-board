@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { makeGetAuthenticatedUser } from "../selectors";
 import { login, logout } from "../actions";
 import { User } from "../models";
+import { makeGetAuthenticatedUser } from "../selectors";
 
 interface RenderProps {
   user: User | null;
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const makeMapStateToProps = createStructuredSelector({
-  user: makeGetAuthenticatedUser(),
+  user: makeGetAuthenticatedUser()
 });
 
 const enhance = connect(
@@ -26,11 +26,16 @@ const enhance = connect(
   { login, logout }
 );
 
-const AuthContainer = ({ user, login, logout, children }: Props) =>
+const AuthContainer = ({
+  user,
+  login: onLogin,
+  logout: onLogout,
+  children
+}: Props) =>
   children({
     user,
-    onLogin: login,
-    onLogout: logout,
+    onLogin,
+    onLogout
   });
 
 export default enhance(AuthContainer);

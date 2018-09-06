@@ -1,9 +1,9 @@
 import * as React from "react";
 import {
-  render,
   cleanup,
   fireEvent,
-  RenderResult,
+  render,
+  RenderResult
 } from "react-testing-library";
 import Header from "./Header";
 
@@ -61,7 +61,7 @@ describe("when login button is pressed", () => {
     fireEvent(
       result.getByText("Login"),
       new MouseEvent("click", {
-        bubbles: true,
+        bubbles: true
       })
     );
   });
@@ -85,7 +85,7 @@ describe("when logout button is pressed", () => {
     fireEvent(
       result.getByText("Logout"),
       new MouseEvent("click", {
-        bubbles: true,
+        bubbles: true
       })
     );
   });

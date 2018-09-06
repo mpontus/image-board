@@ -1,7 +1,7 @@
-import { createSelector } from "reselect";
 import jwtDecode from "jwt-decode";
-import { State } from "../reducers";
+import { createSelector } from "reselect";
 import { User } from "../models";
+import { State } from "../reducers";
 
 export const makeGetAuthenticatedUser = () =>
   createSelector<State, string | null, User | null>(
@@ -20,7 +20,7 @@ export const makeGetAuthenticatedUser = () =>
       return {
         id: payload.sid,
         name: payload.name,
-        avatarUrl: payload.picture,
+        avatarUrl: payload.picture
       };
     }
   );

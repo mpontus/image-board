@@ -1,9 +1,9 @@
 import { AxiosInstance } from "axios";
 import { applyMiddleware, createStore } from "redux";
-import { EpicMiddleware, createEpicMiddleware } from "redux-observable";
-import reduxPromise from "redux-promise";
 import { composeWithDevTools } from "redux-devtools-extension";
 import reduxLogger from "redux-logger";
+import { createEpicMiddleware, EpicMiddleware } from "redux-observable";
+import reduxPromise from "redux-promise";
 import { Action } from "../actions";
 import epics from "../epics";
 import reducers, { State } from "../reducers";
@@ -21,7 +21,7 @@ const configureStore = (dependencies: Dependencies) => {
     State,
     Dependencies
   > = createEpicMiddleware({
-    dependencies,
+    dependencies
   });
 
   const store = createStore(

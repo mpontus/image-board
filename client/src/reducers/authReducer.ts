@@ -1,5 +1,5 @@
-import { Reducer } from "redux";
 import { set } from "object-immutable-set";
+import { Reducer } from "redux";
 import { Action, AUTHENTICATED } from "../actions";
 
 export interface State {
@@ -7,7 +7,7 @@ export interface State {
 }
 
 const initialState = {
-  idToken: null,
+  idToken: null
 };
 
 const reducer: Reducer<State, Action> = (state = initialState, action) => {

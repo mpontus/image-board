@@ -1,5 +1,5 @@
-import { Action as PostAction } from "./postActions";
 import { Action as AuthAction } from "./authActions";
+import { Action as PostAction } from "./postActions";
 
 export type Action = PostAction | AuthAction;
 
@@ -15,7 +15,7 @@ export {
   loadPostsReject,
   createPost,
   createPostResolve,
-  createPostReject,
+  createPostReject
 } from "./postActions";
 
 export {
@@ -24,5 +24,5 @@ export {
   LOGOUT,
   authenticated,
   login,
-  logout,
+  logout
 } from "./authActions";

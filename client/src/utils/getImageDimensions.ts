@@ -10,13 +10,13 @@ interface Dimensions {
  * @return Dimensions Object containing width and height
  */
 const getImageDimensions = (file: File): Promise<Dimensions> =>
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     const image = new Image();
     image.src = URL.createObjectURL(file);
     image.onload = () =>
       resolve({
         width: image.width,
-        height: image.height,
+        height: image.height
       });
   });
 

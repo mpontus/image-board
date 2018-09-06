@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { makeGetPostById } from "../selectors";
 import { Post } from "../models";
+import { makeGetPostById } from "../selectors";
 
 interface RenderProps {
   post: Post | undefined;
@@ -13,7 +13,7 @@ interface Props extends RenderProps {
 }
 
 const makeMapStateToProps = createStructuredSelector({
-  post: makeGetPostById(),
+  post: makeGetPostById()
 });
 
 const enhance = connect(makeMapStateToProps);

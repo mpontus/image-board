@@ -1,5 +1,5 @@
-import authReducer from "./authReducer";
 import { authenticated } from "../actions";
+import authReducer from "./authReducer";
 
 const initialState = authReducer(undefined, {} as any);
 

@@ -1,6 +1,11 @@
-import { Selector, ParametricSelector, createSelector } from "reselect";
-import { State } from "../reducers";
+import { createSelector, ParametricSelector, Selector } from "reselect";
 import { Post } from "../models";
+import { State } from "../reducers";
+
+const getFinalIdRecursively = (
+  instances: { [key: string]: string },
+  id: string
+) => (id in instances ? instances[id] : id);
 
 /**
  * Resolve Post's final id
@@ -14,12 +19,7 @@ const makeGetFinalId = (): ParametricSelector<State, string, string> =>
   createSelector(
     state => state.posts.instances,
     (state: State, id: string) => id,
-    (instances, id) => {
-      const recurse = (id: string): string =>
-        id in instances ? recurse(instances[id]) : id;
-
-      return recurse(id);
-    }
+    getFinalIdRecursively
   );
 
 /**

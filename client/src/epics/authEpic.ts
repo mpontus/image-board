@@ -1,13 +1,13 @@
-import { Epic, ofType, combineEpics } from "redux-observable";
+import { combineEpics, Epic, ofType } from "redux-observable";
 import { empty, from, of } from "rxjs";
 import {
-  switchMap,
-  map,
   catchError,
-  tap,
   ignoreElements,
+  map,
+  switchMap,
+  tap
 } from "rxjs/operators";
-import { Action, LOGIN, LOGOUT, authenticated } from "../actions";
+import { Action, authenticated, LOGIN, LOGOUT } from "../actions";
 import { State } from "../reducers";
 import { Dependencies } from "../store";
 

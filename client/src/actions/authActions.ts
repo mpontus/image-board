@@ -19,14 +19,14 @@ export type Action =
 export const authenticated = (idToken: string): Action => ({
   type: AUTHENTICATED,
   payload: {
-    idToken,
-  },
+    idToken
+  }
 });
 
 export const login = (): Action => ({
-  type: LOGIN,
+  type: LOGIN
 });
 
 export const logout = (): Action => ({
-  type: LOGOUT,
+  type: LOGOUT
 });

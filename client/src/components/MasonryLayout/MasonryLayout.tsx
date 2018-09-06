@@ -4,12 +4,12 @@ import {
   CellMeasurer,
   CellMeasurerCache,
   CellRenderer,
+  createMasonryCellPositioner,
   KeyMapper,
   Masonry,
   MasonryCellProps,
   Size,
-  WindowScroller,
-  createMasonryCellPositioner,
+  WindowScroller
 } from "react-virtualized";
 
 interface Props {
@@ -26,7 +26,7 @@ interface State {
 }
 
 const defaultProps = {
-  gutter: 0,
+  gutter: 0
 };
 
 /**
@@ -35,39 +35,37 @@ const defaultProps = {
 const MasonryLayout: React.ComponentClass<
   Props
 > = class extends React.Component<Props & typeof defaultProps, State> {
-  static defaultProps = defaultProps;
+  public static defaultProps = defaultProps;
 
-  state = {
+  public state = {
     columnCount: 0,
-    columnWidth: Math.min(200, this.props.maxCellWidth),
+    columnWidth: Math.min(200, this.props.maxCellWidth)
   };
 
-  cellMeasurerCache = new CellMeasurerCache({
+  public cellMeasurerCache = new CellMeasurerCache({
     defaultHeight: 250,
     defaultWidth: this.state.columnWidth,
-    fixedWidth: true,
+    fixedWidth: true
   });
 
-  cellPositioner = createMasonryCellPositioner({
+  public cellPositioner = createMasonryCellPositioner({
     cellMeasurerCache: this.cellMeasurerCache,
     columnCount: this.state.columnCount,
     columnWidth: this.state.columnWidth,
-    spacer: this.props.gutter,
+    spacer: this.props.gutter
   });
 
-  masonry: React.RefObject<Masonry> = React.createRef();
+  public masonry: React.RefObject<Masonry> = React.createRef();
 
-  handleResize = ({ width }: Size) => {
-    const { gutter } = this.props;
-    const columnCount = Math.ceil(
-      (width - gutter) / (this.props.maxCellWidth + gutter)
-    );
+  public handleResize = ({ width }: Size) => {
+    const { maxCellWidth, gutter } = this.props;
+    const columnCount = Math.ceil((width - gutter) / (maxCellWidth + gutter));
     const columnWidth = Math.trunc(width / columnCount);
 
     this.setState(
       {
         columnCount,
-        columnWidth,
+        columnWidth
       },
       () => {
         this.cellMeasurerCache.clearAll();
@@ -75,7 +73,7 @@ const MasonryLayout: React.ComponentClass<
         this.cellPositioner.reset({
           columnWidth,
           columnCount,
-          spacer: this.props.gutter,
+          spacer: this.props.gutter
         });
 
         if (this.masonry.current !== null) {
@@ -85,7 +83,7 @@ const MasonryLayout: React.ComponentClass<
     );
   };
 
-  cellRenderer = (props: MasonryCellProps) => {
+  public cellRenderer = (props: MasonryCellProps) => {
     const { index, key, parent, style } = props;
     const { columnWidth: width } = this.state;
 
@@ -107,7 +105,7 @@ const MasonryLayout: React.ComponentClass<
     );
   };
 
-  componentDidUpdate(prevProps: Props) {
+  public componentDidUpdate(prevProps: Props) {
     if (this.props.cellCount !== prevProps.cellCount) {
       const { columnWidth, columnCount } = this.state;
 
@@ -115,7 +113,7 @@ const MasonryLayout: React.ComponentClass<
       this.cellPositioner.reset({
         columnWidth,
         columnCount,
-        spacer: this.props.gutter,
+        spacer: this.props.gutter
       });
 
       if (this.masonry.current !== null) {
@@ -124,7 +122,7 @@ const MasonryLayout: React.ComponentClass<
     }
   }
 
-  render() {
+  public render() {
     return (
       <WindowScroller>
         {({ height, scrollTop }) => (

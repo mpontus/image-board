@@ -6,7 +6,7 @@ describe("configureStore", () => {
   it("should return store instance", () => {
     const store = configureStore({
       api: {} as AxiosInstance,
-      auth: {} as AuthService,
+      auth: {} as AuthService
     });
 
     expect(typeof store.dispatch).toBe("function");

@@ -1,10 +1,10 @@
 import { Reducer } from "redux";
 import {
   Action,
-  LOAD_POSTS_RESOLVE,
   CREATE_POST,
-  CREATE_POST_RESOLVE,
   CREATE_POST_REJECT,
+  CREATE_POST_RESOLVE,
+  LOAD_POSTS_RESOLVE
 } from "../actions";
 import { Post } from "../models";
 
@@ -23,7 +23,7 @@ const initialState: State = {
   pendingIds: [],
   ids: [],
   byId: {},
-  instances: {},
+  instances: {}
 };
 
 const reducer: Reducer<State, Action> = (
@@ -42,10 +42,10 @@ const reducer: Reducer<State, Action> = (
         byId: posts.reduce(
           (acc, post) => ({
             ...acc,
-            [post.id]: post,
+            [post.id]: post
           }),
           {}
-        ),
+        )
       };
     }
 
@@ -57,8 +57,8 @@ const reducer: Reducer<State, Action> = (
         pendingIds: [post.id, ...state.pendingIds],
         byId: {
           ...state.byId,
-          [post.id]: post,
-        },
+          [post.id]: post
+        }
       };
     }
 
@@ -71,12 +71,12 @@ const reducer: Reducer<State, Action> = (
         ids: [post.id, ...state.ids],
         instances: {
           ...state.instances,
-          [post.id]: instance.id,
+          [post.id]: instance.id
         },
         byId: {
           ...state.byId,
-          [instance.id]: instance,
-        },
+          [instance.id]: instance
+        }
       };
     }
 
@@ -88,8 +88,8 @@ const reducer: Reducer<State, Action> = (
         pendingIds: state.pendingIds.filter(id => id !== post.id),
         byId: {
           ...state.byId,
-          [post.id]: undefined,
-        },
+          [post.id]: undefined
+        }
       };
     }
 

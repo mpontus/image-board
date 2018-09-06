@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, BackgroundImage } from "rebass";
+import { BackgroundImage, Box } from "rebass";
 
 interface Props {
   imageUrl: string;

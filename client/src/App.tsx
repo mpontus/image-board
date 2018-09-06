@@ -1,6 +1,6 @@
 import * as React from "react";
-import { AuthContainer, PostListContainer, PostContainer } from "./containers";
-import { Header, MasonryLayout, Card } from "./components";
+import { Card, Header, MasonryLayout } from "./components";
+import { AuthContainer, PostContainer, PostListContainer } from "./containers";
 
 class App extends React.Component {
   public render() {
@@ -30,7 +30,7 @@ class App extends React.Component {
               gutter={10}
               maxCellWidth={420}
               cellCount={ids.length}
-              cellRenderer={({ index, key }) => (
+              cellRenderer={({ index }) => (
                 <PostContainer id={ids[index]}>
                   {({ post }) =>
                     post ? (

@@ -1,13 +1,13 @@
 import { combineReducers } from "redux";
-import { State as PostState, default as postReducer } from "./postReducer";
-import { State as AuthState, default as authReducer } from "./authReducer";
+import { default as authReducer, State as AuthState } from "./authReducer";
+import { default as postReducer, State as PostState } from "./postReducer";
 
-export type State = {
+export interface State {
   readonly posts: PostState;
   readonly auth: AuthState;
-};
+}
 
 export default combineReducers({
   posts: postReducer,
-  auth: authReducer,
+  auth: authReducer
 });

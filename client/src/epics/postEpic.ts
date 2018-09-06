@@ -1,16 +1,16 @@
 import { ThrowReporter } from "io-ts/lib/ThrowReporter";
 import { Epic, ofType } from "redux-observable";
 import { from, of } from "rxjs";
-import { switchMap, map, catchError } from "rxjs/operators";
+import { catchError, map, switchMap } from "rxjs/operators";
 import {
   Action,
   LOAD_POSTS,
-  loadPostsResolve,
   loadPostsReject,
+  loadPostsResolve
 } from "../actions";
+import { PageResponseSchema } from "../api";
 import { State } from "../reducers";
 import { Dependencies } from "../store";
-import { PageResponseSchema } from "../api";
 
 const postEpic: Epic<Action, Action, State, Dependencies> = (
   action$,

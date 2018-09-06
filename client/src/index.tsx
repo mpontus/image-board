@@ -1,16 +1,16 @@
+import auth0Lock from "auth0-lock";
 import axios from "axios";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import auth0Lock from "auth0-lock";
-import App from "./App";
-import { configureStore } from "./store";
-import registerServiceWorker from "./registerServiceWorker";
 import { loadPosts } from "./actions";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
 import { AuthService } from "./services";
+import { configureStore } from "./store";
 
 const api = axios.create({
-  baseURL: "/api/",
+  baseURL: "/api/"
 });
 
 const auth = new AuthService({
@@ -21,10 +21,10 @@ const auth = new AuthService({
       autoclose: true,
       auth: {
         redirect: false,
-        responseType: "token id_token",
-      },
+        responseType: "token id_token"
+      }
     }
-  ),
+  )
 });
 
 const store = configureStore({ api, auth });

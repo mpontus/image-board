@@ -1,14 +1,14 @@
 import { encode } from "jwt-simple";
-import { makeGetAuthenticatedUser } from "./authSelectors";
 import { User } from "../models";
+import { makeGetAuthenticatedUser } from "./authSelectors";
 
 describe("makeGetAuthenticatedUser", () => {
   it("returns null when user is unauthenticated", () => {
     const getAuthenticatedUser = makeGetAuthenticatedUser();
     const state = {
       auth: {
-        idToken: null,
-      },
+        idToken: null
+      }
     };
 
     expect(getAuthenticatedUser(state as any)).toEqual(null);
@@ -18,7 +18,7 @@ describe("makeGetAuthenticatedUser", () => {
     const user: User = {
       id: "someid",
       name: "foo bar",
-      avatarUrl: "https://example.org/picture.jpg",
+      avatarUrl: "https://example.org/picture.jpg"
     };
     const getAuthenticatedUser = makeGetAuthenticatedUser();
     const state = {
@@ -27,11 +27,11 @@ describe("makeGetAuthenticatedUser", () => {
           {
             sid: user.id,
             name: user.name,
-            picture: user.avatarUrl,
+            picture: user.avatarUrl
           },
           "secret"
-        ),
-      },
+        )
+      }
     };
 
     expect(getAuthenticatedUser(state as any)).toEqual(user);

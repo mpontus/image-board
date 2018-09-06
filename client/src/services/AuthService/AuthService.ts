@@ -25,20 +25,20 @@ interface Options {
  * Authentication service using auth0 lock enhanced with persistent storage
  */
 class AuthService {
-  static createAxiosInterceptor = createAxiosInterceptor;
+  public static createAxiosInterceptor = createAxiosInterceptor;
 
   private readonly lock: Auth0Lock;
 
-  idToken: Promise<string | null> = Promise.resolve(null);
+  private idToken: Promise<string | null> = Promise.resolve(null);
 
   constructor({ lock }: Options) {
     this.lock = lock;
 
-    const idToken = localStorage.getItem(ID_TOKEN_KEY);
+    const initialIdToken = localStorage.getItem(ID_TOKEN_KEY);
 
-    if (idToken && isTokenValid(idToken)) {
-      this.idToken = Promise.resolve(idToken);
-      this.scheduleRefreshToken(idToken);
+    if (initialIdToken && isTokenValid(initialIdToken)) {
+      this.idToken = Promise.resolve(initialIdToken);
+      this.scheduleRefreshToken(initialIdToken);
     } else {
       this.lock.on("authenticated", ({ idToken }) => {
         localStorage.setItem(ID_TOKEN_KEY, idToken);
@@ -48,11 +48,11 @@ class AuthService {
     }
   }
 
-  login() {
+  public login() {
     this.lock.show();
   }
 
-  logout() {
+  public logout() {
     localStorage.removeItem(ID_TOKEN_KEY);
 
     this.lock.logout({});
@@ -60,31 +60,31 @@ class AuthService {
     location.reload();
   }
 
-  getIdToken() {
+  public getIdToken() {
     return this.idToken;
   }
 
-  scheduleRefreshToken(idToken: string) {
+  public scheduleRefreshToken(idToken: string) {
     const { exp } = jwtDecode(idToken);
     const delay = exp * 1000 - Date.now();
 
     setTimeout(() => {
       this.idToken = this.refreshToken();
 
-      this.idToken.then(idToken => {
-        if (idToken === null) {
+      this.idToken.then(nextIdToken => {
+        if (nextIdToken === null) {
           localStorage.removeItem(ID_TOKEN_KEY);
 
           return;
         }
 
-        localStorage.setItem(ID_TOKEN_KEY, idToken);
+        localStorage.setItem(ID_TOKEN_KEY, nextIdToken);
         this.scheduleRefreshToken(idToken);
       });
     }, delay);
   }
 
-  refreshToken(): Promise<string | null> {
+  public refreshToken(): Promise<string | null> {
     return new Promise((resolve, reject) => {
       this.lock.checkSession({}, (err, data) => {
         err ? reject(err) : resolve(data ? data.idToken : null);
