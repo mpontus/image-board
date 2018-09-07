@@ -10,12 +10,14 @@ export {
   CREATE_POST,
   CREATE_POST_RESOLVE,
   CREATE_POST_REJECT,
+  UPLOAD_PROGRESS,
   loadPosts,
   loadPostsResolve,
   loadPostsReject,
   createPost,
   createPostResolve,
-  createPostReject
+  createPostReject,
+  uploadProgress
 } from "./postActions";
 
 export {

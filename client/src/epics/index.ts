@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
 import authEpic from "./authEpic";
-import postEpic from "./postEpic";
+import retrievePostsEpic from "./postEpic";
 
-export default combineEpics(authEpic, postEpic);
+export default combineEpics(authEpic, retrievePostsEpic);

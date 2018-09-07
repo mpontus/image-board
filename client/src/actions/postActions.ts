@@ -9,6 +9,7 @@ export const LOAD_POSTS_RESOLVE = "LOAD_POSTS_RESOLVE";
 export const CREATE_POST = "CREATE_POST";
 export const CREATE_POST_RESOLVE = "CREATE_POST_RESOLVE";
 export const CREATE_POST_REJECT = "CREATE_POST_REJECT";
+export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
 
 export type Action =
   | {
@@ -46,6 +47,14 @@ export type Action =
       payload: {
         post: Post;
         error: Error;
+      };
+    }
+  | {
+      type: typeof UPLOAD_PROGRESS;
+      payload: {
+        key: string;
+        bytesTransferred: number;
+        bytesTotal: number;
       };
     };
 
@@ -103,5 +112,18 @@ export const createPostReject = (post: Post, error: Error): Action => ({
   payload: {
     post,
     error
+  }
+});
+
+export const uploadProgress = (
+  key: string,
+  bytesTransferred: number,
+  bytesTotal: number
+): Action => ({
+  type: UPLOAD_PROGRESS,
+  payload: {
+    key,
+    bytesTransferred,
+    bytesTotal
   }
 });
