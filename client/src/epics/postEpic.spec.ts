@@ -8,15 +8,15 @@ import {
   createPostReject,
   createPostResolve,
   deletePost,
+  deletePostReject,
   deletePostResolve,
+  likePost,
+  likePostReject,
+  likePostResolve,
   loadPosts,
   loadPostsReject,
   loadPostsResolve,
-  uploadProgress,
-  deletePostReject,
-  likePost,
-  likePostResolve,
-  likePostReject
+  uploadProgress
 } from "../actions";
 import postEpic from "./postEpic";
 

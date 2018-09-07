@@ -3,6 +3,10 @@ import {
   CREATE_POST,
   createPostReject,
   createPostResolve,
+  deletePost,
+  deletePostReject,
+  likePost,
+  likePostReject,
   loadPostsResolve
 } from "../actions";
 import postReducer from "./postReducer";
@@ -56,10 +60,13 @@ describe("Post reducer", () => {
   });
 
   describe("listing retrieval", () => {
+    const post1 = postFixtures[0];
+    const post2 = postFixtures[1];
+
     it("should add posts to the state", () => {
       const action = loadPostsResolve({
         total: 2,
-        items: postFixtures
+        items: [post1, post2]
       });
 
       const state = postReducer(initialState, action);
@@ -68,23 +75,26 @@ describe("Post reducer", () => {
         ...initialState,
         loading: false,
         total: 2,
-        ids: [postFixtures[0].id, postFixtures[1].id],
+        ids: [post1.id, post2.id],
         byId: {
-          [postFixtures[0].id]: postFixtures[0],
-          [postFixtures[1].id]: postFixtures[1]
+          [post1.id]: post1,
+          [post2.id]: post2
         }
       });
     });
   });
 
   describe("post creation", () => {
+    const post1 = postFixtures[0];
+    const post2 = postFixtures[1];
+
     it("should add the post optimistically", () => {
       const file = new File([""], "picture.png");
       const action: Action = {
         type: CREATE_POST,
         payload: {
           file,
-          post: postFixtures[0]
+          post: post1
         }
       };
 
@@ -92,20 +102,20 @@ describe("Post reducer", () => {
 
       expect(state).toEqual({
         ...initialState,
-        pendingIds: [postFixtures[0].id],
+        pendingIds: [post1.id],
         byId: {
-          [postFixtures[0].id]: postFixtures[0]
+          [post1.id]: post1
         }
       });
     });
 
     it("should remove post from pending after it's committed", () => {
-      const action = createPostResolve(postFixtures[0], postFixtures[1]);
+      const action = createPostResolve(post1, post2);
       const state0 = {
         ...initialState,
-        pendingIds: [postFixtures[0].id],
+        pendingIds: [post1.id],
         byId: {
-          [postFixtures[0].id]: postFixtures[0]
+          [post1.id]: post1
         }
       };
       const state1 = postReducer(state0, action);
@@ -113,24 +123,24 @@ describe("Post reducer", () => {
       expect(state1).toEqual({
         ...state0,
         pendingIds: [],
-        ids: [postFixtures[0].id],
+        ids: [post1.id],
         byId: {
           ...state0.byId,
-          [postFixtures[1].id]: postFixtures[1]
+          [post2.id]: post2
         },
         instances: {
-          [postFixtures[0].id]: postFixtures[1].id
+          [post1.id]: post2.id
         }
       });
     });
 
     it("should remove post when creation is unsuccessful", () => {
-      const action = createPostReject(postFixtures[0], new Error("foo"));
+      const action = createPostReject(post1, new Error("foo"));
       const state0 = {
         ...initialState,
-        pendingIds: [postFixtures[0].id],
+        pendingIds: [post1.id],
         byId: {
-          [postFixtures[0].id]: postFixtures[0]
+          [post1.id]: post1
         }
       };
       const state1 = postReducer(state0, action);
@@ -139,6 +149,87 @@ describe("Post reducer", () => {
         ...state0,
         pendingIds: [],
         byId: {}
+      });
+    });
+  });
+
+  describe("post deletion", () => {
+    const post = postFixtures[0];
+
+    it("should delete post optimistically", () => {
+      const state0 = {
+        ...initialState,
+        byId: {
+          [post.id]: post
+        }
+      };
+      const action = deletePost(post);
+      const state = postReducer(initialState, action);
+
+      expect(state).toEqual({
+        ...state0,
+        byId: {}
+      });
+    });
+
+    it("should revive the post on error", () => {
+      const state0 = {
+        ...initialState
+      };
+      const action = deletePostReject(post, new Error("foo"));
+      const state = postReducer(initialState, action);
+
+      expect(state).toEqual({
+        ...state0,
+        byId: {
+          [post.id]: post
+        }
+      });
+    });
+  });
+
+  describe("post liking", () => {
+    const post = postFixtures[0];
+
+    it("should like the post optimistically", () => {
+      const state0 = {
+        ...initialState,
+        byId: {
+          [post.id]: post
+        }
+      };
+      const action = likePost(post, 1);
+      const state = postReducer(state0, action);
+
+      expect(state).toEqual({
+        ...state0,
+        byId: {
+          [post.id]: {
+            ...post,
+            likesCount: post.likesCount + 1
+          }
+        }
+      });
+    });
+
+    it("should revert like count on error", () => {
+      const state0 = {
+        ...initialState,
+        byId: {
+          [post.id]: post
+        }
+      };
+      const action = likePostReject(post, 1, new Error("foo"));
+      const state = postReducer(state0, action);
+
+      expect(state).toEqual({
+        ...state0,
+        byId: {
+          [post.id]: {
+            ...post,
+            likesCount: post.likesCount - 1
+          }
+        }
       });
     });
   });

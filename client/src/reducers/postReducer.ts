@@ -4,6 +4,10 @@ import {
   CREATE_POST,
   CREATE_POST_REJECT,
   CREATE_POST_RESOLVE,
+  DELETE_POST,
+  DELETE_POST_REJECT,
+  LIKE_POST,
+  LIKE_POST_REJECT,
   LOAD_POSTS_RESOLVE
 } from "../actions";
 import { Post } from "../models";
@@ -89,6 +93,70 @@ const reducer: Reducer<State, Action> = (
         byId: {
           ...state.byId,
           [post.id]: undefined
+        }
+      };
+    }
+
+    case DELETE_POST: {
+      const { post } = action.payload;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [post.id]: undefined
+        }
+      };
+    }
+
+    case DELETE_POST_REJECT: {
+      const { post } = action.payload;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [post.id]: post
+        }
+      };
+    }
+
+    case LIKE_POST: {
+      const { post, value } = action.payload;
+      const current = state.byId[post.id];
+
+      if (!current) {
+        return state;
+      }
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [post.id]: {
+            ...current,
+            likesCount: current.likesCount + value
+          }
+        }
+      };
+    }
+
+    case LIKE_POST_REJECT: {
+      const { post, value } = action.payload;
+      const current = state.byId[post.id];
+
+      if (!current) {
+        return state;
+      }
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [post.id]: {
+            ...current,
+            likesCount: current.likesCount - value
+          }
         }
       };
     }
