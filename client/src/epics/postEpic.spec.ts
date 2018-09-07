@@ -7,10 +7,16 @@ import {
   CREATE_POST,
   createPostReject,
   createPostResolve,
+  deletePost,
+  deletePostResolve,
   loadPosts,
   loadPostsReject,
   loadPostsResolve,
-  uploadProgress
+  uploadProgress,
+  deletePostReject,
+  likePost,
+  likePostResolve,
+  likePostReject
 } from "../actions";
 import postEpic from "./postEpic";
 
@@ -230,6 +236,149 @@ describe("Post epic", () => {
 
           expectObservable(output$).toBe("---a--", {
             a: createPostReject(post, error)
+          });
+        });
+      });
+    });
+  });
+
+  describe("deleting post", () => {
+    describe("when the request is successful", () => {
+      const post = posts[0];
+
+      it("dispatches DELETE_POST_RESOLVE", () => {
+        testScheduler.run(({ hot, expectObservable }) => {
+          // prettier-ignore
+          const [actions, responses] = [
+	    "-x---",
+	    "---x-"
+	  ];
+
+          const action$ = hot(actions, {
+            x: deletePost(post)
+          });
+
+          const response$ = hot(responses, {
+            x: {}
+          });
+
+          const api = {
+            delete: (url: string) => {
+              expect(url).toBe(`posts/${post.id}`);
+
+              return response$;
+            }
+          };
+
+          const output$ = postEpic(action$ as any, null as any, { api } as any);
+
+          expectObservable(output$).toBe("---x-", {
+            x: deletePostResolve(post)
+          });
+        });
+      });
+    });
+
+    describe("when the request fails", () => {
+      const post = posts[0];
+      const error = new Error("foo");
+
+      it("dispatches DELETE_POST_REJECT", () => {
+        testScheduler.run(({ hot, expectObservable }) => {
+          // prettier-ignore
+          const [actions, responses] = [
+	    "-x---",
+	    "---#"
+	  ];
+
+          const action$ = hot(actions, {
+            x: deletePost(post)
+          });
+
+          const response$ = hot(responses, {}, error);
+
+          const api = {
+            delete: (url: string) => {
+              expect(url).toBe(`posts/${post.id}`);
+
+              return response$;
+            }
+          };
+
+          const output$ = postEpic(action$ as any, null as any, { api } as any);
+
+          expectObservable(output$).toBe("---x-", {
+            x: deletePostReject(post, error)
+          });
+        });
+      });
+    });
+  });
+
+  describe("liking post", () => {
+    describe("when the request is successful", () => {
+      const post = posts[0];
+
+      it("dispatches LIKE_POST_RESOLVE", () => {
+        testScheduler.run(({ hot, expectObservable }) => {
+          // prettier-ignore
+          const [actions, responses] = ["-x---", "---x-"];
+
+          const action$ = hot(actions, {
+            x: likePost(post, 1)
+          });
+
+          const response$ = hot(responses, {
+            x: {}
+          });
+
+          const api = {
+            put: (url: string) => {
+              expect(url).toBe(`posts/${post.id}/like`);
+
+              return response$;
+            }
+          };
+
+          const output$ = postEpic(action$ as any, null as any, { api } as any);
+
+          expectObservable(output$).toBe("---x-", {
+            x: likePostResolve(post, 1)
+          });
+        });
+      });
+    });
+
+    describe("when the request fails", () => {
+      const post = posts[0];
+      const error = new Error("foo");
+
+      it("dispatches LIKE_POST_REJECT", () => {
+        testScheduler.run(({ hot, expectObservable }) => {
+          // prettier-ignore
+          const [actions, responses] = [
+	    "-x---",
+	    "---#"
+	  ];
+
+          const action$ = hot(actions, {
+            x: likePost(post, 1)
+          });
+
+          const response$ = hot(responses, {}, error);
+
+          const api = {
+            put: (url: string) => {
+              expect(url).toBe(`posts/${post.id}/like`);
+
+              return response$;
+            }
+          };
+
+          const output$ = postEpic(action$ as any, null as any, { api } as any);
+
+          expectObservable(output$).toBe("---x-", {
+            x: likePostReject(post, 1, error)
           });
         });
       });

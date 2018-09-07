@@ -8,6 +8,12 @@ import {
   CREATE_POST,
   createPostReject,
   createPostResolve,
+  DELETE_POST,
+  deletePostReject,
+  deletePostResolve,
+  LIKE_POST,
+  likePostResolve,
+  likePostReject,
   LOAD_POSTS,
   loadPostsReject,
   loadPostsResolve,
@@ -75,4 +81,58 @@ const createPostEpic: Epic<Action, Action, State, Dependencies> = (
     })
   );
 };
-export default combineEpics(retrievePostsEpic, createPostEpic);
+
+const deletePostEpic: Epic<Action, Action, State, Dependencies> = (
+  action$,
+  state$,
+  { api }
+) =>
+  action$.pipe(
+    ofType(DELETE_POST),
+    switchMap(action => {
+      // Type guard
+      if (action.type !== DELETE_POST) {
+        return empty();
+      }
+
+      const { post } = action.payload;
+
+      return from(api.delete(`posts/${post.id}`)).pipe(
+        map(() => deletePostResolve(post)),
+        catchError(error => of(deletePostReject(post, error)))
+      );
+    })
+  );
+
+const likePostEpic: Epic<Action, Action, State, Dependencies> = (
+  action$,
+  state$,
+  { api }
+) =>
+  action$.pipe(
+    ofType(LIKE_POST),
+    switchMap(action => {
+      // Type guard
+      if (action.type !== LIKE_POST) {
+        return empty();
+      }
+
+      const { post, value } = action.payload;
+
+      return from(
+        value > 0
+          ? api.put(`posts/${post.id}/like`)
+          : api.delete(`posts/${post.id}/like`)
+      ).pipe(
+        map(() => likePostResolve(post, value)),
+        catchError(error => of(likePostReject(post, value, error)))
+      );
+    })
+  );
+
+export default combineEpics(
+  retrievePostsEpic,
+  createPostEpic,
+  deletePostEpic,
+  likePostEpic
+);

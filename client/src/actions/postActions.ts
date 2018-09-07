@@ -10,6 +10,12 @@ export const CREATE_POST = "CREATE_POST";
 export const CREATE_POST_RESOLVE = "CREATE_POST_RESOLVE";
 export const CREATE_POST_REJECT = "CREATE_POST_REJECT";
 export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
+export const DELETE_POST = "DELETE_POST";
+export const DELETE_POST_RESOLVE = "DELETE_POST_RESOLVE";
+export const DELETE_POST_REJECT = "DELETE_POST_REJECT";
+export const LIKE_POST = "LIKE_POST";
+export const LIKE_POST_RESOLVE = "LIKE_POST_RESOLVE";
+export const LIKE_POST_REJECT = "LIKE_POST_REJECT";
 
 export type Action =
   | {
@@ -55,6 +61,47 @@ export type Action =
         key: string;
         bytesTransferred: number;
         bytesTotal: number;
+      };
+    }
+  | {
+      type: typeof DELETE_POST;
+      payload: {
+        post: Post;
+      };
+    }
+  | {
+      type: typeof DELETE_POST_RESOLVE;
+      payload: {
+        post: Post;
+      };
+    }
+  | {
+      type: typeof DELETE_POST_REJECT;
+      payload: {
+        post: Post;
+        error: Error;
+      };
+    }
+  | {
+      type: typeof LIKE_POST;
+      payload: {
+        post: Post;
+        value: 1 | -1;
+      };
+    }
+  | {
+      type: typeof LIKE_POST_RESOLVE;
+      payload: {
+        post: Post;
+        value: 1 | -1;
+      };
+    }
+  | {
+      type: typeof LIKE_POST_REJECT;
+      payload: {
+        post: Post;
+        value: 1 | -1;
+        error: Error;
       };
     };
 
@@ -125,5 +172,56 @@ export const uploadProgress = (
     key,
     bytesTransferred,
     bytesTotal
+  }
+});
+
+export const deletePost = (post: Post): Action => ({
+  type: DELETE_POST,
+  payload: {
+    post
+  }
+});
+
+export const deletePostResolve = (post: Post): Action => ({
+  type: DELETE_POST_RESOLVE,
+  payload: {
+    post
+  }
+});
+
+export const deletePostReject = (post: Post, error: Error): Action => ({
+  type: DELETE_POST_REJECT,
+  payload: {
+    post,
+    error
+  }
+});
+
+export const likePost = (post: Post, value: 1 | -1): Action => ({
+  type: LIKE_POST,
+  payload: {
+    post,
+    value
+  }
+});
+
+export const likePostResolve = (post: Post, value: 1 | -1): Action => ({
+  type: LIKE_POST_RESOLVE,
+  payload: {
+    post,
+    value
+  }
+});
+
+export const likePostReject = (
+  post: Post,
+  value: 1 | -1,
+  error: Error
+): Action => ({
+  type: LIKE_POST_REJECT,
+  payload: {
+    post,
+    value,
+    error
   }
 });
