@@ -18,46 +18,47 @@ import {
   loadPostsResolve,
   uploadProgress
 } from "../actions";
+import { Post as ApiPost } from "../api";
+import { Post } from "../models";
 import postEpic from "./postEpic";
 
-const posts = [
-  {
-    id: "1",
-    picture: {
-      url:
-        "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
-      width: 500,
-      height: 333
-    },
-    author: {
-      id: "auth9|123123",
-      name: "Foo bar",
-      avatarUrl:
-        "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
-    },
-    likesCount: 1,
-    isLiked: true,
-    timestamp: 1535731213512
+const post1 = {
+  id: "1",
+  picture: {
+    url:
+      "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
+    width: 500,
+    height: 333
   },
-  {
-    id: "2",
-    picture: {
-      url:
-        "https://images.unsplash.com/photo-1535406110845-88cbe4f661bc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f4a0c1c0797ffc0e0008c764bf37fdf4&auto=format&fit=crop&w=500&q=60",
-      width: 500,
-      height: 281
-    },
-    author: {
-      id: "auth9|123123",
-      name: "Foo bar",
-      avatarUrl:
-        "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
-    },
-    likesCount: 1,
-    isLiked: true,
-    timestamp: 1535731213512
-  }
-];
+  author: {
+    id: "auth9|123123",
+    name: "Foo bar",
+    avatarUrl:
+      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
+  },
+  likesCount: 1,
+  isLiked: true,
+  timestamp: 1535731213512
+} as ApiPost;
+
+const post2 = {
+  id: "2",
+  picture: {
+    url:
+      "https://images.unsplash.com/photo-1535406110845-88cbe4f661bc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f4a0c1c0797ffc0e0008c764bf37fdf4&auto=format&fit=crop&w=500&q=60",
+    width: 500,
+    height: 281
+  },
+  author: {
+    id: "auth9|123123",
+    name: "Foo bar",
+    avatarUrl:
+      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
+  },
+  likesCount: 1,
+  isLiked: true,
+  timestamp: 1535731213512
+} as ApiPost;
 
 let testScheduler: TestScheduler;
 
@@ -82,7 +83,7 @@ describe("Post epic", () => {
     describe("when request is successful", () => {
       const response = {
         total: 2,
-        items: posts
+        items: [post1, post2]
       };
 
       beforeEach(() => {
@@ -165,15 +166,15 @@ describe("Post epic", () => {
               type: CREATE_POST,
               payload: {
                 file,
-                post: posts[0]
+                post: post1
               }
             }
           });
           const output$ = postEpic(action$ as any, null as any, { api } as any);
 
           expectObservable(output$).toBe("--a-b-", {
-            a: uploadProgress(posts[0].id, 250, 400),
-            b: uploadProgress(posts[0].id, 300, 400)
+            a: uploadProgress(post1.id, 250, 400),
+            b: uploadProgress(post1.id, 300, 400)
           });
         });
       });
@@ -181,9 +182,6 @@ describe("Post epic", () => {
 
     describe("when the request is successful", () => {
       const file = new File([""], "picture.png");
-      const post = posts[0];
-      const instance = posts[1];
-
       it("should dispatch CREATE_POST_RESOLVE", () => {
         testScheduler.run(({ hot, cold, expectObservable }) => {
           const action$ = cold("-a-", {
@@ -191,13 +189,13 @@ describe("Post epic", () => {
               type: CREATE_POST,
               payload: {
                 file,
-                post: posts[0]
+                post: post1
               }
             }
           });
           const response$ = cold("--a|", {
             a: {
-              data: instance
+              data: post2
             }
           });
           const api = {
@@ -206,7 +204,7 @@ describe("Post epic", () => {
           const output$ = postEpic(action$ as any, null as any, { api } as any);
 
           expectObservable(output$).toBe("---a", {
-            a: createPostResolve(post, instance)
+            a: createPostResolve(post1, post2)
           });
         });
       });
@@ -214,7 +212,7 @@ describe("Post epic", () => {
 
     describe("when the request fails", () => {
       const file = new File([""], "picture.png");
-      const post = posts[0];
+      const post = post1;
       const error = new Error("foo");
 
       it("should dispatch CREATE_POST_REJECT", () => {
@@ -224,7 +222,7 @@ describe("Post epic", () => {
               type: CREATE_POST,
               payload: {
                 file,
-                post: posts[0]
+                post: post1
               }
             }
           });
@@ -243,9 +241,19 @@ describe("Post epic", () => {
   });
 
   describe("deleting post", () => {
-    describe("when the request is successful", () => {
-      const post = posts[0];
+    // Create denormalized instance from fixture
+    const post = {
+      id: post1.id,
+      picture: post1.picture,
+      author: post1.author,
+      likesCount: post1.likesCount,
+      isLiked: post1.isLiked,
+      timestamp: post1.timestamp,
+      pending: false,
+      progress: null
+    } as Post;
 
+    describe("when the request is successful", () => {
       it("dispatches DELETE_POST_RESOLVE", () => {
         testScheduler.run(({ hot, expectObservable }) => {
           // prettier-ignore
@@ -280,7 +288,6 @@ describe("Post epic", () => {
     });
 
     describe("when the request fails", () => {
-      const post = posts[0];
       const error = new Error("foo");
 
       it("dispatches DELETE_POST_REJECT", () => {
@@ -316,9 +323,19 @@ describe("Post epic", () => {
   });
 
   describe("liking post", () => {
-    describe("when the request is successful", () => {
-      const post = posts[0];
+    // Create denormalized instance from fixture
+    const post = {
+      id: post1.id,
+      picture: post1.picture,
+      author: post1.author,
+      likesCount: post1.likesCount,
+      isLiked: post1.isLiked,
+      timestamp: post1.timestamp,
+      pending: false,
+      progress: null
+    } as Post;
 
+    describe("when the request is successful", () => {
       it("dispatches LIKE_POST_RESOLVE", () => {
         testScheduler.run(({ hot, expectObservable }) => {
           // prettier-ignore
@@ -350,7 +367,6 @@ describe("Post epic", () => {
     });
 
     describe("when the request fails", () => {
-      const post = posts[0];
       const error = new Error("foo");
 
       it("dispatches LIKE_POST_REJECT", () => {

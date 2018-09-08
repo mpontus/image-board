@@ -6,28 +6,36 @@ import {
   CREATE_POST_RESOLVE,
   DELETE_POST,
   DELETE_POST_REJECT,
+  DELETE_POST_RESOLVE,
   LIKE_POST,
   LIKE_POST_REJECT,
   LOAD_POSTS_RESOLVE
 } from "../actions";
-import { Post } from "../models";
+import { Post as ApiPost } from "../api";
+import { Progress } from "../models";
 
 export interface State {
   readonly loading: boolean;
   readonly total: number | null;
-  readonly pendingIds: ReadonlyArray<string>;
   readonly ids: ReadonlyArray<string>;
-  readonly byId: Readonly<{ [id: string]: Post | undefined }>;
+  readonly byId: Readonly<{ [id: string]: ApiPost | undefined }>;
+  readonly pendingIds: ReadonlyArray<string>;
+  readonly isPendingById: Readonly<{ [id: string]: boolean }>;
+  readonly isDeletedById: Readonly<{ [id: string]: boolean }>;
   readonly instances: Readonly<{ [id: string]: string }>;
+  readonly progress: Readonly<{ [id: string]: Progress }>;
 }
 
 const initialState: State = {
   loading: false,
   total: null,
-  pendingIds: [],
   ids: [],
   byId: {},
-  instances: {}
+  pendingIds: [],
+  isPendingById: {},
+  isDeletedById: {},
+  instances: {},
+  progress: {}
 };
 
 const reducer: Reducer<State, Action> = (
@@ -59,6 +67,10 @@ const reducer: Reducer<State, Action> = (
       return {
         ...state,
         pendingIds: [post.id, ...state.pendingIds],
+        isPendingById: {
+          ...state.isPendingById,
+          [post.id]: true
+        },
         byId: {
           ...state.byId,
           [post.id]: post
@@ -102,6 +114,18 @@ const reducer: Reducer<State, Action> = (
 
       return {
         ...state,
+        isDeletedById: {
+          ...state.isDeletedById,
+          [post.id]: true
+        }
+      };
+    }
+
+    case DELETE_POST_RESOLVE: {
+      const { post } = action.payload;
+
+      return {
+        ...state,
         byId: {
           ...state.byId,
           [post.id]: undefined
@@ -114,9 +138,9 @@ const reducer: Reducer<State, Action> = (
 
       return {
         ...state,
-        byId: {
-          ...state.byId,
-          [post.id]: post
+        isDeletedById: {
+          ...state.isDeletedById,
+          [post.id]: false
         }
       };
     }

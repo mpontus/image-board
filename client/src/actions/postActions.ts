@@ -1,5 +1,5 @@
 import nanoid from "nanoid";
-import { PageResponse } from "../api";
+import { PageResponse, Post as ApiPost } from "../api";
 import { Post, User } from "../models";
 import { fileToDataUrl, getImageDimensions } from "../utils";
 
@@ -25,7 +25,7 @@ export type Action =
       type: typeof LOAD_POSTS_RESOLVE;
       payload: {
         total: number;
-        posts: Post[];
+        posts: ApiPost[];
       };
     }
   | {
@@ -38,20 +38,20 @@ export type Action =
       type: typeof CREATE_POST;
       payload: {
         file: File;
-        post: Post;
+        post: ApiPost;
       };
     }
   | {
       type: typeof CREATE_POST_RESOLVE;
       payload: {
-        post: Post;
-        instance: Post;
+        post: ApiPost;
+        instance: ApiPost;
       };
     }
   | {
       type: typeof CREATE_POST_REJECT;
       payload: {
-        post: Post;
+        post: ApiPost;
         error: Error;
       };
     }
@@ -113,7 +113,7 @@ export const loadPostsResolve = ({ total, items }: PageResponse): Action => ({
   type: LOAD_POSTS_RESOLVE,
   payload: {
     total,
-    posts: items
+    posts: items as ApiPost[]
   }
 });
 
@@ -141,12 +141,15 @@ export const createPost = (file: File, user: User): Promise<Action> =>
           likesCount: 1,
           isLiked: true,
           timestamp: Date.now()
-        }
+        } as ApiPost
       }
     })
   );
 
-export const createPostResolve = (post: Post, instance: Post): Action => ({
+export const createPostResolve = (
+  post: ApiPost,
+  instance: ApiPost
+): Action => ({
   type: CREATE_POST_RESOLVE,
   payload: {
     post,
@@ -154,7 +157,7 @@ export const createPostResolve = (post: Post, instance: Post): Action => ({
   }
 });
 
-export const createPostReject = (post: Post, error: Error): Action => ({
+export const createPostReject = (post: ApiPost, error: Error): Action => ({
   type: CREATE_POST_REJECT,
   payload: {
     post,

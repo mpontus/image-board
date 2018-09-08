@@ -1,3 +1,4 @@
+import { Post as ApiPost } from "../api";
 import reducers, { State } from "../reducers";
 import { makeGetPostById, makeGetPostIds } from "./postSelectors";
 
@@ -18,7 +19,8 @@ const postFixture = {
   likesCount: 1,
   isLiked: true,
   timestamp: 1535731213512
-};
+} as ApiPost;
+
 const postFixture2 = {
   id: "7",
   picture: {
@@ -36,7 +38,8 @@ const postFixture2 = {
   likesCount: 1,
   isLiked: true,
   timestamp: 1535731213512
-};
+} as ApiPost;
+
 const initialState = reducers(undefined, {} as any);
 
 describe("postSelectors", () => {

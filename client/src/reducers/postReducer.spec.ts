@@ -9,46 +9,47 @@ import {
   likePostReject,
   loadPostsResolve
 } from "../actions";
+import { PageResponse, Post as ApiPost } from "../api";
+import { Post } from "../models";
 import postReducer from "./postReducer";
 
-const postFixtures = [
-  {
-    id: "1",
-    picture: {
-      url:
-        "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
-      width: 500,
-      height: 333
-    },
-    author: {
-      id: "auth9|123123",
-      name: "Foo bar",
-      avatarUrl:
-        "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
-    },
-    likesCount: 1,
-    isLiked: true,
-    timestamp: 1535731213512
+const post1 = {
+  id: "1",
+  picture: {
+    url:
+      "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
+    width: 500,
+    height: 333
   },
-  {
-    id: "2",
-    picture: {
-      url:
-        "https://images.unsplash.com/photo-1535406110845-88cbe4f661bc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f4a0c1c0797ffc0e0008c764bf37fdf4&auto=format&fit=crop&w=500&q=60",
-      width: 500,
-      height: 281
-    },
-    author: {
-      id: "auth9|123123",
-      name: "Foo bar",
-      avatarUrl:
-        "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
-    },
-    likesCount: 1,
-    isLiked: true,
-    timestamp: 1535731213512
-  }
-];
+  author: {
+    id: "auth9|123123",
+    name: "Foo bar",
+    avatarUrl:
+      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
+  },
+  likesCount: 1,
+  isLiked: true,
+  timestamp: 1535731213512
+} as ApiPost;
+
+const post2 = {
+  id: "2",
+  picture: {
+    url:
+      "https://images.unsplash.com/photo-1535406110845-88cbe4f661bc?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f4a0c1c0797ffc0e0008c764bf37fdf4&auto=format&fit=crop&w=500&q=60",
+    width: 500,
+    height: 281
+  },
+  author: {
+    id: "auth9|123123",
+    name: "Foo bar",
+    avatarUrl:
+      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
+  },
+  likesCount: 1,
+  isLiked: true,
+  timestamp: 1535731213512
+} as ApiPost;
 
 const initialState = postReducer(undefined, {} as any);
 
@@ -60,15 +61,12 @@ describe("Post reducer", () => {
   });
 
   describe("listing retrieval", () => {
-    const post1 = postFixtures[0];
-    const post2 = postFixtures[1];
-
     it("should add posts to the state", () => {
-      const action = loadPostsResolve({
+      const response = {
         total: 2,
         items: [post1, post2]
-      });
-
+      } as PageResponse;
+      const action = loadPostsResolve(response);
       const state = postReducer(initialState, action);
 
       expect(state).toEqual({
@@ -85,9 +83,6 @@ describe("Post reducer", () => {
   });
 
   describe("post creation", () => {
-    const post1 = postFixtures[0];
-    const post2 = postFixtures[1];
-
     it("should add the post optimistically", () => {
       const file = new File([""], "picture.png");
       const action: Action = {
@@ -102,9 +97,12 @@ describe("Post reducer", () => {
 
       expect(state).toEqual({
         ...initialState,
-        pendingIds: [post1.id],
         byId: {
           [post1.id]: post1
+        },
+        pendingIds: [post1.id],
+        isPendingById: {
+          [post1.id]: true
         }
       });
     });
@@ -154,21 +152,34 @@ describe("Post reducer", () => {
   });
 
   describe("post deletion", () => {
-    const post = postFixtures[0];
+    // Create denormalized post instance from the fixture
+    const post1denormalized = {
+      id: post1.id,
+      picture: post1.picture,
+      author: post1.author,
+      likesCount: post1.likesCount,
+      isLiked: post1.isLiked,
+      timestamp: post1.timestamp,
+      pending: false,
+      progress: null
+    } as Post;
 
     it("should delete post optimistically", () => {
       const state0 = {
         ...initialState,
         byId: {
-          [post.id]: post
+          [post1.id]: post1
         }
       };
-      const action = deletePost(post);
-      const state = postReducer(initialState, action);
+
+      const action = deletePost(post1denormalized);
+      const state = postReducer(state0, action);
 
       expect(state).toEqual({
         ...state0,
-        byId: {}
+        isDeletedById: {
+          [post1.id]: true
+        }
       });
     });
 
@@ -176,37 +187,47 @@ describe("Post reducer", () => {
       const state0 = {
         ...initialState
       };
-      const action = deletePostReject(post, new Error("foo"));
-      const state = postReducer(initialState, action);
+      const action = deletePostReject(post1denormalized, new Error("foo"));
+      const state = postReducer(state0, action);
 
       expect(state).toEqual({
         ...state0,
-        byId: {
-          [post.id]: post
+        isDeletedById: {
+          [post1.id]: false
         }
       });
     });
   });
 
   describe("post liking", () => {
-    const post = postFixtures[0];
+    // Create denormalized post instance from the fixture
+    const post1denormalized = {
+      id: post1.id,
+      picture: post1.picture,
+      author: post1.author,
+      likesCount: post1.likesCount,
+      isLiked: post1.isLiked,
+      timestamp: post1.timestamp,
+      pending: false,
+      progress: null
+    } as Post;
 
     it("should like the post optimistically", () => {
       const state0 = {
         ...initialState,
         byId: {
-          [post.id]: post
+          [post1.id]: post1
         }
       };
-      const action = likePost(post, 1);
+      const action = likePost(post1denormalized, 1);
       const state = postReducer(state0, action);
 
       expect(state).toEqual({
         ...state0,
         byId: {
-          [post.id]: {
-            ...post,
-            likesCount: post.likesCount + 1
+          [post1.id]: {
+            ...post1,
+            likesCount: post1.likesCount + 1
           }
         }
       });
@@ -216,18 +237,18 @@ describe("Post reducer", () => {
       const state0 = {
         ...initialState,
         byId: {
-          [post.id]: post
+          [post1.id]: post1
         }
       };
-      const action = likePostReject(post, 1, new Error("foo"));
+      const action = likePostReject(post1denormalized, 1, new Error("foo"));
       const state = postReducer(state0, action);
 
       expect(state).toEqual({
         ...state0,
         byId: {
-          [post.id]: {
-            ...post,
-            likesCount: post.likesCount - 1
+          [post1.id]: {
+            ...post1,
+            likesCount: post1.likesCount - 1
           }
         }
       });

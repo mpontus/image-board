@@ -39,9 +39,20 @@ export const makeGetPostIds = (): Selector<
 export const makeGetPostById = (): ParametricSelector<
   State,
   { id: string },
-  Post | undefined
+  Post
 > => {
   const getFinalId = makeGetFinalId();
+  const finalSelector: ParametricSelector<State, string, Post> = createSelector(
+    (state: State, id: string) => state.posts.byId[id],
+    (state: State, id: string) => state.posts.isPendingById[id],
+    (state: State, id: string) => state.posts.progress[id],
+    (post, pending, progress) =>
+      ({
+        ...post,
+        pending,
+        progress
+      } as Post)
+  );
 
-  return (state, { id }) => state.posts.byId[getFinalId(state, id)];
+  return (state, { id }) => finalSelector(state, getFinalId(state, id));
 };

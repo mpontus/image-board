@@ -5,8 +5,11 @@ Object {
   "byId": Object {},
   "ids": Array [],
   "instances": Object {},
+  "isDeletedById": Object {},
+  "isPendingById": Object {},
   "loading": false,
   "pendingIds": Array [],
+  "progress": Object {},
   "total": null,
 }
 `;
