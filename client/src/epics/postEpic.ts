@@ -1,7 +1,8 @@
-import { AxiosRequestConfig } from "axios";
-import { ThrowReporter } from "io-ts/lib/ThrowReporter";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
+import * as t from "io-ts";
+import { failure } from "io-ts/lib/PathReporter";
 import { combineEpics, Epic, ofType } from "redux-observable";
-import { empty, from, Observable, Observer, of } from "rxjs";
+import { empty, from, Observable, Observer, of, throwError } from "rxjs";
 import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
 import {
   Action,
@@ -19,9 +20,29 @@ import {
   loadPostsResolve,
   uploadProgress
 } from "../actions";
-import { PageResponseSchema } from "../api";
+import { PageResponseSchema, PostSchema } from "../api";
+import { mapResponseToPostData } from "../models";
 import { State } from "../reducers";
 import { Dependencies } from "../store";
+
+/**
+ * Validate the response object and cast the results to the given schema.
+ *
+ * @param schema Type io-ts schema definition
+ * @return Observable<*> Observable of the instances of the given schema objects
+ */
+const validateResponse = <S extends t.Any>(schema: S) => (
+  source: Observable<AxiosResponse<any>>
+): Observable<t.TypeOf<S>> =>
+  source.pipe(
+    map(response =>
+      schema
+        .decode(response.data)
+        .mapLeft(errors => failure(errors).join("\n"))
+        .mapLeft(message => new Error(message))
+    ),
+    switchMap(result => result.fold(throwError, of))
+  );
 
 const retrievePostsEpic: Epic<Action, Action, State, Dependencies> = (
   action$,
@@ -32,17 +53,10 @@ const retrievePostsEpic: Epic<Action, Action, State, Dependencies> = (
     ofType(LOAD_POSTS),
     switchMap(() =>
       from(api.get("posts?page=1")).pipe(
-        // map(response => loadPostsResolve(response.data)),
-        map(response => {
-          const { data } = response;
-
-          const validationResult = PageResponseSchema.decode(data);
-
-          ThrowReporter.report(validationResult);
-
-          return validationResult.value;
-        }),
-        map(loadPostsResolve),
+        validateResponse(PageResponseSchema),
+        map(({ total, items }) =>
+          loadPostsResolve(total, items.map(mapResponseToPostData))
+        ),
         catchError(error => of(loadPostsReject(error)))
       )
     )
@@ -73,7 +87,10 @@ const createPostEpic: Epic<Action, Action, State, Dependencies> = (
 
         from(api.post("posts", data, config))
           .pipe(
-            map(response => createPostResolve(post, response.data)),
+            validateResponse(PostSchema),
+            map(response =>
+              createPostResolve(post, mapResponseToPostData(response))
+            ),
             catchError(error => of(createPostReject(post, error)))
           )
           .subscribe(observer);

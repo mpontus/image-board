@@ -1,3 +1,4 @@
+import { Post as ApiPost } from "../api";
 import { User } from "./User";
 
 export interface Picture {
@@ -11,14 +12,29 @@ export interface Progress {
   bytesTotal: number;
 }
 
-export interface Post {
-  _model: void;
+export interface PostData {
   id: string;
   picture: Picture;
   author: User;
   likesCount: number;
   isLiked: boolean;
   timestamp: number;
+}
+
+export interface Post extends PostData {
   pending: boolean;
   progress: Progress | null;
 }
+
+export const mapResponseToPostData = (post: ApiPost): PostData => ({
+  id: post.id,
+  author: post.author,
+  picture: {
+    url: post.imageUrl,
+    width: post.imageWidth,
+    height: post.imageHeight
+  },
+  isLiked: post.isLiked,
+  likesCount: post.likes,
+  timestamp: post.timestamp.getTime()
+});

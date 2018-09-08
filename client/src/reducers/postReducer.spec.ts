@@ -9,8 +9,6 @@ import {
   likePostReject,
   loadPostsResolve
 } from "../actions";
-import { PageResponse, Post as ApiPost } from "../api";
-import { Post } from "../models";
 import postReducer from "./postReducer";
 
 const post1 = {
@@ -30,7 +28,7 @@ const post1 = {
   likesCount: 1,
   isLiked: true,
   timestamp: 1535731213512
-} as ApiPost;
+};
 
 const post2 = {
   id: "2",
@@ -49,7 +47,7 @@ const post2 = {
   likesCount: 1,
   isLiked: true,
   timestamp: 1535731213512
-} as ApiPost;
+};
 
 const initialState = postReducer(undefined, {} as any);
 
@@ -62,17 +60,13 @@ describe("Post reducer", () => {
 
   describe("listing retrieval", () => {
     it("should add posts to the state", () => {
-      const response = {
-        total: 2,
-        items: [post1, post2]
-      } as PageResponse;
-      const action = loadPostsResolve(response);
+      const action = loadPostsResolve(7, [post1, post2]);
       const state = postReducer(initialState, action);
 
       expect(state).toEqual({
         ...initialState,
         loading: false,
-        total: 2,
+        total: 7,
         ids: [post1.id, post2.id],
         byId: {
           [post1.id]: post1,
@@ -162,7 +156,7 @@ describe("Post reducer", () => {
       timestamp: post1.timestamp,
       pending: false,
       progress: null
-    } as Post;
+    };
 
     it("should delete post optimistically", () => {
       const state0 = {
@@ -210,7 +204,7 @@ describe("Post reducer", () => {
       timestamp: post1.timestamp,
       pending: false,
       progress: null
-    } as Post;
+    };
 
     it("should like the post optimistically", () => {
       const state0 = {

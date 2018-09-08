@@ -1,6 +1,5 @@
 import nanoid from "nanoid";
-import { PageResponse, Post as ApiPost } from "../api";
-import { Post, User } from "../models";
+import { Post, PostData, User } from "../models";
 import { fileToDataUrl, getImageDimensions } from "../utils";
 
 export const LOAD_POSTS = "LOAD_POSTS";
@@ -25,7 +24,7 @@ export type Action =
       type: typeof LOAD_POSTS_RESOLVE;
       payload: {
         total: number;
-        posts: ApiPost[];
+        posts: PostData[];
       };
     }
   | {
@@ -38,20 +37,20 @@ export type Action =
       type: typeof CREATE_POST;
       payload: {
         file: File;
-        post: ApiPost;
+        post: PostData;
       };
     }
   | {
       type: typeof CREATE_POST_RESOLVE;
       payload: {
-        post: ApiPost;
-        instance: ApiPost;
+        post: PostData;
+        instance: PostData;
       };
     }
   | {
       type: typeof CREATE_POST_REJECT;
       payload: {
-        post: ApiPost;
+        post: PostData;
         error: Error;
       };
     }
@@ -109,11 +108,11 @@ export const loadPosts = (): Action => ({
   type: LOAD_POSTS
 });
 
-export const loadPostsResolve = ({ total, items }: PageResponse): Action => ({
+export const loadPostsResolve = (total: number, posts: PostData[]): Action => ({
   type: LOAD_POSTS_RESOLVE,
   payload: {
     total,
-    posts: items as ApiPost[]
+    posts
   }
 });
 
@@ -141,14 +140,14 @@ export const createPost = (file: File, user: User): Promise<Action> =>
           likesCount: 1,
           isLiked: true,
           timestamp: Date.now()
-        } as ApiPost
+        } as PostData
       }
     })
   );
 
 export const createPostResolve = (
-  post: ApiPost,
-  instance: ApiPost
+  post: PostData,
+  instance: PostData
 ): Action => ({
   type: CREATE_POST_RESOLVE,
   payload: {
@@ -157,7 +156,7 @@ export const createPostResolve = (
   }
 });
 
-export const createPostReject = (post: ApiPost, error: Error): Action => ({
+export const createPostReject = (post: PostData, error: Error): Action => ({
   type: CREATE_POST_REJECT,
   payload: {
     post,

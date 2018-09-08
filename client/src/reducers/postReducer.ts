@@ -11,14 +11,13 @@ import {
   LIKE_POST_REJECT,
   LOAD_POSTS_RESOLVE
 } from "../actions";
-import { Post as ApiPost } from "../api";
-import { Progress } from "../models";
+import { PostData, Progress } from "../models";
 
 export interface State {
   readonly loading: boolean;
   readonly total: number | null;
   readonly ids: ReadonlyArray<string>;
-  readonly byId: Readonly<{ [id: string]: ApiPost | undefined }>;
+  readonly byId: Readonly<{ [id: string]: PostData | undefined }>;
   readonly pendingIds: ReadonlyArray<string>;
   readonly isPendingById: Readonly<{ [id: string]: boolean }>;
   readonly isDeletedById: Readonly<{ [id: string]: boolean }>;
