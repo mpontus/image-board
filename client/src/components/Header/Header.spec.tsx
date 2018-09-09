@@ -7,9 +7,7 @@ import {
 } from "react-testing-library";
 import Header from "./Header";
 
-afterEach(() => {
-  cleanup();
-});
+afterEach(cleanup);
 
 describe("when user is unauthenticated", () => {
   let result: RenderResult;
