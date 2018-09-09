@@ -16,6 +16,7 @@ interface Props {
   cellCount: number;
   keyMapper?: KeyMapper;
   maxCellWidth: number;
+  overscanByPixels?: number;
   gutter?: number;
   cellRenderer: CellRenderer;
 }
@@ -26,7 +27,8 @@ interface State {
 }
 
 const defaultProps = {
-  gutter: 0
+  gutter: 0,
+  overscanByPixels: 20
 };
 
 /**
@@ -144,6 +146,12 @@ const MasonryLayout: React.ComponentClass<
                 cellPositioner={this.cellPositioner}
                 cellRenderer={this.cellRenderer}
                 ref={this.masonry}
+                overscanByPixels={
+                  "Cypress" in window
+                    ? // Effectively disable optimization for UI tests
+                      Infinity
+                    : this.props.overscanByPixels
+                }
               />
             )}
           </AutoSizer>
