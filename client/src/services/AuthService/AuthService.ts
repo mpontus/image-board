@@ -68,6 +68,11 @@ class AuthService {
     const { exp } = jwtDecode(idToken);
     const delay = exp * 1000 - Date.now();
 
+    if (delay > 0x7fffffff) {
+      // setTimeout limit is MAX_INT32=(2^31-1)
+      return;
+    }
+
     setTimeout(() => {
       this.idToken = this.refreshToken();
 
@@ -79,7 +84,7 @@ class AuthService {
         }
 
         localStorage.setItem(ID_TOKEN_KEY, nextIdToken);
-        this.scheduleRefreshToken(idToken);
+        this.scheduleRefreshToken(nextIdToken);
       });
     }, delay);
   }
