@@ -5,7 +5,7 @@ declare module "rebass" {
     T & {
       is?: string | React.ComponentType<any>;
     }
-    >;
+  >;
 
   interface SpaceProps {
     m?: number;
@@ -79,35 +79,40 @@ declare module "rebass" {
 
   export declare const Flex: React.CompnentType<
     WidthProps &
-    SpaceProps &
-    FontSizeProps &
-    ColorProps &
-    FlexProps &
-    OrderProps &
-    AlignSelfProps
-    >;
+      SpaceProps &
+      FontSizeProps &
+      ColorProps &
+      FlexProps &
+      OrderProps &
+      AlignSelfProps
+  >;
 
   export declare const Box: Component<
     FlexWrapProps & FlexDirectionProps & AlignItemsProps & JustifyContentProps
-    >;
+  >;
 
   export declare const Text: Component<
     SpaceProps &
-    ColorProps &
-    FontFamilyProps &
-    FontSizeProps &
-    FontWeightProps &
-    TextAlignProps &
-    LineHeightProps
-    >;
+      ColorProps &
+      FontFamilyProps &
+      FontSizeProps &
+      FontWeightProps &
+      TextAlignProps &
+      LineHeightProps
+  >;
 
   export declare const BackgroundImage: Component<
-    RatioProps &
-    BackgroundSizeProps &
-    BackgroundPositionProps &
-    SpaceProps &
-    ColorProps & {
-      src: string;
-    }
-    >;
+    WidthProps &
+      RatioProps &
+      BackgroundSizeProps &
+      BackgroundPositionProps &
+      SpaceProps &
+      ColorProps & {
+        src: string;
+      }
+  >;
+
+  export declare const Avatar: Component<
+    BorderRadiusProps & SpaceProps & ColorProps & SizeProps
+  >;
 }

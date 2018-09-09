@@ -9,14 +9,14 @@ class App extends React.Component {
         <AuthContainer>
           {({ user, onLogin, onLogout }) => (
             <PostListContainer>
-              {({ createPost }) => (
+              {({ onCreatePost }) => (
                 <Header
                   isAuthenticated={user !== null}
                   onLoginClick={onLogin}
                   onLogoutClick={onLogout}
                   onFileChange={e => {
                     if (user && e.currentTarget.files) {
-                      createPost(e.currentTarget.files[0], user);
+                      onCreatePost(e.currentTarget.files[0], user);
                     }
                   }}
                 />
@@ -24,28 +24,44 @@ class App extends React.Component {
             </PostListContainer>
           )}
         </AuthContainer>
-        <PostListContainer>
-          {({ ids }) => (
-            <MasonryLayout
-              gutter={10}
-              maxCellWidth={420}
-              cellCount={ids.length}
-              cellRenderer={({ index }) => (
-                <PostContainer id={ids[index]}>
-                  {({ post }) =>
-                    post ? (
-                      <Card
-                        width={post.picture.width}
-                        height={post.picture.height}
-                        imageUrl={post.picture.url}
-                      />
-                    ) : null
-                  }
-                </PostContainer>
+        <AuthContainer>
+          {({ user, onLogin, onLogout }) => (
+            <PostListContainer>
+              {({ ids, onDeletePost, onLikePost }) => (
+                <MasonryLayout
+                  gutter={10}
+                  maxCellWidth={420}
+                  cellCount={ids.length}
+                  cellRenderer={({ index }) => (
+                    <PostContainer id={ids[index]}>
+                      {({ post }) =>
+                        post ? (
+                          <Card
+                            authorName={post.author.name}
+                            authorAvatarUrl={post.author.avatarUrl}
+                            width={post.picture.width}
+                            height={post.picture.height}
+                            imageUrl={post.picture.url}
+                            likeCount={post.likesCount}
+                            isLiked={post.isLiked}
+                            canLike={user !== null}
+                            onLikeToggle={() =>
+                              onLikePost(post, post.isLiked ? -1 : 1)
+                            }
+                            canDelete={
+                              user !== null && user.id === post.author.id
+                            }
+                            onDeleteClick={() => onDeletePost(post)}
+                          />
+                        ) : null
+                      }
+                    </PostContainer>
+                  )}
+                />
               )}
-            />
+            </PostListContainer>
           )}
-        </PostListContainer>
+        </AuthContainer>
       </div>
     );
   }

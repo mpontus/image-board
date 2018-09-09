@@ -1,12 +1,14 @@
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { createPost } from "../actions";
-import { User } from "../models";
+import { createPost, deletePost, likePost } from "../actions";
+import { Post, User } from "../models";
 import { makeGetPostIds } from "../selectors";
 
 interface RenderProps {
   ids: ReadonlyArray<string>;
-  createPost: (file: File, user: User) => void;
+  onCreatePost: (file: File, user: User) => void;
+  onDeletePost: (post: Post) => void;
+  onLikePost: (post: Post, value: 1 | -1) => void;
 }
 
 interface Props extends RenderProps {
@@ -19,7 +21,11 @@ const makeMapStateToProps = createStructuredSelector({
 
 const enhance = connect(
   makeMapStateToProps,
-  { createPost }
+  {
+    onCreatePost: createPost,
+    onDeletePost: deletePost,
+    onLikePost: likePost
+  }
 );
 
 const PostListContainer = ({ children, ...rest }: Props) => children(rest);

@@ -158,6 +158,7 @@ const reducer: Reducer<State, Action> = (
           ...state.byId,
           [post.id]: {
             ...current,
+            isLiked: value > 0,
             likesCount: current.likesCount + value
           }
         }
@@ -178,6 +179,7 @@ const reducer: Reducer<State, Action> = (
           ...state.byId,
           [post.id]: {
             ...current,
+            isLiked: !(value > 0),
             likesCount: current.likesCount - value
           }
         }
