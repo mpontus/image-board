@@ -27,6 +27,8 @@ const auth = new AuthService({
   )
 });
 
+api.interceptors.request.use(AuthService.createAxiosInterceptor(auth));
+
 const store = configureStore({ api, auth });
 
 store.dispatch(loadPosts());
