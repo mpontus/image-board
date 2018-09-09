@@ -28,10 +28,22 @@ const makeGetFinalId = (): ParametricSelector<State, string, string> =>
  * Do not return final ids from this function to avoid remounting
  * pending posts after resolution.
  */
-export const makeGetPostIds = (): Selector<
-  State,
-  ReadonlyArray<string>
-> => state => [...state.posts.pendingIds, ...state.posts.ids];
+export const makeGetPostIds = (): Selector<State, string[]> =>
+  createSelector(
+    state => state.posts.pendingIds,
+    state => state.posts.ids,
+    state => state.posts.byId,
+    state => state.posts.isDeletedById,
+    state => state.posts.instances,
+    (pending, ids, byId, isDeletedById, instances) =>
+      [...pending, ...ids].filter(id => !isDeletedById[id]).filter(id => {
+        // Use resultFunc to bypass, in this case, harmful memoization
+        // since the key will be reset with each iteration
+        const finalId = getFinalIdRecursively(instances, id);
+
+        return !!byId[finalId];
+      })
+  );
 
 /**
  * Retrieve the post by ID and denormalize it into domain model
@@ -54,5 +66,7 @@ export const makeGetPostById = (): ParametricSelector<
       post ? denormalizePost(post, pending || false, progress) : undefined
   );
 
-  return (state, { id }) => finalSelector(state, getFinalId(state, id));
+  return (state, { id }) => {
+    return finalSelector(state, getFinalId(state, id));
+  };
 };

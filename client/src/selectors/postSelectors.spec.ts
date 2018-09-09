@@ -1,62 +1,60 @@
+import * as fixture from "../@testing/fixtures";
 import { denormalizePost } from "../models";
 import reducers, { State } from "../reducers";
 import { makeGetPostById, makeGetPostIds } from "./postSelectors";
 
-const postFixture = {
-  id: "5",
-  picture: {
-    url:
-      "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
-    width: 500,
-    height: 333
-  },
-  author: {
-    id: "auth9|123123",
-    name: "Foo bar",
-    avatarUrl:
-      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
-  },
-  likesCount: 1,
-  isLiked: true,
-  timestamp: 1535731213512
-};
-
-const postFixture2 = {
-  id: "7",
-  picture: {
-    url:
-      "https://images.unsplash.com/photo-1535412833400-85426926b8c1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=47e717c53dae51ed4a300fffa13733a8&auto=format&fit=crop&w=500&q=60",
-    width: 500,
-    height: 333
-  },
-  author: {
-    id: "auth9|123123",
-    name: "Foo bar",
-    avatarUrl:
-      "https://images.unsplash.com/profile-1532310311737-e56bb5caa506?dpr=1&auto=format&fit=crop&w=64&h=64&q=60&crop=faces&bg=fff"
-  },
-  likesCount: 1,
-  isLiked: true,
-  timestamp: 1535731213512
-};
-
 const initialState = reducers(undefined, {} as any);
+
+const posts = [fixture.post(), fixture.post()];
+
+const state: State = {
+  ...initialState,
+  posts: {
+    ...initialState.posts,
+    pendingIds: [posts[0].id],
+    ids: [posts[1].id],
+    byId: {
+      [posts[0].id]: posts[0],
+      [posts[1].id]: posts[1]
+    }
+  }
+};
 
 describe("postSelectors", () => {
   describe("makeGetPostIds", () => {
     const getPostIds = makeGetPostIds();
 
     it("Returns all post ids", () => {
-      const state = {
-        ...initialState,
+      expect(getPostIds(state)).toEqual([posts[0].id, posts[1].id]);
+    });
+
+    it("should exclude ids marked as deleted", () => {
+      const state1: State = {
+        ...state,
         posts: {
-          ...initialState.posts,
-          pendingIds: ["2", "4"],
-          ids: ["3", "5", "9"]
+          ...state.posts,
+          isDeletedById: {
+            [posts[0].id]: true
+          }
         }
       };
 
-      expect(getPostIds(state)).toEqual(["2", "4", "3", "5", "9"]);
+      expect(getPostIds(state1)).toEqual([posts[1].id]);
+    });
+
+    it("should exclude ids for removed posts", () => {
+      const state1: State = {
+        ...state,
+        posts: {
+          ...state.posts,
+          byId: {
+            ...state.posts.byId,
+            [posts[0].id]: undefined
+          }
+        }
+      };
+
+      expect(getPostIds(state1)).toEqual([posts[1].id]);
     });
   });
 
@@ -64,38 +62,24 @@ describe("postSelectors", () => {
     const getPostById = makeGetPostById();
 
     it("should return post by its id", () => {
-      const state = {
-        ...initialState,
-        posts: {
-          ...initialState.posts,
-          byId: {
-            [postFixture.id]: postFixture
-          }
-        }
-      };
-
-      expect(getPostById(state, { id: postFixture.id })).toEqual(
-        denormalizePost(postFixture, false)
+      expect(getPostById(state, { id: posts[1].id })).toEqual(
+        denormalizePost(posts[1], false)
       );
     });
 
     it("should resolve pending post instance if it exists", () => {
-      const state: State = {
-        ...initialState,
+      const state1: State = {
+        ...state,
         posts: {
-          ...initialState.posts,
+          ...state.posts,
           instances: {
-            [postFixture.id]: postFixture2.id
-          },
-          byId: {
-            [postFixture.id]: postFixture,
-            [postFixture2.id]: postFixture2
+            [posts[0].id]: posts[1].id
           }
         }
       };
 
-      expect(getPostById(state, { id: "5" })).toEqual(
-        denormalizePost(postFixture2, false)
+      expect(getPostById(state1, { id: posts[0].id })).toEqual(
+        denormalizePost(posts[1], false)
       );
     });
   });
