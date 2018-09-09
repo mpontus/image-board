@@ -4,5 +4,6 @@ export {
   Progress,
   PostData,
   Post,
-  mapResponseToPostData
+  mapResponseToPostData,
+  denormalizePost
 } from "./Post";

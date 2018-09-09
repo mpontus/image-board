@@ -9,9 +9,10 @@ import {
   likePostReject,
   loadPostsResolve
 } from "../actions";
+import { denormalizePost, PostData } from "../models";
 import postReducer from "./postReducer";
 
-const post1 = {
+const post1: PostData = {
   id: "1",
   picture: {
     url:
@@ -30,7 +31,7 @@ const post1 = {
   timestamp: 1535731213512
 };
 
-const post2 = {
+const post2: PostData = {
   id: "2",
   picture: {
     url:
@@ -146,17 +147,7 @@ describe("Post reducer", () => {
   });
 
   describe("post deletion", () => {
-    // Create denormalized post instance from the fixture
-    const post1denormalized = {
-      id: post1.id,
-      picture: post1.picture,
-      author: post1.author,
-      likesCount: post1.likesCount,
-      isLiked: post1.isLiked,
-      timestamp: post1.timestamp,
-      pending: false,
-      progress: null
-    };
+    const post1denormalized = denormalizePost(post1, false);
 
     it("should delete post optimistically", () => {
       const state0 = {
@@ -194,17 +185,7 @@ describe("Post reducer", () => {
   });
 
   describe("post liking", () => {
-    // Create denormalized post instance from the fixture
-    const post1denormalized = {
-      id: post1.id,
-      picture: post1.picture,
-      author: post1.author,
-      likesCount: post1.likesCount,
-      isLiked: post1.isLiked,
-      timestamp: post1.timestamp,
-      pending: false,
-      progress: null
-    };
+    const post1denormalized = denormalizePost(post1, false);
 
     it("should like the post optimistically", () => {
       const state0 = {

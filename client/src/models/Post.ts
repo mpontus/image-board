@@ -23,7 +23,7 @@ export interface PostData {
 
 export interface Post extends PostData {
   pending: boolean;
-  progress: Progress | null;
+  progress: Progress | undefined;
 }
 
 export const mapResponseToPostData = (post: ApiPost): PostData => ({
@@ -37,4 +37,14 @@ export const mapResponseToPostData = (post: ApiPost): PostData => ({
   isLiked: post.isLiked,
   likesCount: post.likes,
   timestamp: post.timestamp.getTime()
+});
+
+export const denormalizePost = (
+  data: PostData,
+  pending: boolean,
+  progress?: Progress
+): Post => ({
+  ...data,
+  pending,
+  progress
 });

@@ -1,5 +1,5 @@
 import { createSelector, ParametricSelector, Selector } from "reselect";
-import { Post } from "../models";
+import { denormalizePost, Post } from "../models";
 import { State } from "../reducers";
 
 const getFinalIdRecursively = (
@@ -39,19 +39,19 @@ export const makeGetPostIds = (): Selector<
 export const makeGetPostById = (): ParametricSelector<
   State,
   { id: string },
-  Post
+  Post | undefined
 > => {
   const getFinalId = makeGetFinalId();
-  const finalSelector: ParametricSelector<State, string, Post> = createSelector(
+  const finalSelector: ParametricSelector<
+    State,
+    string,
+    Post | undefined
+  > = createSelector(
     (state: State, id: string) => state.posts.byId[id],
     (state: State, id: string) => state.posts.isPendingById[id],
     (state: State, id: string) => state.posts.progress[id],
     (post, pending, progress) =>
-      ({
-        ...post,
-        pending,
-        progress
-      } as Post)
+      post ? denormalizePost(post, pending || false, progress) : undefined
   );
 
   return (state, { id }) => finalSelector(state, getFinalId(state, id));

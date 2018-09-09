@@ -1,3 +1,4 @@
+import { denormalizePost } from "../models";
 import reducers, { State } from "../reducers";
 import { makeGetPostById, makeGetPostIds } from "./postSelectors";
 
@@ -73,7 +74,9 @@ describe("postSelectors", () => {
         }
       };
 
-      expect(getPostById(state, { id: postFixture.id })).toEqual(postFixture);
+      expect(getPostById(state, { id: postFixture.id })).toEqual(
+        denormalizePost(postFixture, false)
+      );
     });
 
     it("should resolve pending post instance if it exists", () => {
@@ -91,7 +94,9 @@ describe("postSelectors", () => {
         }
       };
 
-      expect(getPostById(state, { id: "5" })).toEqual(postFixture2);
+      expect(getPostById(state, { id: "5" })).toEqual(
+        denormalizePost(postFixture2, false)
+      );
     });
   });
 });

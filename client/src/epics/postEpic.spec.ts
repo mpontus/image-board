@@ -19,7 +19,7 @@ import {
   uploadProgress
 } from "../actions";
 import { Post as ApiPost } from "../api";
-import { mapResponseToPostData, Post } from "../models";
+import { denormalizePost, mapResponseToPostData, Post } from "../models";
 import postEpic from "./postEpic";
 
 const post1: ApiPost = {
@@ -243,12 +243,7 @@ describe.skip("Post epic", () => {
   });
 
   describe("deleting post", () => {
-    // Create denormalized instance from fixture
-    const post: Post = {
-      ...mapResponseToPostData(post1),
-      pending: false,
-      progress: null
-    };
+    const post: Post = denormalizePost(mapResponseToPostData(post1), false);
 
     describe("when the request is successful", () => {
       it("dispatches DELETE_POST_RESOLVE", () => {
@@ -320,12 +315,7 @@ describe.skip("Post epic", () => {
   });
 
   describe("liking post", () => {
-    // Create denormalized instance from fixture
-    const post: Post = {
-      ...mapResponseToPostData(post1),
-      pending: false,
-      progress: null
-    };
+    const post: Post = denormalizePost(mapResponseToPostData(post1), false);
 
     describe("when the request is successful", () => {
       it("dispatches LIKE_POST_RESOLVE", () => {
