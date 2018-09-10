@@ -106,6 +106,10 @@ app.post(
   upload.single("file"),
   async (req, res, next) => {
     try {
+      if (!req.user.nickname || !req.user.picture) {
+        throw new Error("Invalid user");
+      }
+
       const post = await Post.create({
         imageId: req.file.public_id,
         imageUrl: req.file.url,
