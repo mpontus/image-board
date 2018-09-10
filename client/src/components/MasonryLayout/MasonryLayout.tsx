@@ -11,6 +11,8 @@ import {
   Size,
   WindowScroller
 } from "react-virtualized";
+import injectLastItem from "./injectLastItem";
+import SideEffect from "./SideEffect";
 
 interface Props {
   cellCount: number;
@@ -30,6 +32,15 @@ const defaultProps = {
   gutter: 0,
   overscanByPixels: 20
 };
+
+const enhance = injectLastItem<Props & { onEndReached?: () => void }, Props>(
+  ({ onEndReached }) => ({ style }) => (
+    <div style={style}>
+      <SideEffect onMount={onEndReached} />
+    </div>
+  ),
+  ({ onEndReached, ...rest }) => rest
+);
 
 /**
  * Masonry layout component using React-Virtualized
@@ -161,4 +172,4 @@ const MasonryLayout: React.ComponentClass<
   }
 };
 
-export default MasonryLayout;
+export default enhance(MasonryLayout);
