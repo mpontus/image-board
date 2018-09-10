@@ -103,7 +103,7 @@ describe.skip("Post epic", () => {
           .toPromise()
           .then(actions => {
             expect(actions).toEqual([
-              loadPostsResolve(7, [post1, post2].map(mapResponseToPostData))
+              loadPostsResolve(1, 7, [post1, post2].map(mapResponseToPostData))
             ]);
           });
       });

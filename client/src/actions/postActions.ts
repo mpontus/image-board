@@ -5,6 +5,7 @@ import { fileToDataUrl, getImageDimensions } from "../utils";
 export const LOAD_POSTS = "LOAD_POSTS";
 export const LOAD_POSTS_REJECT = "LOAD_POSTS_REJECT";
 export const LOAD_POSTS_RESOLVE = "LOAD_POSTS_RESOLVE";
+export const END_REACHED = "END_REACHED";
 export const CREATE_POST = "CREATE_POST";
 export const CREATE_POST_RESOLVE = "CREATE_POST_RESOLVE";
 export const CREATE_POST_REJECT = "CREATE_POST_REJECT";
@@ -23,6 +24,7 @@ export type Action =
   | {
       type: typeof LOAD_POSTS_RESOLVE;
       payload: {
+        page: number;
         total: number;
         posts: PostData[];
       };
@@ -31,6 +33,12 @@ export type Action =
       type: typeof LOAD_POSTS_REJECT;
       payload: {
         error: Error;
+      };
+    }
+  | {
+      type: typeof END_REACHED;
+      payload: {
+        lastPage: number;
       };
     }
   | {
@@ -108,9 +116,14 @@ export const loadPosts = (): Action => ({
   type: LOAD_POSTS
 });
 
-export const loadPostsResolve = (total: number, posts: PostData[]): Action => ({
+export const loadPostsResolve = (
+  page: number,
+  total: number,
+  posts: PostData[]
+): Action => ({
   type: LOAD_POSTS_RESOLVE,
   payload: {
+    page,
     total,
     posts
   }
@@ -120,6 +133,13 @@ export const loadPostsReject = (error: Error): Action => ({
   type: LOAD_POSTS_REJECT,
   payload: {
     error
+  }
+});
+
+export const endReached = (lastPage: number): Action => ({
+  type: END_REACHED,
+  payload: {
+    lastPage
   }
 });
 

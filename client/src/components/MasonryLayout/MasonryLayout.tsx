@@ -11,8 +11,8 @@ import {
   Size,
   WindowScroller
 } from "react-virtualized";
+import Waypoint from "react-waypoint";
 import injectLastItem from "./injectLastItem";
-import SideEffect from "./SideEffect";
 
 interface Props {
   cellCount: number;
@@ -30,13 +30,13 @@ interface State {
 
 const defaultProps = {
   gutter: 0,
-  overscanByPixels: 20
+  overscanByPixels: 100
 };
 
 const enhance = injectLastItem<Props & { onEndReached?: () => void }, Props>(
   ({ onEndReached }) => ({ style }) => (
-    <div style={style}>
-      <SideEffect onMount={onEndReached} />
+    <div>
+      <Waypoint onEnter={onEndReached} scrollableAncestor={window} />
     </div>
   ),
   ({ onEndReached, ...rest }) => rest
