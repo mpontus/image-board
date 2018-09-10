@@ -2,8 +2,8 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 import * as t from "io-ts";
 import { failure } from "io-ts/lib/PathReporter";
 import { combineEpics, Epic, ofType } from "redux-observable";
-import { empty, from, Observable, Observer, of, throwError } from "rxjs";
-import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
+import { empty, from, merge, Observable, Observer, of, throwError } from "rxjs";
+import { catchError, map, mapTo, mergeMap, switchMap } from "rxjs/operators";
 import {
   Action,
   CREATE_POST,
@@ -12,6 +12,7 @@ import {
   DELETE_POST,
   deletePostReject,
   deletePostResolve,
+  END_REACHED,
   LIKE_POST,
   likePostReject,
   likePostResolve,
@@ -49,13 +50,27 @@ const retrievePostsEpic: Epic<Action, Action, State, Dependencies> = (
   state$,
   { api }
 ) =>
-  action$.pipe(
-    ofType(LOAD_POSTS),
-    switchMap(() =>
-      from(api.get("posts?page=1")).pipe(
+  merge(
+    action$.pipe(
+      ofType(LOAD_POSTS),
+      mapTo(1)
+    ),
+    action$.pipe(
+      ofType(END_REACHED),
+      map(action => {
+        if (action.type !== END_REACHED) {
+          throw new Error("I'm a useless type guard");
+        }
+
+        return action.payload.lastPage + 1;
+      })
+    )
+  ).pipe(
+    switchMap(page =>
+      from(api.get(`posts?page=${page}`)).pipe(
         validateResponse(PageResponseSchema),
         map(({ total, items }) =>
-          loadPostsResolve(total, items.map(mapResponseToPostData))
+          loadPostsResolve(page, total, items.map(mapResponseToPostData))
         ),
         catchError(error => of(loadPostsReject(error)))
       )

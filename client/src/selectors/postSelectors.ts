@@ -2,10 +2,23 @@ import { createSelector, ParametricSelector, Selector } from "reselect";
 import { denormalizePost, Post } from "../models";
 import { State } from "../reducers";
 
-const getFinalIdRecursively = (
-  instances: { [key: string]: string },
-  id: string
-) => (id in instances ? instances[id] : id);
+/**
+ * Return whether the post list is currently loading
+ */
+export const makeGetPostsLoading = (): Selector<State, boolean> => state =>
+  state.posts.loading;
+
+/**
+ * Return whether the post list is currently loading
+ */
+export const makeGetLastPage = (): Selector<State, number | null> => state =>
+  state.posts.lastPage;
+
+/**
+ * Return whether the post list is currently loading
+ */
+export const makeGetTotalPosts = (): Selector<State, number | null> => state =>
+  state.posts.total;
 
 /**
  * Resolve Post's final id
@@ -15,6 +28,11 @@ const getFinalIdRecursively = (
  * the real id by which the entity returned from the API is saved into
  * redux store.
  */
+const getFinalIdRecursively = (
+  instances: { [key: string]: string },
+  id: string
+) => (id in instances ? instances[id] : id);
+
 const makeGetFinalId = (): ParametricSelector<State, string, string> =>
   createSelector(
     state => state.posts.instances,

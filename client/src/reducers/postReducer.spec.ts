@@ -61,12 +61,13 @@ describe("Post reducer", () => {
 
   describe("listing retrieval", () => {
     it("should add posts to the state", () => {
-      const action = loadPostsResolve(7, [post1, post2]);
+      const action = loadPostsResolve(1, 7, [post1, post2]);
       const state = postReducer(initialState, action);
 
       expect(state).toEqual({
         ...initialState,
         loading: false,
+        lastPage: 1,
         total: 7,
         ids: [post1.id, post2.id],
         byId: {

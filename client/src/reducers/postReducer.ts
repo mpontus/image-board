@@ -15,6 +15,7 @@ import { PostData, Progress } from "../models";
 
 export interface State {
   readonly loading: boolean;
+  readonly lastPage: number | null;
   readonly total: number | null;
   readonly ids: ReadonlyArray<string>;
   readonly byId: Readonly<{ [id: string]: PostData | undefined }>;
@@ -26,7 +27,8 @@ export interface State {
 }
 
 const initialState: State = {
-  loading: false,
+  loading: true,
+  lastPage: null,
   total: null,
   ids: [],
   byId: {},
@@ -43,19 +45,20 @@ const reducer: Reducer<State, Action> = (
 ) => {
   switch (action.type) {
     case LOAD_POSTS_RESOLVE: {
-      const { total, posts } = action.payload;
+      const { page, total, posts } = action.payload;
 
       return {
         ...state,
-        total,
         loading: false,
-        ids: posts.map(post => post.id),
+        lastPage: page,
+        total,
+        ids: state.ids.concat(posts.map(post => post.id)),
         byId: posts.reduce(
           (acc, post) => ({
             ...acc,
             [post.id]: post
           }),
-          {}
+          state.byId
         )
       };
     }

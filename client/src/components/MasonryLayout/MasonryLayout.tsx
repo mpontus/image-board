@@ -11,6 +11,8 @@ import {
   Size,
   WindowScroller
 } from "react-virtualized";
+import Waypoint from "react-waypoint";
+import injectLastItem from "./injectLastItem";
 
 interface Props {
   cellCount: number;
@@ -28,8 +30,17 @@ interface State {
 
 const defaultProps = {
   gutter: 0,
-  overscanByPixels: 20
+  overscanByPixels: 100
 };
+
+const enhance = injectLastItem<Props & { onEndReached?: () => void }, Props>(
+  ({ onEndReached }) => ({ style }) => (
+    <div>
+      <Waypoint onEnter={onEndReached} scrollableAncestor={window} />
+    </div>
+  ),
+  ({ onEndReached, ...rest }) => rest
+);
 
 /**
  * Masonry layout component using React-Virtualized
@@ -161,4 +172,4 @@ const MasonryLayout: React.ComponentClass<
   }
 };
 
-export default MasonryLayout;
+export default enhance(MasonryLayout);
