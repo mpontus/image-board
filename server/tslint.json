@@ -1,0 +1,17 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
+  ],
+  "linterOptions": {
+    "exclude": ["node_modules/**/*.ts", "coverage/lcov-report/*.js"]
+  },
+  "rules": {
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "no-implicit-dependencies": false,
+    "prettier": true
+  }
+}

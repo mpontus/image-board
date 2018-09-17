@@ -1,41 +1,37 @@
-require("dotenv-safe").config();
-const express = require("express");
-const paginate = require("express-paginate");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const jwt = require("express-jwt");
-const jwksRsa = require("jwks-rsa");
-const cloudinary = require("cloudinary");
-const multer = require("multer");
-const cloudinaryStorage = require("multer-storage-cloudinary");
-const shortid = require("shortid");
-const Post = require("./model/Post");
+import * as cloudinary from "cloudinary";
+import * as cors from "cors";
+import * as dotenv from "dotenv-safe";
+import * as express from "express";
+import * as jwt from "express-jwt";
+import * as paginate from "express-paginate";
+import * as jwksRsa from "jwks-rsa";
+import * as mongoose from "mongoose";
+import * as multer from "multer";
+import * as cloudinaryStorage from "multer-storage-cloudinary";
+import * as shortid from "shortid";
+import Post from "./model/Post";
 
-const HOST = process.env.IMAGE_BOARD_SERVER_HOST || "0.0.0.0";
-const PORT = process.env.IMAGE_BOARD_SERVER_PORT || 8080;
+dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true
-});
+mongoose.connect(
+  process.env.MONGODB_URI || "",
+  {
+    useNewUrlParser: true
+  }
+);
 
 cloudinary.config(process.env.CLOUDINARY_URL);
 
-const storage = cloudinaryStorage({
-  cloudinary,
-  folder: process.env.CLOUDINARY_FOLDER,
-  allowedFormats: ["jpg", "png"],
-  filename: function(req, file, cb) {
-    cb(undefined, shortid());
-  }
-});
+const upload = multer({
+  storage: cloudinaryStorage({
+    cloudinary,
+    folder: process.env.CLOUDINARY_FOLDER || "",
+    allowedFormats: ["jpg", "png"],
 
-const upload = multer({ storage });
-
-const secret = jwksRsa.expressJwtSecret({
-  cache: true,
-  rateLimit: true,
-  jwksRequestsPerMinute: 5,
-  jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+    filename(req, file, cb) {
+      cb(undefined, shortid());
+    }
+  })
 });
 
 const app = express();
@@ -44,7 +40,12 @@ app.use(cors());
 
 app.use(
   jwt({
-    secret,
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+    }),
     audience: process.env.AUTH0_CLIENT_ID,
     issuer: `https://${process.env.AUTH0_DOMAIN}/`,
     algorithms: ["RS256"],
@@ -52,7 +53,7 @@ app.use(
   })
 );
 
-const requireAuth = (req, res, next) => {
+const requireAuth: express.RequestHandler = (req, res, next) => {
   if (!req.user) {
     res.status(401).send({
       message: "Authentication required"
@@ -62,7 +63,15 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-const serializePost = user => post => ({
+interface User {
+  sub: string;
+  nickname: string;
+  picture: string;
+}
+
+type ModelType<T> = T extends mongoose.Model<infer R> ? R : any;
+
+const serializePost = (user: User) => (post: ModelType<typeof Post>) => ({
   id: post._id,
   imageUrl: post.imageUrl,
   imageWidth: post.imageWidth,
@@ -83,9 +92,10 @@ app.get("/api/posts", paginate.middleware(5, 5), async (req, res, next) => {
       Post.find({})
         .countDocuments()
         .exec(),
+
       Post.find({})
         .sort("-timestamp")
-        .skip(req.skip)
+        .skip(req.skip as number)
         .limit(req.query.limit)
         .lean()
         .exec()
@@ -110,11 +120,13 @@ app.post(
         throw new Error("Invalid user");
       }
 
+      const file = req.file as any;
+
       const post = await Post.create({
-        imageId: req.file.public_id,
-        imageUrl: req.file.url,
-        imageWidth: req.file.width,
-        imageHeight: req.file.height,
+        imageId: file.public_id,
+        imageUrl: file.url,
+        imageWidth: file.width,
+        imageHeight: file.height,
         author: {
           id: req.user.sub,
           name: req.user.nickname,
@@ -134,6 +146,12 @@ app.post(
 app.delete("/api/posts/:id", requireAuth, async (req, res, next) => {
   try {
     const post = await Post.findOne({ _id: req.params.id });
+
+    if (post === null) {
+      res.status(404).send();
+
+      return;
+    }
 
     if (req.user.sub !== post.author.id) {
       throw new Error("Unauthorized");
@@ -196,14 +214,10 @@ app.delete("/api/posts/:id/like", requireAuth, async (req, res, next) => {
   }
 });
 
-app.use((err, req, res, next) => {
+app.use(((err, req, res, next) => {
   res.status(500).json({
     message: err.message
   });
-});
+}) as express.ErrorRequestHandler);
 
-const server = app.listen(PORT, HOST, () => {
-  const { address, port } = server.address();
-
-  console.log(`Server listening on http://${address}:${port}/`);
-});
+module.exports = app;
