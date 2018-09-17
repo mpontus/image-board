@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/posts DELETE when post does not exist should return a 404 Not Found 1`] = `Object {}`;
+
+exports[`/api/posts DELETE when user does not own the post should return a 401 Unauthorized 1`] = `Object {}`;
+
+exports[`/api/posts DELETE when user is unauthenticated should return a 401 Unauthorized 1`] = `Object {}`;
+
+exports[`/api/posts DELETE when user owns the post should return a valid response 1`] = `Object {}`;

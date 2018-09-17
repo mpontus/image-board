@@ -45,25 +45,30 @@ app.use(morgan("combined"));
 app.use(cors());
 
 app.use(
-  jwt({
-    secret: jwksRsa.expressJwtSecret({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
-    }),
-    audience: process.env.AUTH0_CLIENT_ID,
-    issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-    algorithms: ["RS256"],
-    credentialsRequired: false
-  })
+  jwt(
+    process.env.NODE_ENV === "test"
+      ? {
+          secret: process.env.JWT_SECRET || "",
+          credentialsRequired: false
+        }
+      : {
+          secret: jwksRsa.expressJwtSecret({
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 5,
+            jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+          }),
+          audience: process.env.AUTH0_CLIENT_ID,
+          issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+          algorithms: ["RS256"],
+          credentialsRequired: false
+        }
+  )
 );
 
 const requireAuth: express.RequestHandler = (req, res, next) => {
   if (!req.user) {
-    res.status(401).send({
-      message: "Authentication required"
-    });
+    res.status(401).end();
   } else {
     next();
   }
@@ -123,7 +128,7 @@ app.post(
   async (req, res, next) => {
     try {
       if (!req.user.nickname || !req.user.picture) {
-        throw new Error("Invalid user");
+        res.status(400).send();
       }
 
       const file = req.file as any;
@@ -142,7 +147,7 @@ app.post(
         likesCount: 1
       });
 
-      res.json(serializePost(req.user)(post));
+      res.status(201).json(serializePost(req.user)(post));
     } catch (error) {
       next(error);
     }
@@ -151,7 +156,9 @@ app.post(
 
 app.delete("/api/posts/:id", requireAuth, async (req, res, next) => {
   try {
-    const post = await Post.findOne({ _id: req.params.id });
+    const post = mongoose.Types.ObjectId.isValid(req.params.id)
+      ? await Post.findOne({ _id: req.params.id })
+      : null;
 
     if (post === null) {
       res.status(404).send();
@@ -160,12 +167,12 @@ app.delete("/api/posts/:id", requireAuth, async (req, res, next) => {
     }
 
     if (req.user.sub !== post.author.id) {
-      throw new Error("Unauthorized");
+      res.status(401).send();
     }
 
     await Promise.all([storage.delete(post.imageId), post.remove()]);
 
-    res.end();
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
