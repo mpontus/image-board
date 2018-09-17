@@ -1,6 +1,8 @@
 import * as cors from "cors";
 import * as dotenv from "dotenv-safe";
 import * as express from "express";
+import * as morgan from "morgan";
+import * as winston from "winston";
 import * as jwt from "express-jwt";
 import * as paginate from "express-paginate";
 import * as jwksRsa from "jwks-rsa";
@@ -33,8 +35,13 @@ const upload = multer({
   storage
 });
 
+const logger = winston.createLogger({
+  transports: [new winston.transports.Console()]
+});
+
 const app = express();
 
+app.use(morgan("combined"));
 app.use(cors());
 
 app.use(
@@ -211,6 +218,8 @@ app.delete("/api/posts/:id/like", requireAuth, async (req, res, next) => {
 });
 
 app.use(((err, req, res, next) => {
+  logger.error(err);
+
   res.status(500).json({
     message: err.message
   });
