@@ -7,11 +7,21 @@ import * as paginate from "express-paginate";
 import * as jwksRsa from "jwks-rsa";
 import * as mongoose from "mongoose";
 import * as multer from "multer";
-import * as cloudinaryStorage from "multer-storage-cloudinary";
 import * as shortid from "shortid";
 import Post from "./model/Post";
+import createStorage from "./storage/createStorage";
 
 dotenv.config();
+
+const storage = createStorage({
+  storageType: process.env.CLOUDINARY_STUB ? "test" : "cloudinary",
+  cloudinaryUrl: process.env.CLOUDINARY_URL,
+  storageParams: {
+    folder: process.env.CLOUDINARY_FOLDER || "",
+    allowedFormats: ["jpg", "png"],
+    filename: (req, file, cb) => cb(null, shortid())
+  }
+});
 
 mongoose.connect(
   process.env.MONGODB_URI || "",
@@ -23,15 +33,7 @@ mongoose.connect(
 cloudinary.config(process.env.CLOUDINARY_URL);
 
 const upload = multer({
-  storage: cloudinaryStorage({
-    cloudinary,
-    folder: process.env.CLOUDINARY_FOLDER || "",
-    allowedFormats: ["jpg", "png"],
-
-    filename(req, file, cb) {
-      cb(undefined, shortid());
-    }
-  })
+  storage
 });
 
 const app = express();
@@ -157,10 +159,7 @@ app.delete("/api/posts/:id", requireAuth, async (req, res, next) => {
       throw new Error("Unauthorized");
     }
 
-    await Promise.all([
-      cloudinary.uploader.destroy(post.imageId),
-      post.remove()
-    ]);
+    await Promise.all([storage.delete(post.imageId), post.remove()]);
 
     res.end();
   } catch (error) {
