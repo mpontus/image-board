@@ -1,4 +1,3 @@
-import * as cloudinary from "cloudinary";
 import * as cors from "cors";
 import * as dotenv from "dotenv-safe";
 import * as express from "express";
@@ -29,8 +28,6 @@ mongoose.connect(
     useNewUrlParser: true
   }
 );
-
-cloudinary.config(process.env.CLOUDINARY_URL);
 
 const upload = multer({
   storage
