@@ -6,7 +6,11 @@ beforeEach(() => resetDb());
 
 describe("/api/posts", () => {
   describe("PUT", () => {
-    const { postId, default: seed } = require("@test/seed/single-post");
+    const {
+      postId,
+      authorId,
+      default: seed
+    } = require("@test/seed/single-post");
 
     describe("when post exists", () => {
       beforeEach(seed);
@@ -14,7 +18,7 @@ describe("/api/posts", () => {
       it("should return 202 Accepted", async () => {
         const response = await request(app)
           .put(`/api/posts/${postId}/like`)
-          .set("Authorization", `Bearer ${createToken({ sub: "123" })}`)
+          .set("Authorization", `Bearer ${createToken({ sub: authorId })}`)
           .expect(202);
 
         expect(response.body).toMatchSnapshot();
@@ -24,8 +28,8 @@ describe("/api/posts", () => {
     describe("when post doesn't exist", () => {
       it("should return 400 Bad Request", async () => {
         const response = await request(app)
-          .put(`/api/posts/43345823304970c878318d12/like`)
-          .set("Authorization", `Bearer ${createToken({ sub: "123" })}`)
+          .put(`/api/posts/${postId}/like`)
+          .set("Authorization", `Bearer ${createToken({ sub: authorId })}`)
           .expect(400);
 
         expect(response.body).toMatchSnapshot();
@@ -88,7 +92,7 @@ describe("/api/posts", () => {
       it("should return 400 Bad Request", async () => {
         const response = await request(app)
           .delete(`/api/posts/43345823304970c878318d12/like`)
-          .set("Authorization", `Bearer ${createToken({ sub: "123" })}`)
+          .set("Authorization", `Bearer ${createToken({ sub: authorId })}`)
           .expect(400);
 
         expect(response.body).toMatchSnapshot();
