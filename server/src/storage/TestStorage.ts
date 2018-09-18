@@ -1,5 +1,5 @@
-import * as fs from "fs";
 import * as express from "express";
+import * as fs from "fs";
 import Storage from "./Storage";
 
 /**

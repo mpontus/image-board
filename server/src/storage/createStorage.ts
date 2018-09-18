@@ -1,7 +1,7 @@
 import * as cloudinaryStorage from "multer-storage-cloudinary";
+import CloudinaryStorage from "./CloudinaryStorage";
 import Storage from "./Storage";
 import TestStorage from "./TestStorage";
-import CloudinaryStorage from "./CloudinaryStorage";
 
 /**
  * Storage options
