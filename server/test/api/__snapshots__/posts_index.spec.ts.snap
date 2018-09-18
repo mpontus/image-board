@@ -9,23 +9,8 @@ Object {
 
 exports[`/api/posts GET when some posts exist should return a valid response 1`] = `
 Object {
-  "items": Array [
-    Object {
-      "author": Object {
-        "avatarUrl": "http://lorempixel.com/640/480",
-        "id": "7862f3cc-bfc5-41b8-aded-1d0420ea196a",
-        "name": "Vernie.Jenkins",
-      },
-      "id": "43345823304969c878318d12",
-      "imageHeight": 417,
-      "imageUrl": "http://lorempixel.com/640/480",
-      "imageWidth": 914,
-      "isLiked": false,
-      "likes": 0,
-      "timestamp": "1986-12-02T10:15:00.816Z",
-    },
-  ],
-  "total": 1,
+  "items": Array [],
+  "total": 0,
 }
 `;
 

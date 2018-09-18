@@ -5,22 +5,16 @@ import { createToken, resetDb } from "../utils";
 beforeEach(() => resetDb());
 
 describe("/api/posts", () => {
-  const seed = require("@test/seed/single-post").default;
-  let post: any;
+  const { postId, authorId, default: seed } = require("@test/seed/single-post");
 
-  beforeEach(async () => {
-    post = await seed();
-  });
+  beforeEach(seed);
 
   describe("DELETE", () => {
     describe("when user owns the post", () => {
       it("should return a valid response", async () => {
         const response = await request(app)
-          .delete(`/api/posts/${post._id}`)
-          .set(
-            "Authorization",
-            `Bearer ${createToken({ sub: post.author.id })}`
-          )
+          .delete(`/api/posts/${postId}`)
+          .set("Authorization", `Bearer ${createToken({ sub: authorId })}`)
           .expect(204);
 
         expect(response.body).toMatchSnapshot();
@@ -30,7 +24,7 @@ describe("/api/posts", () => {
     describe("when user does not own the post", () => {
       it("should return a 401 Unauthorized", async () => {
         const response = await request(app)
-          .delete(`/api/posts/${post._id}`)
+          .delete(`/api/posts/${postId}`)
           .set("Authorization", `Bearer ${createToken({ sub: "123" })}`)
           .expect(401);
 
@@ -41,7 +35,7 @@ describe("/api/posts", () => {
     describe("when user is unauthenticated", () => {
       it("should return a 401 Unauthorized", async () => {
         const response = await request(app)
-          .delete(`/api/posts/${post._id}`)
+          .delete(`/api/posts/${postId}`)
           .expect(401);
 
         expect(response.body).toMatchSnapshot();

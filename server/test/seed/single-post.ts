@@ -1,17 +1,22 @@
-import * as faker from "faker";
 import Post from "@src/model/Post";
+import * as faker from "faker";
 
-const seed = () => {
+faker.seed(1);
+
+export const postId = "43345823304969c878318d12";
+export const authorId = faker.random.uuid();
+
+export default async () => {
   faker.seed(1);
 
-  return Post.create({
-    _id: "43345823304969c878318d12",
+  await Post.create({
+    _id: postId,
     imageId: faker.random.uuid(),
     imageUrl: faker.image.imageUrl(),
     imageWidth: faker.random.number(1000),
     imageHeight: faker.random.number(1000),
     author: {
-      id: faker.random.uuid(),
+      id: authorId,
       name: faker.internet.userName(),
       avatarUrl: faker.image.imageUrl()
     },
@@ -20,5 +25,3 @@ const seed = () => {
     timestamp: faker.date.between("1980-01-01", "1990-01-01")
   });
 };
-
-export default seed;
