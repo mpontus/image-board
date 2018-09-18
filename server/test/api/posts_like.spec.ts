@@ -1,5 +1,5 @@
 /* tslint:disable:no-shadowed-variable */
-import * as app from "@src/app";
+import app from "@src/app";
 import * as request from "supertest";
 import { createToken, resetDb } from "../utils";
 

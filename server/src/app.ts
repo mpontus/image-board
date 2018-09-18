@@ -244,4 +244,4 @@ app.use(((err, req, res, next) => {
   });
 }) as express.ErrorRequestHandler);
 
-module.exports = app;
+export default app;
