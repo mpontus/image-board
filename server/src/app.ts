@@ -180,7 +180,7 @@ app.delete("/api/posts/:id", requireAuth, async (req, res, next) => {
 
 app.put("/api/posts/:id/like", requireAuth, async (req, res, next) => {
   try {
-    await Post.update(
+    const { nModified } = await Post.updateOne(
       {
         _id: req.params.id,
         likes: { $ne: req.user.sub }
@@ -195,7 +195,13 @@ app.put("/api/posts/:id/like", requireAuth, async (req, res, next) => {
       }
     ).exec();
 
-    res.end();
+    if (nModified === 0) {
+      res.status(400).end();
+
+      return;
+    }
+
+    res.status(202).end();
   } catch (error) {
     next(error);
   }
@@ -203,7 +209,7 @@ app.put("/api/posts/:id/like", requireAuth, async (req, res, next) => {
 
 app.delete("/api/posts/:id/like", requireAuth, async (req, res, next) => {
   try {
-    await Post.update(
+    const { nModified } = await Post.updateOne(
       {
         _id: req.params.id,
         likes: req.user.sub
@@ -218,7 +224,13 @@ app.delete("/api/posts/:id/like", requireAuth, async (req, res, next) => {
       }
     ).exec();
 
-    res.end();
+    if (nModified === 0) {
+      res.status(400).end();
+
+      return;
+    }
+
+    res.status(202).end();
   } catch (error) {
     next(error);
   }
