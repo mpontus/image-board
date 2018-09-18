@@ -4,7 +4,7 @@
   "description": "Image Board Server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server.js",
+    "start": "nodemon",
     "lint": "tslint -c tslint.json '**/*.ts'",
     "test": "better-npm-run test"
   },
