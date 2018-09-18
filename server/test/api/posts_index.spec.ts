@@ -54,7 +54,7 @@ describe("/api/posts", () => {
     describe("when token contains insufficient information", () => {
       it("should return a valid response", async () => {
         const token = createToken({
-          sub: "123"
+          nickname: undefined
         });
 
         const response = await request(app)

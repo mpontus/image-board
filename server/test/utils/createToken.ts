@@ -1,10 +1,11 @@
 import * as jwt from "jsonwebtoken";
 
-const createToken = (payload: object) => {
+const createToken = (payload: object = {}) => {
   return jwt.sign(
     {
-      ...payload,
-      iat: Math.floor(Date.now() / 1000)
+      iat: Math.floor(Date.now() / 1000),
+      sub: "123",
+      ...payload
     },
     process.env.JWT_SECRET || ""
   );

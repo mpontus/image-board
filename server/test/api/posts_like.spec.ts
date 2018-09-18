@@ -5,7 +5,7 @@ import { createToken, resetDb } from "../utils";
 
 beforeEach(() => resetDb());
 
-describe("/api/posts", () => {
+describe("/api/posts/:id/like", () => {
   describe("PUT", () => {
     const {
       postId,
@@ -92,7 +92,7 @@ describe("/api/posts", () => {
     describe("when post doesn't exist", () => {
       it("should return 400 Bad Request", async () => {
         const response = await request(app)
-          .delete(`/api/posts/43345823304970c878318d12/like`)
+          .delete(`/api/posts/${postId}/like`)
           .set("Authorization", `Bearer ${createToken({ sub: authorId })}`)
           .expect(400);
 

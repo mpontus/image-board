@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/api/posts DELETE when post doesn't exist should return 400 Bad Request 1`] = `Object {}`;
+exports[`/api/posts/:id/like DELETE when post doesn't exist should return 400 Bad Request 1`] = `Object {}`;
 
-exports[`/api/posts DELETE when post exists should return 202 Accepted 1`] = `Object {}`;
+exports[`/api/posts/:id/like DELETE when post exists should return 202 Accepted 1`] = `Object {}`;
 
-exports[`/api/posts DELETE when post has not been liked should return 400 Bad Request 1`] = `Object {}`;
+exports[`/api/posts/:id/like DELETE when post has not been liked should return 400 Bad Request 1`] = `Object {}`;
 
-exports[`/api/posts DELETE when user is unauthenticated should return 401 Unauthorized 1`] = `Object {}`;
+exports[`/api/posts/:id/like DELETE when user is unauthenticated should return 401 Unauthorized 1`] = `Object {}`;
 
-exports[`/api/posts PUT when post doesn't exist should return 400 Bad Request 1`] = `Object {}`;
+exports[`/api/posts/:id/like PUT when post doesn't exist should return 400 Bad Request 1`] = `Object {}`;
 
-exports[`/api/posts PUT when post exists should return 202 Accepted 1`] = `Object {}`;
+exports[`/api/posts/:id/like PUT when post exists should return 202 Accepted 1`] = `Object {}`;
 
-exports[`/api/posts PUT when post is already liked should return 400 Bad Request 1`] = `Object {}`;
+exports[`/api/posts/:id/like PUT when post is already liked should return 400 Bad Request 1`] = `Object {}`;
 
-exports[`/api/posts PUT when user is unauthenticated should return 401 Unauthorized 1`] = `Object {}`;
+exports[`/api/posts/:id/like PUT when user is unauthenticated should return 401 Unauthorized 1`] = `Object {}`;
