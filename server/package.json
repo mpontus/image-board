@@ -9,7 +9,7 @@
   },
   "betterScripts": {
     "test": {
-      "command": "jest",
+      "command": "jest --runInBand",
       "env": {
         "CLOUDINARY_STUB": 1,
         "JWT_SECRET": "secret",
