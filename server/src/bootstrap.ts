@@ -6,12 +6,14 @@ import * as url from "url";
 import { AuthProvider } from "./auth/AuthProvider";
 import "./controllers/PostsController";
 import { Auth0Service } from "./data/auth/Auth0Service";
+import { CloudinaryImageStore } from "./data/file/CloudinaryImageStore";
 import { MongoosePostRepository } from "./data/post/MongoosePostRepository";
 import { CreatePost } from "./domain/interactor/CreatePost";
 import { DeletePost } from "./domain/interactor/DeletePost";
 import { GetPosts } from "./domain/interactor/GetPosts";
 import { UpdatePostLikes } from "./domain/interactor/UpdatePostLikes";
 import { AuthService } from "./domain/service/AuthService";
+import { ImageStore } from "./domain/service/ImageStore";
 import { PostRepository } from "./domain/service/PostRepository";
 import { Types } from "./domain/Types";
 
@@ -60,6 +62,7 @@ const bootstrap = () => {
   container
     .bind<PostRepository>(Types.PostRepository)
     .to(MongoosePostRepository);
+  container.bind<ImageStore>(Types.ImageStore).to(CloudinaryImageStore);
   container.bind<GetPosts>(Types.GetPosts).to(GetPosts);
   container.bind<CreatePost>(Types.CreatePost).to(CreatePost);
   container.bind<DeletePost>(Types.DeletePost).to(DeletePost);
