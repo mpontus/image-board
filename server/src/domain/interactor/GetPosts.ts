@@ -1,10 +1,10 @@
-import { injectable, inject } from "inversify";
+import { inject, injectable } from "inversify";
 import { Page } from "../model/Page";
 import { Post } from "../model/Post";
 import { User } from "../model/User";
 import { PostRepository } from "../service/PostRepository";
-import { UseCase } from "../UseCase";
 import { Types } from "../Types";
+import { UseCase } from "../UseCase";
 
 /**
  * Use case parameters
@@ -43,6 +43,12 @@ export class GetPosts implements UseCase<Params, Page<Post>> {
    * Execute the use case
    */
   public async execute({ user, limit, offset }: Params) {
-    return this.postRepository.getPosts(user, offset, limit);
+    const total = await this.postRepository.getTotalPosts();
+    const posts = await this.postRepository.getPosts(user, offset, limit);
+
+    return {
+      total,
+      items: posts
+    };
   }
 }

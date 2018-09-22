@@ -1,5 +1,4 @@
 import { Image } from "@src/domain/model/Image";
-import { Page } from "@src/domain/model/Page";
 import { Post } from "@src/domain/model/Post";
 import { User } from "@src/domain/model/User";
 
@@ -10,7 +9,7 @@ export interface PostRepository {
   /**
    * Returns the total number of posts visible to the user
    */
-  getTotalPosts(user: User | undefined): Promise<number>;
+  getTotalPosts(): Promise<number>;
 
   /**
    * Returns slice of all posts as seen by the user
@@ -19,7 +18,7 @@ export interface PostRepository {
     user: User | undefined,
     offset: number,
     limit: number
-  ): Promise<Page<Post>>;
+  ): Promise<Post[]>;
 
   /**
    * Returns Post by its id
