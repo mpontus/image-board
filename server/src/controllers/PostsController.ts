@@ -4,7 +4,8 @@ import {
   controller,
   httpGet,
   httpPost,
-  response
+  response,
+  BaseHttpController
 } from "inversify-express-utils";
 import { Types } from "../domain/Types";
 import { Post } from "../domain/model/Post";
@@ -27,14 +28,17 @@ const serializePost = (post: Post): object => ({
 });
 
 @controller("/api/posts")
-export class PostsController {
+export class PostsController extends BaseHttpController {
   constructor(
     @inject(Types.GetPosts) private readonly getPostsUseCase: GetPosts
-  ) {}
+  ) {
+    super();
+  }
 
   @httpGet("/")
   public async index() {
     const { total, items } = await this.getPostsUseCase.execute({
+      user: this.httpContext.user.details,
       limit: 10,
       offset: 0
     });

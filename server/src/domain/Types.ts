@@ -1,4 +1,5 @@
 export const Types = {
+  AuthService: Symbol("AuthService"),
   Mongoose: Symbol("Mongoose"),
   PostRepository: Symbol("PostRepository"),
   GetPosts: Symbol("GetPosts"),
