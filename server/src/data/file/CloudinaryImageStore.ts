@@ -21,12 +21,19 @@ export class CloudinaryImageStore implements ImageStore {
   ) {}
 
   /**
-   * Upload a file
+   * Upload a file as a stream
    */
-  public save(buffer: Buffer) {
-    return cloudinary.v2.uploader
-      .upload(buffer, undefined, this.uploadOptions)
-      .then(this.uploadResultMapper.transform);
+  public save(stream: NodeJS.ReadableStream) {
+    return new Promise<cloudinary.v2.uploader.UploadResult>(
+      (resolve, reject) => {
+        const destination = cloudinary.v2.uploader.upload_stream(
+          this.uploadOptions,
+          (err, result) => (err ? reject(err) : resolve(result))
+        );
+
+        stream.pipe(destination);
+      }
+    ).then(this.uploadResultMapper.transform);
   }
 
   /**

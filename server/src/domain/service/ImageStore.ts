@@ -7,7 +7,7 @@ export interface ImageStore {
   /**
    * Save image to permanent storage and return its details
    */
-  save(file: Buffer): Promise<Image>;
+  save(stream: NodeJS.ReadableStream): Promise<Image>;
 
   /**
    * Remove previously saved image from permanent storage

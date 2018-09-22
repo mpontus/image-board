@@ -16,7 +16,7 @@ interface Params {
   /**
    * Post image
    */
-  file: Buffer;
+  file: NodeJS.ReadableStream;
 }
 
 /**
