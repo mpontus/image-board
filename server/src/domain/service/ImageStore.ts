@@ -12,5 +12,5 @@ export interface ImageStore {
   /**
    * Remove previously saved image from permanent storage
    */
-  destory(removeKey: string): Promise<void>;
+  destroy(removeKey: string): Promise<void>;
 }
