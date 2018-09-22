@@ -5,8 +5,13 @@ import {
   controller,
   httpGet,
   httpPost,
+  request,
   response
 } from "inversify-express-utils";
+import * as multiparty from "multiparty";
+import { Observable } from "rxjs";
+import { filter, map, switchMap } from "rxjs/operators";
+import { CreatePost } from "../domain/interactor/CreatePost";
 import { GetPosts } from "../domain/interactor/GetPosts";
 import { Post } from "../domain/model/Post";
 import { Types } from "../domain/Types";
@@ -30,7 +35,8 @@ const serializePost = (post: Post): object => ({
 @controller("/api/posts")
 export class PostsController extends BaseHttpController {
   constructor(
-    @inject(Types.GetPosts) private readonly getPostsUseCase: GetPosts
+    @inject(Types.GetPosts) private readonly getPostsUseCase: GetPosts,
+    @inject(Types.CreatePost) private readonly createPostUseCase: CreatePost
   ) {
     super();
   }
@@ -50,12 +56,37 @@ export class PostsController extends BaseHttpController {
   }
 
   @httpPost("/")
-  public async createPost(@response() res: express.Response) {
-    return "foo";
-    // await this.createPostUseCase.execute({
-    //   id: "123",
-    //   username: "foo",
-    //   avatarUrl: "http://example.org/picture.jpg"
-    // });
+  public createPost(
+    @request() req: express.Request,
+    @response() res: express.Response
+  ) {
+    const part$ = new Observable<multiparty.Part>(observer => {
+      const form = new multiparty.Form();
+
+      form.on("part", (part: multiparty.Part) => {
+        observer.next(part);
+      });
+
+      form.on("error", (error: Error) => observer.error("error"));
+
+      form.on("close", () => observer.complete());
+
+      form.parse(req);
+
+      return () => form.removeAllListeners();
+    });
+
+    return part$
+      .pipe(
+        filter(part => part.name === "file"),
+        switchMap(file =>
+          this.createPostUseCase.execute({
+            user: this.httpContext.user.details,
+            file
+          })
+        ),
+        map(serializePost)
+      )
+      .toPromise();
   }
 }

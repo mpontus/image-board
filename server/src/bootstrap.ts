@@ -62,7 +62,11 @@ const bootstrap = () => {
   container
     .bind<PostRepository>(Types.PostRepository)
     .to(MongoosePostRepository);
-  container.bind<ImageStore>(Types.ImageStore).to(CloudinaryImageStore);
+  container.bind<ImageStore>(Types.ImageStore).toConstantValue(
+    new CloudinaryImageStore({
+      folder: process.env.CLOUDINARY_FOLDER || ""
+    })
+  );
   container.bind<GetPosts>(Types.GetPosts).to(GetPosts);
   container.bind<CreatePost>(Types.CreatePost).to(CreatePost);
   container.bind<DeletePost>(Types.DeletePost).to(DeletePost);

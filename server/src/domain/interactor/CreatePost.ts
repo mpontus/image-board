@@ -1,8 +1,10 @@
-import { Post } from "@src/domain/model/Post";
-import { User } from "@src/domain/model/User";
-import { ImageStore } from "@src/domain/service/ImageStore";
-import { PostRepository } from "@src/domain/service/PostRepository";
-import { UseCase } from "@src/domain/UseCase";
+import { inject, injectable } from "inversify";
+import { Post } from "../model/Post";
+import { User } from "../model/User";
+import { ImageStore } from "../service/ImageStore";
+import { PostRepository } from "../service/PostRepository";
+import { Types } from "../Types";
+import { UseCase } from "../UseCase";
 
 /**
  * Use case parameters
@@ -22,12 +24,14 @@ interface Params {
 /**
  * Creates a new post authored by the user using uploaded file
  */
+@injectable()
 export class CreatePost implements UseCase<Params, Post> {
   /**
    * Create a new use case instance
    */
   constructor(
-    private readonly imageStore: ImageStore,
+    @inject(Types.ImageStore) private readonly imageStore: ImageStore,
+    @inject(Types.PostRepository)
     private readonly postRepository: PostRepository
   ) {}
 

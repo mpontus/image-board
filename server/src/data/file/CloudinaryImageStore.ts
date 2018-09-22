@@ -1,4 +1,5 @@
 import * as cloudinary from "cloudinary";
+import { injectable } from "inversify";
 import { Image } from "../../domain/model/Image";
 import { ImageStore } from "../../domain/service/ImageStore";
 import { DataMapper } from "../DataMapper";
@@ -7,6 +8,7 @@ import { CloudinaryUploadResultMapper } from "./CloudinaryUploadResultMapper";
 /**
  * File storage which stores images using Cloudinary service
  */
+@injectable()
 export class CloudinaryImageStore implements ImageStore {
   private readonly uploadResultMapper: DataMapper<
     cloudinary.v2.uploader.UploadResult,
@@ -32,6 +34,7 @@ export class CloudinaryImageStore implements ImageStore {
         );
 
         stream.pipe(destination);
+        stream.resume();
       }
     ).then(this.uploadResultMapper.transform);
   }
