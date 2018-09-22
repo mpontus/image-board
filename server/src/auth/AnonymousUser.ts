@@ -1,7 +1,7 @@
 import { interfaces } from "inversify-express-utils";
 
 export class AnonymousUser implements interfaces.Principal {
-  details: void = undefined;
+  public details: void = undefined;
 
   public isAuthenticated() {
     return Promise.resolve(false);

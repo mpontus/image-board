@@ -1,9 +1,9 @@
-import { PostDocument } from "./PostDocument";
-import { DataMapper } from "../DataMapper";
 import { Post } from "../../domain/model/Post";
+import { DataMapper } from "../DataMapper";
+import { PostDocument } from "./PostDocument";
 
 export class PostDocumentMapper implements DataMapper<PostDocument, Post> {
-  transform(post: PostDocument) {
+  public transform(post: PostDocument) {
     return {
       id: post._id,
       image: {

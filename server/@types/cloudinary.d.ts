@@ -22,12 +22,12 @@ declare module "cloudinary" {
           folder: string;
         }
 
-        // This list is incomplete
         interface UploadResult {
           public_id: PublicId;
           url: string;
           width: number;
           height: number;
+          [key: string]: any;
         }
 
         function upload(
@@ -50,8 +50,9 @@ declare module "cloudinary" {
           invalidate: boolean;
         }
 
-        // This list is empty because we don't care about the response
-        interface DestroyResult {}
+        interface DestroyResult {
+          [key: string]: any;
+        }
 
         function destroy(
           publicId: PublicId,

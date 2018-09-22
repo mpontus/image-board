@@ -1,5 +1,5 @@
-import "reflect-metadata";
 import * as dotenv from "dotenv-safe";
+import "reflect-metadata";
 import bootstrap from "./bootstrap";
 
 dotenv.config();

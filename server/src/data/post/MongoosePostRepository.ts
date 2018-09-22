@@ -3,9 +3,9 @@ import { Model, Mongoose } from "mongoose";
 import { User } from "../../domain/model/User";
 import { PostRepository } from "../../domain/service/PostRepository";
 import { Types } from "../../domain/Types";
-import { PostSchema } from "./PostSchema";
 import { PostDocument } from "./PostDocument";
 import { PostDocumentMapper } from "./PostDocumentMapper";
+import { PostSchema } from "./PostSchema";
 
 @injectable()
 export class MongoosePostRepository implements PostRepository {

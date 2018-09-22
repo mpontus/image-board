@@ -1,6 +1,6 @@
-import { promisify } from "util";
 import * as jwt from "jsonwebtoken";
 import * as jwksRsa from "jwks-rsa";
+import { promisify } from "util";
 import { AuthService } from "../../domain/service/AuthService";
 import { tokenTransform } from "./tokenTransform";
 
@@ -14,7 +14,7 @@ export class Auth0Service implements AuthService {
     this.client = jwksRsa(clientOptions);
   }
 
-  getUser(token: string) {
+  public getUser(token: string) {
     const decoded = jwt.decode(token, { complete: true });
     const verifyToken = promisify<
       string,

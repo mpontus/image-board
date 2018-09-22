@@ -1,8 +1,8 @@
 import * as express from "express";
-import { injectable, inject } from "inversify";
+import { inject, injectable } from "inversify";
 import { interfaces } from "inversify-express-utils";
-import { Types } from "../domain/Types";
 import { AuthService } from "../domain/service/AuthService";
+import { Types } from "../domain/Types";
 import { AnonymousUser } from "./AnonymousUser";
 import { AuthenticatedUser } from "./AuthenticatedUser";
 
@@ -29,7 +29,7 @@ export class AuthProvider implements interfaces.AuthProvider {
   @inject(Types.AuthService)
   private readonly authService: AuthService;
 
-  async getUser(
+  public async getUser(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction

@@ -1,7 +1,7 @@
-import { promisify } from "util";
 import * as jwt from "jsonwebtoken";
-import { AuthService } from "../../domain/service/AuthService";
+import { promisify } from "util";
 import { User } from "../../domain/model/User";
+import { AuthService } from "../../domain/service/AuthService";
 import { tokenTransform } from "./tokenTransform";
 
 const verifyToken = promisify<

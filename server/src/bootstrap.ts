@@ -1,17 +1,17 @@
 import { Container } from "inversify";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { Mongoose } from "mongoose";
+import { AuthProvider } from "./auth/AuthProvider";
 import "./controllers/PostsController";
-import { MongoosePostRepository } from "./data/post/MongoosePostRepository";
 import { Auth0Service } from "./data/auth/Auth0Service";
+import { MongoosePostRepository } from "./data/post/MongoosePostRepository";
 import { CreatePost } from "./domain/interactor/CreatePost";
 import { DeletePost } from "./domain/interactor/DeletePost";
 import { GetPosts } from "./domain/interactor/GetPosts";
 import { UpdatePostLikes } from "./domain/interactor/UpdatePostLikes";
-import { PostRepository } from "./domain/service/PostRepository";
 import { AuthService } from "./domain/service/AuthService";
+import { PostRepository } from "./domain/service/PostRepository";
 import { Types } from "./domain/Types";
-import { AuthProvider } from "./auth/AuthProvider";
 
 const bootstrap = () => {
   const mongoose = new Mongoose();

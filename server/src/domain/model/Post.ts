@@ -1,5 +1,5 @@
-import { User } from "@src/domain/model/User";
 import { Image } from "@src/domain/model/Image";
+import { User } from "@src/domain/model/User";
 
 /**
  * Describes a post on the image board

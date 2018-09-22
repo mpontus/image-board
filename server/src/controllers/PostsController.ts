@@ -1,15 +1,15 @@
 import * as express from "express";
 import { inject } from "inversify";
 import {
+  BaseHttpController,
   controller,
   httpGet,
   httpPost,
-  response,
-  BaseHttpController
+  response
 } from "inversify-express-utils";
-import { Types } from "../domain/Types";
-import { Post } from "../domain/model/Post";
 import { GetPosts } from "../domain/interactor/GetPosts";
+import { Post } from "../domain/model/Post";
+import { Types } from "../domain/Types";
 
 const serializePost = (post: Post): object => ({
   id: post.id,
