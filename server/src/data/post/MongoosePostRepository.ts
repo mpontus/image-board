@@ -1,5 +1,7 @@
 import { inject, injectable } from "inversify";
 import { Model, Mongoose } from "mongoose";
+import { Image } from "../../domain/model/Image";
+import { Post } from "../../domain/model/Post";
 import { User } from "../../domain/model/User";
 import { PostRepository } from "../../domain/service/PostRepository";
 import { Types } from "../../domain/Types";
@@ -43,15 +45,44 @@ export class MongoosePostRepository implements PostRepository {
     return dataMapper.transform(post);
   }
 
-  public createPost() {
-    return Promise.reject("not implemented");
+  public async createPost(user: User, image: Image) {
+    const dataMapper = new PostDocumentMapper();
+    const post: PostDocument = await this.model.create({
+      imageId: image.storageId,
+      imageUrl: image.url,
+      imageWidth: image.width,
+      imageHeight: image.height,
+      author: {
+        id: user.id,
+        name: user.username,
+        avatarUrl: user.avatarUrl
+      },
+      likes: [user.id],
+      likesCount: 1
+    });
+
+    return dataMapper.transform(post);
   }
 
-  public updatePostLikes() {
-    return Promise.reject("not implemented");
+  public async updatePostLikes(user: User, post: Post, delta: 1 | -1) {
+    const [conditions, doc] =
+      delta > 0
+        ? [
+            { _id: post.id, likes: { $ne: user.id } },
+            { $inc: { likesCount: 1 }, $push: { likes: user.id } }
+          ]
+        : [
+            { _id: post.id, likes: user.id },
+            { $inc: { likesCount: -1 }, $pull: { likes: user.id } }
+          ];
+    const { nModified } = await this.model.updateOne(conditions, doc).exec();
+
+    if (nModified === 0) {
+      throw new Error("Post likes could not be changed");
+    }
   }
 
-  public deletePost() {
-    return Promise.reject("not implemented");
+  public async deletePost(post: Post) {
+    await this.model.findByIdAndDelete(post.id);
   }
 }
