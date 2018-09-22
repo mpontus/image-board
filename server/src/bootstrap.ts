@@ -1,6 +1,8 @@
+import * as cloudinary from "cloudinary";
 import { Container } from "inversify";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { Mongoose } from "mongoose";
+import * as url from "url";
 import { AuthProvider } from "./auth/AuthProvider";
 import "./controllers/PostsController";
 import { Auth0Service } from "./data/auth/Auth0Service";
@@ -13,9 +15,29 @@ import { AuthService } from "./domain/service/AuthService";
 import { PostRepository } from "./domain/service/PostRepository";
 import { Types } from "./domain/Types";
 
+/**
+ * Extract credentials from cloudinary url
+ */
+// Taken from cloudinary_npm source, at the time of writing
+// cloudinary only parses URL extracted from an environment
+// variable, and doesn't expose any such method to client.
+const parseCloudinaryUrl = (cloudinaryUrl: string): cloudinary.Config => {
+  const uri = url.parse(cloudinaryUrl);
+
+  return {
+    cloud_name: uri.host,
+    api_key: uri.auth && uri.auth.split(":")[0],
+    api_secret: uri.auth && uri.auth.split(":")[1],
+    private_cdn: uri.pathname,
+    secure_distribution: uri.pathname && uri.pathname.substring(1)
+  };
+};
+
 const bootstrap = () => {
   const mongoose = new Mongoose();
   const container = new Container();
+
+  cloudinary.config(parseCloudinaryUrl(process.env.CLOUDINARY_URL || ""));
 
   mongoose.connect(process.env.MONGODB_URI || "");
 
