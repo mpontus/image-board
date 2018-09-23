@@ -5,6 +5,7 @@ import {
   controller,
   httpGet,
   httpPost,
+  queryParam,
   request,
   response
 } from "inversify-express-utils";
@@ -42,11 +43,11 @@ export class PostsController extends BaseHttpController {
   }
 
   @httpGet("/")
-  public async index() {
+  public async index(@queryParam("page") page: number) {
     const { total, items } = await this.getPostsUseCase.execute({
       user: this.httpContext.user.details,
       limit: 10,
-      offset: 0
+      offset: 10 * (Math.max(1, page) - 1)
     });
 
     return {
