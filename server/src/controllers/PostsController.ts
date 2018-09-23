@@ -15,9 +15,10 @@ import { filter, map, switchMap } from "rxjs/operators";
 import { CreatePost } from "../domain/interactor/CreatePost";
 import { GetPosts } from "../domain/interactor/GetPosts";
 import { Post } from "../domain/model/Post";
+import { User } from "../domain/model/User";
 import { Types } from "../domain/Types";
 
-const serializePost = (post: Post): object => ({
+const serializePost = (user: User | undefined) => (post: Post): object => ({
   id: post.id,
   imageUrl: post.image.url,
   imageWidth: post.image.width,
@@ -28,8 +29,7 @@ const serializePost = (post: Post): object => ({
     avatarUrl: post.author.avatarUrl
   },
   likes: post.likesCount,
-  // TODO: this is wrong
-  isLiked: false,
+  isLiked: user ? user.id in post.likedBy : false,
   timestamp: new Date(post.timestamp).toISOString()
 });
 
@@ -52,7 +52,7 @@ export class PostsController extends BaseHttpController {
 
     return {
       total,
-      items: items.map(serializePost)
+      items: items.map(serializePost(this.httpContext.user.details))
     };
   }
 
@@ -86,7 +86,7 @@ export class PostsController extends BaseHttpController {
             file
           })
         ),
-        map(serializePost)
+        map(serializePost(this.httpContext.user.details))
       )
       .toPromise();
   }
