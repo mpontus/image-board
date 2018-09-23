@@ -3,10 +3,13 @@ import { inject } from "inversify";
 import {
   BaseHttpController,
   controller,
+  httpDelete,
   httpGet,
   httpPost,
+  httpPut,
   queryParam,
   request,
+  requestParam,
   response
 } from "inversify-express-utils";
 import * as multiparty from "multiparty";
@@ -14,6 +17,7 @@ import { Observable } from "rxjs";
 import { filter, map, switchMap } from "rxjs/operators";
 import { CreatePost } from "../domain/interactor/CreatePost";
 import { GetPosts } from "../domain/interactor/GetPosts";
+import { UpdatePostLikes } from "../domain/interactor/UpdatePostLikes";
 import { Post } from "../domain/model/Post";
 import { User } from "../domain/model/User";
 import { Types } from "../domain/Types";
@@ -37,7 +41,9 @@ const serializePost = (user: User | undefined) => (post: Post): object => ({
 export class PostsController extends BaseHttpController {
   constructor(
     @inject(Types.GetPosts) private readonly getPostsUseCase: GetPosts,
-    @inject(Types.CreatePost) private readonly createPostUseCase: CreatePost
+    @inject(Types.CreatePost) private readonly createPostUseCase: CreatePost,
+    @inject(Types.UpdatePostLikes)
+    private readonly updatePostLikesUseCase: UpdatePostLikes
   ) {
     super();
   }
@@ -89,5 +95,23 @@ export class PostsController extends BaseHttpController {
         map(serializePost(this.httpContext.user.details))
       )
       .toPromise();
+  }
+
+  @httpPut("/:id/like")
+  public async likePost(@requestParam("id") id: string) {
+    await this.updatePostLikesUseCase.execute({
+      user: this.httpContext.user.details,
+      id,
+      delta: 1
+    });
+  }
+
+  @httpDelete("/:id/like")
+  public async dislikePost(@requestParam("id") id: string) {
+    await this.updatePostLikesUseCase.execute({
+      user: this.httpContext.user.details,
+      id,
+      delta: -1
+    });
   }
 }

@@ -1,6 +1,8 @@
-import { User } from "@src/domain/model/User";
-import { PostRepository } from "@src/domain/service/PostRepository";
-import { UseCase } from "@src/domain/UseCase";
+import { inject, injectable } from "inversify";
+import { User } from "../model/User";
+import { PostRepository } from "../service/PostRepository";
+import { Types } from "../Types";
+import { UseCase } from "../UseCase";
 
 /**
  * Use case params
@@ -25,11 +27,15 @@ export interface Params {
 /**
  * Like or unlike the post on behalf of the given user
  */
+@injectable()
 export class UpdatePostLikes implements UseCase<Params, void> {
   /**
    * Create new instance of the use case
    */
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    @inject(Types.PostRepository)
+    private readonly postRepository: PostRepository
+  ) {}
 
   /**
    * Execute the use case
