@@ -2,6 +2,8 @@ import { Post } from "@src/domain/model/Post";
 import { User } from "@src/domain/model/User";
 import { PostRepository } from "@src/domain/service/PostRepository";
 import { UseCase } from "@src/domain/UseCase";
+import { inject, injectable } from "inversify";
+import { Types } from "../Types";
 
 /**
  * Use case parameters
@@ -21,11 +23,15 @@ interface Params {
 /**
  * Deletes existing post belonging to the user
  */
+@injectable()
 export class DeletePost implements UseCase<Params, void> {
   /**
    * Create a new use case instance
    */
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    @inject(Types.PostRepository)
+    private readonly postRepository: PostRepository
+  ) {}
 
   /**
    * Delete a post if the user is authorized to do so

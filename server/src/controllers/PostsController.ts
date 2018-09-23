@@ -16,6 +16,7 @@ import * as multiparty from "multiparty";
 import { Observable } from "rxjs";
 import { filter, map, switchMap } from "rxjs/operators";
 import { CreatePost } from "../domain/interactor/CreatePost";
+import { DeletePost } from "../domain/interactor/DeletePost";
 import { GetPosts } from "../domain/interactor/GetPosts";
 import { UpdatePostLikes } from "../domain/interactor/UpdatePostLikes";
 import { Post } from "../domain/model/Post";
@@ -42,6 +43,7 @@ export class PostsController extends BaseHttpController {
   constructor(
     @inject(Types.GetPosts) private readonly getPostsUseCase: GetPosts,
     @inject(Types.CreatePost) private readonly createPostUseCase: CreatePost,
+    @inject(Types.DeletePost) private readonly deletePostUseCase: DeletePost,
     @inject(Types.UpdatePostLikes)
     private readonly updatePostLikesUseCase: UpdatePostLikes
   ) {
@@ -95,6 +97,14 @@ export class PostsController extends BaseHttpController {
         map(serializePost(this.httpContext.user.details))
       )
       .toPromise();
+  }
+
+  @httpDelete("/:id")
+  public async deletePost(@requestParam("id") id: string) {
+    await this.deletePostUseCase.execute({
+      user: this.httpContext.user.details,
+      id
+    });
   }
 
   @httpPut("/:id/like")
