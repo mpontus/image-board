@@ -3,7 +3,6 @@ import { Post } from "../model/Post";
 import { User } from "../model/User";
 import { ImageStore } from "../service/ImageStore";
 import { PostRepository } from "../service/PostRepository";
-import { Types } from "../Types";
 import { UseCase } from "../UseCase";
 
 /**
@@ -30,9 +29,8 @@ export class CreatePost implements UseCase<Params, Post> {
    * Create a new use case instance
    */
   constructor(
-    @inject(Types.ImageStore) private readonly imageStore: ImageStore,
-    @inject(Types.PostRepository)
-    private readonly postRepository: PostRepository
+    @inject(ImageStore) private readonly imageStore: ImageStore,
+    @inject(PostRepository) private readonly postRepository: PostRepository
   ) {}
 
   /**

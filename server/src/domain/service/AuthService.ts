@@ -1,5 +1,5 @@
 import { User } from "../model/User";
 
-export interface AuthService {
-  getUser(token: string): Promise<User>;
+export abstract class AuthService {
+  public abstract getUser(token: string): Promise<User>;
 }

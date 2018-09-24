@@ -5,16 +5,16 @@ import { User } from "@src/domain/model/User";
 /**
  * Manipulates image-board posts
  */
-export interface PostRepository {
+export abstract class PostRepository {
   /**
    * Returns the total number of posts visible to the user
    */
-  getTotalPosts(): Promise<number>;
+  public abstract getTotalPosts(): Promise<number>;
 
   /**
    * Returns slice of all posts as seen by the user
    */
-  getPosts(
+  public abstract getPosts(
     user: User | undefined,
     offset: number,
     limit: number
@@ -23,20 +23,24 @@ export interface PostRepository {
   /**
    * Returns Post by its id
    */
-  getPost(id: string): Promise<Post>;
+  public abstract getPost(id: string): Promise<Post>;
 
   /**
    * Creates new post on behalf of the given user
    */
-  createPost(user: User, image: Image): Promise<Post>;
+  public abstract createPost(user: User, image: Image): Promise<Post>;
 
   /**
    * Updates post likes count on behalf of the given user
    */
-  updatePostLikes(user: User, post: Post, delta: number): Promise<void>;
+  public abstract updatePostLikes(
+    user: User,
+    post: Post,
+    delta: number
+  ): Promise<void>;
 
   /**
    * Deletes a post
    */
-  deletePost(postId: Post): Promise<void>;
+  public abstract deletePost(postId: Post): Promise<void>;
 }

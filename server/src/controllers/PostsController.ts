@@ -21,7 +21,6 @@ import { GetPosts } from "../domain/interactor/GetPosts";
 import { UpdatePostLikes } from "../domain/interactor/UpdatePostLikes";
 import { Post } from "../domain/model/Post";
 import { User } from "../domain/model/User";
-import { Types } from "../domain/Types";
 
 const serializePost = (user: User | undefined) => (post: Post): object => ({
   id: post.id,
@@ -41,10 +40,10 @@ const serializePost = (user: User | undefined) => (post: Post): object => ({
 @controller("/api/posts")
 export class PostsController extends BaseHttpController {
   constructor(
-    @inject(Types.GetPosts) private readonly getPostsUseCase: GetPosts,
-    @inject(Types.CreatePost) private readonly createPostUseCase: CreatePost,
-    @inject(Types.DeletePost) private readonly deletePostUseCase: DeletePost,
-    @inject(Types.UpdatePostLikes)
+    @inject(GetPosts) private readonly getPostsUseCase: GetPosts,
+    @inject(CreatePost) private readonly createPostUseCase: CreatePost,
+    @inject(DeletePost) private readonly deletePostUseCase: DeletePost,
+    @inject(UpdatePostLikes)
     private readonly updatePostLikesUseCase: UpdatePostLikes
   ) {
     super();

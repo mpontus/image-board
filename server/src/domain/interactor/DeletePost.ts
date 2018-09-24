@@ -1,9 +1,8 @@
-import { Post } from "@src/domain/model/Post";
-import { User } from "@src/domain/model/User";
-import { PostRepository } from "@src/domain/service/PostRepository";
-import { UseCase } from "@src/domain/UseCase";
 import { inject, injectable } from "inversify";
-import { Types } from "../Types";
+import { Post } from "../model/Post";
+import { User } from "../model/User";
+import { PostRepository } from "../service/PostRepository";
+import { UseCase } from "../UseCase";
 
 /**
  * Use case parameters
@@ -29,8 +28,7 @@ export class DeletePost implements UseCase<Params, void> {
    * Create a new use case instance
    */
   constructor(
-    @inject(Types.PostRepository)
-    private readonly postRepository: PostRepository
+    @inject(PostRepository) private readonly postRepository: PostRepository
   ) {}
 
   /**

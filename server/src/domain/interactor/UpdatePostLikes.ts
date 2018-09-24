@@ -1,7 +1,6 @@
 import { inject, injectable } from "inversify";
 import { User } from "../model/User";
 import { PostRepository } from "../service/PostRepository";
-import { Types } from "../Types";
 import { UseCase } from "../UseCase";
 
 /**
@@ -33,8 +32,7 @@ export class UpdatePostLikes implements UseCase<Params, void> {
    * Create new instance of the use case
    */
   constructor(
-    @inject(Types.PostRepository)
-    private readonly postRepository: PostRepository
+    @inject(PostRepository) private readonly postRepository: PostRepository
   ) {}
 
   /**

@@ -15,7 +15,6 @@ import { UpdatePostLikes } from "./domain/interactor/UpdatePostLikes";
 import { AuthService } from "./domain/service/AuthService";
 import { ImageStore } from "./domain/service/ImageStore";
 import { PostRepository } from "./domain/service/PostRepository";
-import { Types } from "./domain/Types";
 
 /**
  * Extract credentials from cloudinary url
@@ -43,7 +42,7 @@ const bootstrap = () => {
 
   mongoose.connect(process.env.MONGODB_URI || "");
 
-  container.bind<AuthService>(Types.AuthService).toConstantValue(
+  container.bind<AuthService>(AuthService).toConstantValue(
     new Auth0Service(
       {
         cache: true,
@@ -58,19 +57,18 @@ const bootstrap = () => {
       }
     )
   );
-  container.bind<Mongoose>(Types.Mongoose).toConstantValue(mongoose);
   container
-    .bind<PostRepository>(Types.PostRepository)
-    .to(MongoosePostRepository);
-  container.bind<ImageStore>(Types.ImageStore).toConstantValue(
+    .bind<PostRepository>(PostRepository)
+    .toConstantValue(new MongoosePostRepository(mongoose));
+  container.bind<ImageStore>(ImageStore).toConstantValue(
     new CloudinaryImageStore({
       folder: process.env.CLOUDINARY_FOLDER || ""
     })
   );
-  container.bind<GetPosts>(Types.GetPosts).to(GetPosts);
-  container.bind<CreatePost>(Types.CreatePost).to(CreatePost);
-  container.bind<DeletePost>(Types.DeletePost).to(DeletePost);
-  container.bind<UpdatePostLikes>(Types.UpdatePostLikes).to(UpdatePostLikes);
+  container.bind<GetPosts>(GetPosts).to(GetPosts);
+  container.bind<CreatePost>(CreatePost).to(CreatePost);
+  container.bind<DeletePost>(DeletePost).to(DeletePost);
+  container.bind<UpdatePostLikes>(UpdatePostLikes).to(UpdatePostLikes);
 
   const server = new InversifyExpressServer(
     container,

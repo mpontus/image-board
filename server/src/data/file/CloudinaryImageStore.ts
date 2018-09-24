@@ -9,7 +9,7 @@ import { CloudinaryUploadResultMapper } from "./CloudinaryUploadResultMapper";
  * File storage which stores images using Cloudinary service
  */
 @injectable()
-export class CloudinaryImageStore implements ImageStore {
+export class CloudinaryImageStore extends ImageStore {
   private readonly uploadResultMapper: DataMapper<
     cloudinary.v2.uploader.UploadResult,
     Image
@@ -20,7 +20,9 @@ export class CloudinaryImageStore implements ImageStore {
    */
   constructor(
     private readonly uploadOptions: cloudinary.v2.uploader.UploadOptions
-  ) {}
+  ) {
+    super();
+  }
 
   /**
    * Upload a file as a stream

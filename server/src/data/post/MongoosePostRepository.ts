@@ -1,10 +1,9 @@
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { Model, Mongoose } from "mongoose";
 import { Image } from "../../domain/model/Image";
 import { Post } from "../../domain/model/Post";
 import { User } from "../../domain/model/User";
 import { PostRepository } from "../../domain/service/PostRepository";
-import { Types } from "../../domain/Types";
 import { PostDocument } from "./PostDocument";
 import { PostDocumentMapper } from "./PostDocumentMapper";
 import { PostSchema } from "./PostSchema";
@@ -13,7 +12,7 @@ import { PostSchema } from "./PostSchema";
 export class MongoosePostRepository implements PostRepository {
   private readonly model: Model<PostDocument>;
 
-  constructor(@inject(Types.Mongoose) private readonly db: Mongoose) {
+  constructor(private readonly db: Mongoose) {
     this.model = this.db.model("Post", PostSchema);
   }
 

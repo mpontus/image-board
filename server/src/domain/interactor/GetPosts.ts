@@ -3,7 +3,6 @@ import { Page } from "../model/Page";
 import { Post } from "../model/Post";
 import { User } from "../model/User";
 import { PostRepository } from "../service/PostRepository";
-import { Types } from "../Types";
 import { UseCase } from "../UseCase";
 
 /**
@@ -35,8 +34,7 @@ export class GetPosts implements UseCase<Params, Page<Post>> {
    * Create new instance of the use case
    */
   constructor(
-    @inject(Types.PostRepository)
-    private readonly postRepository: PostRepository
+    @inject(PostRepository) private readonly postRepository: PostRepository
   ) {}
 
   /**

@@ -4,13 +4,14 @@ import { promisify } from "util";
 import { AuthService } from "../../domain/service/AuthService";
 import { tokenTransform } from "./tokenTransform";
 
-export class Auth0Service implements AuthService {
+export class Auth0Service extends AuthService {
   private readonly client: jwksRsa.JwksClient;
 
   constructor(
     clientOptions: jwksRsa.Options,
     private readonly verifyOptions: jwt.VerifyOptions
   ) {
+    super();
     this.client = jwksRsa(clientOptions);
   }
 
